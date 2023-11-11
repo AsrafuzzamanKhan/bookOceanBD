@@ -3,12 +3,27 @@ import SearchForm from "../../SearchForm/SearchForm";
 import { CartContext } from "../../../providers/CartProvider/CartProvider";
 import { FiMenu, FiShoppingBag } from 'react-icons/fi'
 import CategoryNavMobile from "../../CategoryNavMobile/CategoryNavMobile";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Cart from "../../Cart/Cart";
+import { AuthContext } from "../../../providers/AuthProvider/AuthProvider";
 
 const Header = () => {
-    const { isOpen, setIsOpen, itemsAmount } = useContext(CartContext)
-    const [catNavMobile, setCatNavMobile] = useState(false)
+    const { isOpen, setIsOpen, itemsAmount } = useContext(CartContext);
+    const { user, logOut } = useContext(AuthContext)
+    const [catNavMobile, setCatNavMobile] = useState(false);
+    const navigate = useNavigate()
+
+    const handleLogOut = () => {
+        logOut()
+            .then(() => {
+                // Sign-out successful.
+                navigate('/')
+                // console.log(navigate)
+            }).catch((error) => {
+                console.log(error)
+                // An error happened.
+            });
+    }
     return (
         <header className="bg-black text-white py-6 px-2 fixed xl:fixed w-full top-0 z-40 lg:relative lg:mb-[30px] ">
             <div className="container mx-auto  ">
@@ -37,7 +52,9 @@ const Header = () => {
                     {/* phone and cart 
                      */}
                     <div className="flex items-center gap-x-[10px]">
-                        <Link to='/login'> Login</Link>
+                        {user?.email ? <button onClick={handleLogOut} className="btn btn-primary">Logout</button> :
+                            <Link to='/login'> Login</Link>
+                        }
 
                         {/* cart icon  */}
                         <div onClick={() => setIsOpen(!isOpen)} className="relative cursor-pointer">

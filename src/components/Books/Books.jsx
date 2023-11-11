@@ -19,7 +19,7 @@ const Books = () => {
                 <div className="flex gap-x-[30px]">
                     {/* category nav  */}
                     <CategoryNav />
-                    <main>
+                    <main className="w-full">
                         {/* title  */}
                         <div className="py-4 text-center uppercase text-xl lg:text-left">{category} Book</div>
                         {/* product grid   */}
