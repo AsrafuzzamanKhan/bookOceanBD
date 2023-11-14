@@ -18,8 +18,9 @@ const CategoryNavMobile = ({ setCatNavMobile }) => {
             <div className="flex flex-col gap-y-8" >
                 {
                     uniqueCategories?.map((category, i) => {
-                        return <Link key={i} to={`/books/${category}`} className="uppercase font-medium">  {category} Book
-
+                        return <Link key={i} to={`/books/${category}`} className='uppercase font-medium '
+                            onClick={() => setCatNavMobile(false)}
+                        >  {category} Book
                         </Link>
 
                     })

@@ -6,7 +6,10 @@ import loginImg from '../../assets/log.jpg'
 import { AiOutlineEye } from 'react-icons/ai';
 import SocialLogin from "../SocialLogin/SocialLogin";
 import Swal from "sweetalert2";
+
+
 const Login = () => {
+
     const { signIn } = useContext(AuthContext)
     // navigate user 
     const navigate = useNavigate();
@@ -14,6 +17,7 @@ const Login = () => {
     const from = location.state?.from?.pathname || "/";
     const handleLogin = event => {
         event.preventDefault();
+
         const form = event.target;
         const email = form.email.value;
         const password = form.password.value;
@@ -21,6 +25,7 @@ const Login = () => {
         signIn(email, password)
             .then(result => {
                 const user = result.user
+
                 console.log(user)
                 Swal.fire({
                     title: 'Login Sucessfull',
@@ -53,13 +58,13 @@ const Login = () => {
 
                             {/* form  */}
                             <form onSubmit={handleLogin} className="flex flex-col gap-4">
-                                <input className="p-2 mt-8 rounded-xl border" type="email" name="email" placeholder="Email" />
+                                <input className="p-2 mt-8 rounded-xl border" type="email" name="email" placeholder="Email" required />
                                 <div className="relative"
                                 >
-                                    <input className="p-2 mt-3 rounded-xl border w-full" type="password" name="password" placeholder="Password" />
-                                    <div>
+                                    <input className="p-2 mt-3 rounded-xl border w-full" type="password" name="password" placeholder="Password" required />
+                                    {/* <div>
                                         <AiOutlineEye className="absolute top-1/2 right-3 -translate-y-1/2" />
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <input className="bg-blue-400 rounded-xl py-2 hover:scale-105 duration-300" type="submit" value="Login" />
 

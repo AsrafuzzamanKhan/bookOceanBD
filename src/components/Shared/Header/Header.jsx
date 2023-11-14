@@ -2,16 +2,23 @@ import { useContext, useState } from "react";
 import SearchForm from "../../SearchForm/SearchForm";
 import { CartContext } from "../../../providers/CartProvider/CartProvider";
 import { FiMenu, FiShoppingBag } from 'react-icons/fi'
+import { FaRegUserCircle } from "react-icons/fa";
 import CategoryNavMobile from "../../CategoryNavMobile/CategoryNavMobile";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import Cart from "../../Cart/Cart";
 import { AuthContext } from "../../../providers/AuthProvider/AuthProvider";
+
+import useCart from "../../../hooks/useCart";
 
 const Header = () => {
     const { isOpen, setIsOpen, itemsAmount } = useContext(CartContext);
     const { user, logOut } = useContext(AuthContext)
     const [catNavMobile, setCatNavMobile] = useState(false);
     const navigate = useNavigate()
+    // -----
+    const [cart] = useCart()
+
+
 
     const handleLogOut = () => {
         logOut()
@@ -36,7 +43,7 @@ const Header = () => {
                         <FiMenu></FiMenu>
                     </div>
                     {/* category mobile nav  */}
-                    <div className={`${catNavMobile ? 'left-0' : '-left-full'} fixed top-0 bottom-0 z-30 bg-slate-700 "w-2/3 h-screen transition-all duration-200 `}>
+                    <div className={`${catNavMobile ? 'left-0' : '-left-full'} fixed top-0 bottom-0 z-30 bg-slate-700 "w-2/3 h-screen transition-all duration-700 `}>
                         <CategoryNavMobile
                             setCatNavMobile={setCatNavMobile}
                         ></CategoryNavMobile>
@@ -49,21 +56,42 @@ const Header = () => {
                     <div className="hidden lg:flex lg:max-w-[738px] rounded-lg w-full ">
                         <SearchForm></SearchForm>
                     </div>
+
+
                     {/* phone and cart 
                      */}
-                    <div className="flex items-center gap-x-[10px]">
-                        {user?.email ? <button onClick={handleLogOut} className="btn btn-primary">Logout</button> :
-                            <Link to='/login'> Login</Link>
-                        }
+
+                    <div className="flex items-center justify-center gap-x-[10px]">
+                        {/* drop down  */}
+                        <div className="dropdown dropdown-hover dropdown-bottom dropdown-end">
+                            <label tabIndex={0} >
+                                <div className="avatar online placeholder">
+                                    <div className="bg-neutral text-neutral-content rounded-full sm:w-12 w-10">
+                                        {user ? <img src={user?.photoURL} alt={user.displayName} /> : <><FaRegUserCircle /></>}
+
+                                    </div>
+                                </div>
+
+                            </label>
+                            <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                                <li className="bg-black">Hello, {user?.displayName}</li>
+                                <li> <NavLink to='/dashboard' className='text-black'>Dashbord</NavLink></li>
+                                <li><Link>{user?.email ? <button onClick={handleLogOut} className="btn ">Logout</button> :
+                                    <Link className="text-xl text-black" to='/login'> Login</Link>
+                                }</Link></li>
+                            </ul>
+                        </div>
+
 
                         {/* cart icon  */}
                         <div onClick={() => setIsOpen(!isOpen)} className="relative cursor-pointer">
-                            <FiShoppingBag className="text-2xl"></FiShoppingBag>
+                            <FiShoppingBag size={30}></FiShoppingBag>
 
                             {/* amount  */}
-
+                            {/* cart total  */}
                             <div className="bg-blue-400 absolute w-[18px] h-[18px] rounded-full top-3 -right-1 text-[14px] flex justify-center items-center font-bold tracking-[0.1em]">
-                                {itemsAmount}
+                                {/* {itemsAmount} */}
+                                {cart?.length || 0}
                             </div>
                         </div>
 

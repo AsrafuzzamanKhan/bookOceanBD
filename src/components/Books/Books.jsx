@@ -13,7 +13,9 @@ const Books = () => {
     // Use the filter method to get products of the selected category
     const filteredProducts = booksData.filter(item => item.category === selectedCategory);
     return (
-        <div className="pt-40 mb-16 lg:pt-28">
+        <div className="mb-[30px] pt-36 md:pt-36 lg:pt-0 xl:pt-28 ">
+            {/* <div className="mb-16 pt-40 md:pt-28 lg:pt-28 "> */}
+            {/* xl:pt-28   md:pt-40 */}
 
             <div className="container mx-auto px-2">
                 <div className="flex gap-x-[30px]">

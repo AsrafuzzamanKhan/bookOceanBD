@@ -15,7 +15,7 @@ const CategoryNav = () => {
                         uniqueCategories.map(category =>
                             <Link
                                 to={`/books/${category}`}
-                                key={category.id}>
+                                key={category._id}>
                                 {category}
                             </Link>)
                     }

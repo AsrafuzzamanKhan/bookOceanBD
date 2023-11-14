@@ -5,7 +5,6 @@ import { AiOutlineEye } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
 import { useContext } from 'react';
 import { AuthContext } from '../../providers/AuthProvider/AuthProvider';
-import { Result } from 'postcss';
 import Swal from 'sweetalert2';
 import { Helmet } from 'react-helmet-async';
 import SocialLogin from '../SocialLogin/SocialLogin';
@@ -37,7 +36,8 @@ const SignUp = () => {
                         })
                             .then(res => res.json())
                             .then(data => {
-                                if (data.inserteId) {
+                                console.log('new account', data)
+                                if (data.insertedId) {
                                     reset();
                                     Swal.fire({
                                         position: 'top-end',
@@ -58,7 +58,7 @@ const SignUp = () => {
     return (
         <>
             <Helmet>
-                <title>Food Club | Sign up</title>
+                <title>Book Ocean BD | Sign up</title>
             </Helmet>
             <div className="bg-blue-200/40">
                 <div className=" container mx-auto px-2">

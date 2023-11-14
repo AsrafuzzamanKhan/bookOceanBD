@@ -17,6 +17,19 @@ import SearchBook from './components/SearchBook/SearchBook';
 import AuthProvider from './providers/AuthProvider/AuthProvider';
 import Login from './components/Login/Login';
 import SignUp from './components/SignUp/signUp';
+import Checkout from './components/Dashboard/Checkout/Checkout';
+import DashboardLayout from './components/Layout/DashboardLayout/DashboardLayout';
+import AddBooks from './components/Dashboard/AddBook/AddBooks';
+import ManageBooks from './components/Dashboard/ManageBooks/ManageBooks';
+import PrivateRoutes from './components/Routes/PrivateRoutes';
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'// Create a client
+import AllUsers from './components/Dashboard/AllUsers/AllUsers';
+import OrderHistory from './components/Dashboard/OrderHistory/OrderHistory';
+import AdminRoute from './components/Routes/AdminRoute';
+const queryClient = new QueryClient()
 
 const router = createBrowserRouter([
   {
@@ -50,20 +63,51 @@ const router = createBrowserRouter([
         path: '/signup',
         element: <SignUp />
       }
+      ,
+      {
+        path: '/checkout',
+        element: <Checkout />
+      }
     ]
   },
+  {
+    path: 'dashboard',
+    element: <PrivateRoutes> <DashboardLayout></DashboardLayout></PrivateRoutes>,
+    children: [
+      {
+        path: 'addBooks',
+        element: <AddBooks></AddBooks>
+      },
+      {
+        path: 'manageBooks',
+        element: <ManageBooks></ManageBooks>
+      },
+      {
+        path: 'allUsers',
+        element: <AllUsers></AllUsers>
+
+      },
+      {
+        path: 'orderHistory',
+        element: <OrderHistory></OrderHistory>
+      }
+    ]
+
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
 
   <React.StrictMode>
-    <AuthProvider>
-      <HelmetProvider>
-        <CartProvider>
-          <RouterProvider router={router} />
-        </CartProvider>
-      </HelmetProvider>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <HelmetProvider>
+          <CartProvider>
+            <RouterProvider router={router} />
+          </CartProvider>
+        </HelmetProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   </React.StrictMode>,
 
 )
