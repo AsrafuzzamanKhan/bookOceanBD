@@ -8,9 +8,8 @@ const LatestBook = () => {
     const sliceData = newProduct.slice(1, 10)
     // console.log(sliceData.length)
     return (
-        <div className='mb-16'>
-
-            <div className='container mx-auto'>
+        <div className='my-16'>
+            <div className='container mx-auto w-full'>
                 <h2 className='text-xl text-center xl:text-left mb-5 font-semibold'>Latest Books</h2>
 
                 <BookSlider data={sliceData}></BookSlider>

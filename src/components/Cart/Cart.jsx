@@ -1,24 +1,19 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
-
-
 import { IoArrowForward, IoCart } from 'react-icons/io5';
-import { CartContext } from '../../providers/CartProvider/CartProvider';
+
 import CartItem from '../CartItem/CartItem';
 import { Link } from 'react-router-dom';
-
 import useAuth from '../../hooks/useAuth';
 import useCart from '../../hooks/useCart';
 import Swal from 'sweetalert2';
+import { CartContext } from '../../providers/CartProvider/CartProvider';
+
 const Cart = () => {
-    const { setIsOpen, isOpen, clearCart } = useContext(CartContext);
+
+    const { setIsOpen, isOpen } = useContext(CartContext)
     const [cart, refetch] = useCart()
-    const { user } = useAuth()
-    const handleCheckOut = cart => {
-        console.log(cart)
 
-
-    }
     const total = cart.reduce((sum, item) => item.price + sum, 0)
     const handleCartRemove = item => {
         Swal.fire({
@@ -44,7 +39,7 @@ const Cart = () => {
                                 icon: "success"
                             });
                         }
-                        setIsOpen(false)
+                        // setIsOpen(false)
                     })
             }
         });
@@ -85,7 +80,7 @@ const Cart = () => {
                         <div className='flex justify-between text-2xl'>
                             <div>Total:</div>
                             <div>
-                                ${parseFloat(total.toFixed(2))}
+                                {parseFloat(total.toFixed(2))} <span>&#x09F3;</span>
 
                             </div>
                         </div>
@@ -99,15 +94,14 @@ const Cart = () => {
                         <div className='flex justify-between gap-x-4'>
                             {/* clear cart  */}
                             <button
-                                onClick={clearCart}
+                                // onClick={clearCart}
                                 className='btn bg-blue-400 hover:bg-blue-200 text-primary'
                             >Clear Cart</button>
 
 
                             {/* check out  */}
-                            <Link to='/checkout'>
+                            <Link to='/checkout' >
                                 <button
-                                    onClick={() => handleCheckOut(cart)}
                                     className='btn bg-blue-400 hover:bg-blue-200 text-primary flex-1 px-2 gap-x-2'>Check Out <IoArrowForward className='text-lg'></IoArrowForward></button>
                             </Link>
 

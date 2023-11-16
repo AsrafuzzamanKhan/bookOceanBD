@@ -10,6 +10,26 @@ const CartProvider = ({ children }) => {
     const [amount, setAmount] = useState(0)
     const [total, setTotal] = useState(0)
 
+    // const initialState = {
+    //     cart: [],
+    //     total_item: '',
+    //     total_amount: "",
+    //     shipping_fee: 50000,
+    // }
+
+    // const [state, dispatch] = useReducer(reducer, initialState)
+    // const addToCartRedcue = (category, name, image, price, _id, item) => {
+    //     dispatch({ type: 'ADD_TO_CART', payload: { category, name, image, price, _id, item } })
+    // }
+
+
+
+
+
+
+
+
+
     // cart amount 
     useEffect(() => {
         const amount = cart.reduce((a, c) => {
@@ -112,6 +132,22 @@ const CartProvider = ({ children }) => {
 
 
     return (
+        // <CartContext.Provider
+        //     value={{
+
+        //         isOpen,
+        //         setIsOpen,
+        //         addToCart,
+        //         cart,
+        //         removerFromCart,
+        //         itemsAmount,
+        //         handleInput,
+        //         handleSelect,
+        //         total,
+        //         clearCart
+        //     }}>
+        //     {children}
+        // </CartContext.Provider>
         <CartContext.Provider
             value={{
                 isOpen,

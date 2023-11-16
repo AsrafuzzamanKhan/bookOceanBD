@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import SearchForm from "../../SearchForm/SearchForm";
-import { CartContext } from "../../../providers/CartProvider/CartProvider";
+
 import { FiMenu, FiShoppingBag } from 'react-icons/fi'
 import { FaRegUserCircle } from "react-icons/fa";
 import CategoryNavMobile from "../../CategoryNavMobile/CategoryNavMobile";
@@ -9,11 +9,14 @@ import Cart from "../../Cart/Cart";
 import { AuthContext } from "../../../providers/AuthProvider/AuthProvider";
 
 import useCart from "../../../hooks/useCart";
+import { CartContext } from "../../../providers/CartProvider/CartProvider";
 
 const Header = () => {
-    const { isOpen, setIsOpen, itemsAmount } = useContext(CartContext);
+
+
     const { user, logOut } = useContext(AuthContext)
     const [catNavMobile, setCatNavMobile] = useState(false);
+    const { isOpen, setIsOpen } = useContext(CartContext);
     const navigate = useNavigate()
     // -----
     const [cart] = useCart()
@@ -67,14 +70,14 @@ const Header = () => {
                             <label tabIndex={0} >
                                 <div className="avatar online placeholder">
                                     <div className="bg-neutral text-neutral-content rounded-full sm:w-12 w-10">
-                                        {user ? <img src={user?.photoURL} alt={user.displayName} /> : <><FaRegUserCircle /></>}
+                                        {user ? <img src={user?.photoURL} alt={user?.displayName} /> : <><FaRegUserCircle /></>}
 
                                     </div>
                                 </div>
 
                             </label>
                             <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-                                <li className="bg-black">Hello, {user?.displayName}</li>
+                                <li className="bg-black p-2 rounded">Hello, {user?.displayName || "User"}</li>
                                 <li> <NavLink to='/dashboard' className='text-black'>Dashbord</NavLink></li>
                                 <li><Link>{user?.email ? <button onClick={handleLogOut} className="btn ">Logout</button> :
                                     <Link className="text-xl text-black" to='/login'> Login</Link>

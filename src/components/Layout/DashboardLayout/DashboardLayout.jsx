@@ -4,14 +4,14 @@ import { Link, NavLink, Outlet } from 'react-router-dom';
 import logo from '../../../assets/logo/book.png'
 import useAuth from '../../../hooks/useAuth';
 import { FaBook, FaCalendarAlt, FaHome, FaShoppingCart, FaSitemap, FaUsers, FaUtensils, FaWallet, FaWindowClose } from 'react-icons/fa';
-import { CartContext } from '../../../providers/CartProvider/CartProvider';
+
 import useAdmin from '../../../hooks/useAdmin';
 const DashboardLayout = () => {
     const [open, setOpen] = useState(true)
     const { user } = useAuth()
-    // const [isAdmin] = useAdmin()
-    const isAdmin = true
-    const { cart } = useContext(CartContext)
+    const [isAdmin] = useAdmin()
+    // const isAdmin = true
+
     return (
         <div className='flex'>
             <div className='fixed'>
@@ -32,9 +32,15 @@ const DashboardLayout = () => {
                     {/* menu  */}
                     <div className='text-white flex flex-col gap-y-4 mt-6'>
 
-                        {isAdmin ? <>  <NavLink to='/dashboard/addBooks'>Add Book</NavLink>
-                            <NavLink to='/dashboard/manageBooks'>Manage Books</NavLink>
-                            <NavLink to='/dashboard/allUsers'>All Users</NavLink></> : <>    <NavLink to='/dashboard/orderHistory'>Order History</NavLink></>}
+                        {
+                            isAdmin ? <>
+                                <NavLink to='/dashboard/addBook'>Add Book</NavLink>
+                                <NavLink to='/dashboard/manageBooks'>Manage Books</NavLink>
+                                <NavLink to='/dashboard/allUsers'>All Users</NavLink>
+                            </> : <>
+                                <NavLink to='/dashboard/orderHistory'>Order History</NavLink>
+                            </>
+                        }
 
                     </div>
 

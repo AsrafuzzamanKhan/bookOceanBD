@@ -1,31 +1,42 @@
 import { useNavigate, useParams } from "react-router-dom";
 import useBookData from "../../hooks/useBookData";
 import RelatedBooks from "../RelatedBooks/RelatedBooks";
-import { CartContext } from "../../providers/CartProvider/CartProvider";
-import { useContext } from "react";
+
 import Swal from "sweetalert2";
 import useAuth from "../../hooks/useAuth";
 import useCart from "../../hooks/useCart";
+import { useState } from "react";
 
 
 const BookDetails = () => {
     const { id } = useParams()
     const { user } = useAuth()
     const [booksData] = useBookData()
-    const { addToCart } = useContext(CartContext)
     const navigate = useNavigate()
     const [, refetch] = useCart()
-    const productDetails = booksData.find(pd => pd.id == id)
-    console.log(productDetails)
+    const [cart, setCart] = useState([])
+    const [amount, setAmount] = useState(0)
+
+
+
+    const productDetails = booksData.find(pd => pd._id == id)
+
+    console.log('product details', productDetails)
     if (!productDetails) {
         return <div className="container mx-auto">loading....</div>
     }
 
     const handleAddToCart = (item) => {
         const { category, name, image, price, _id } = item;
-        const cartItem = { bookId: _id, category, name, image, price, email: user?.email }
-        console.log('item', item)
+
+        const cartItem = { bookId: _id, category, name, image, price, email: user?.email, amount: 1 }
+        console.log('cartItem', cartItem)
         console.log(id)
+
+
+
+
+
         // phh -------
         if (user) {
             fetch('http://localhost:5000/carts', {
@@ -46,6 +57,27 @@ const BookDetails = () => {
                             showConfirmButton: false,
                             timer: 1500
                         });
+
+
+                        setCart([...cart, cartItem])
+                        const allCartItem = cart.find(item => item.bookId === _id)
+                        if (allCartItem) {
+                            const newCart = cart.map(item => {
+                                if (item.bookId === _id) {
+                                    setAmount(allCartItem.amount + 1)
+                                    return { ...item, amount: allCartItem.amount + 1 }
+                                }
+                                else { return item }
+                            }
+                            );
+                            setCart(newCart)
+                        }
+                        else {
+                            setCart([...cart, cartItem])
+                        }
+
+
+
                     }
                 })
         } else {
@@ -81,30 +113,45 @@ const BookDetails = () => {
                         {/* category  */}
                         <div className="uppercase text-blue-400 text-lg font-medium mb-2"> {productDetails.category}  </div>
                         {/* title  */}
-                        <h2 className="h2 mb-4"> {productDetails.name} Book </h2>
+                        <h2 className="h2 mb-2"> {productDetails.name}</h2>
+                        <div className="mb-6">
+                            by <span className="text-blue-400 ">{productDetails.author}</span>
+                        </div>
+
+                        {/* price and btn   */}
+                        <div className="flex items-center gap-x-8 mb-10">
+                            {/* price  */}
+
+
+                            <div className=" flex justify-center items-center gap-4">
+
+                                <div className="border rounded-[8px] shadow-md flex flex-col h-auto p-2">
+                                    <div >
+                                        {
+                                            productDetails.cover === 'hardcover' && <span className="text-[15px] "> Hardcover </span>
+                                        }
+                                        {
+                                            productDetails.cover == 'paperback' && <span className="text-[15px] "> Paperback </span>
+                                        }
+                                    </div>
+                                    <div className="text-xl font-semibold text-blue-400"><span>&#x09F3;</span> {productDetails.price}</div>
+                                </div>
+
+
+                                {/* add to cart button  */}
+                                <div className="">
+                                    <button
+                                        onClick={() => handleAddToCart(productDetails)}
+                                        className="btn bg-blue-400 hover:bg-blue-200 transition-all">Add to cart
+                                    </button>
+
+                                </div>
+                            </div>
+
+
+                        </div>
                         {/* description  */}
                         <p className="mb-5">{productDetails.description}</p>
-                        <div className="mb-12">
-                            {
-                                productDetails.isHardcover == true && <span className="text-[15px] "> Hardcover </span>
-                            }
-                            {
-                                productDetails.isPaperback == true && <span className="text-[15px] "> Paperback </span>
-                            }
-                        </div>
-                        {/* price and btn   */}
-                        <div className="flex items-center gap-x-8">
-                            {/* price  */}
-                            <div className="text-3xl font-semibold text-blue-400">$ {productDetails.price}</div>
-
-                            <button
-                                onClick={() => handleAddToCart(productDetails)}
-                                className="btn bg-blue-400 hover:bg-blue-200 transition-all">Add to cart
-                            </button>
-                            {/* <button
-                                onClick={() => addToCart(productDetails, productDetails.id)}
-                                className="btn bg-blue-400 hover:bg-blue-200 transition-all">Add to cart</button> */}
-                        </div>
 
                     </div>
                 </div>

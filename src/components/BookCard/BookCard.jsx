@@ -2,10 +2,11 @@ import { Link } from "react-router-dom";
 
 
 const BookCard = ({ book }) => {
-    const { id, name, price, image, description, isNew, category, isPaperback, isHardcover } = book
+    const { _id, name, author, price, image, description, isNew, category, isPaperback, isHardcover } = book;
+    // console.log('book', book)
     return (
-        <Link to={`/book/${id}`}>
-            <div className=" border shadow-md w-full h-[362px] rounded-[8px] overflow-hidden relative group">
+        <Link to={`/book/${_id}`}>
+            <div className=" border shadow-md w-full h-[400px] rounded-[8px] overflow-hidden relative group">
                 {/* badge  */}
                 {isNew === true && <div className="absolute bg-blue-400 text-primary text-[12px] font-extrabold uppercase top-4 right-4 rounded-full px-2 z-10">
                     new
@@ -23,10 +24,11 @@ const BookCard = ({ book }) => {
                     <div className="text-sm text-blue-400">{category}</div>
                     {/* title  */}
                     <div className="text-[15px] ">{name}</div>
+                    <div className="text-[15px] ">{author}</div>
 
 
                     <div className="text-lg text-blue-400">
-                        $ {price}
+                        <span>&#x09F3;</span> {price}
                     </div>
                 </div>
             </div>

@@ -1,9 +1,41 @@
+import { AiFillDelete } from "react-icons/ai";
 import useBookData from "../../../hooks/useBookData";
+import Swal from "sweetalert2";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const ManageBooks = () => {
     const [booksData, , refetch] = useBookData()
+    const [axiosSecure] = useAxiosSecure()
     console.log(booksData)
+    const handleDeleteBook = book => {
+        console.log('selected bookd', book)
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            console.log(result)
+            if (result.isConfirmed) {
+                axiosSecure.delete(`/books/${book._id}`)
+                    .then(res => {
+                        if (res.data.deletedCount > 0) {
+                            refetch();
+                            Swal.fire(
+                                'Deleted!',
+                                'Your item has been deleted.',
+                                'success'
+                            )
+                        }
+                    })
 
+
+            }
+        })
+    }
     return (
         <div className="w-full">
             <div className=" text-white text-2xl font-bold text-center mb-12 bg-[#081A51] py-12">
@@ -18,7 +50,7 @@ const ManageBooks = () => {
                             <th>S/N</th>
                             <th>Image</th>
                             <th>Name</th>
-                            <th>Chategory</th>
+                            <th>Category</th>
                             <th>Price</th>
                             <th>Edit</th>
                             <th>Action</th>
@@ -45,16 +77,16 @@ const ManageBooks = () => {
                             <td>
                                 {book.name}
                                 <br />
-                                <span className="badge badge-ghost badge-sm">Author name</span>
+                                <span className="badge badge-ghost badge-sm">{book.author}</span>
                             </td>
                             <td>{book.category}</td>
                             <td>{book.price}</td>
                             <td>
                                 <button className="btn btn-ghost btn-xs">Edit</button>
                             </td>
-                            <td>
-                                <button className="btn btn-primary btn-xs">Delete</button>
-                            </td>
+                            <th>
+                                <button onClick={() => handleDeleteBook(book)} className="btn bg-red-600 text-white"> <AiFillDelete className='text-2xl' /></button>
+                            </th>
                         </tr>)}
 
 

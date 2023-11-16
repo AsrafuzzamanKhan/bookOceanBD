@@ -10,7 +10,7 @@ import {
 import Roots from './Roots/Roots';
 import Home from './components/Home/Home/Home';
 
-import CartProvider from './providers/CartProvider/CartProvider';
+
 import BookDetails from './components/BookDetails/BookDetails';
 import Books from './components/Books/Books';
 import SearchBook from './components/SearchBook/SearchBook';
@@ -29,6 +29,7 @@ import {
 import AllUsers from './components/Dashboard/AllUsers/AllUsers';
 import OrderHistory from './components/Dashboard/OrderHistory/OrderHistory';
 import AdminRoute from './components/Routes/AdminRoute';
+import CartProvider from './providers/CartProvider/CartProvider';
 const queryClient = new QueryClient()
 
 const router = createBrowserRouter([
@@ -75,16 +76,16 @@ const router = createBrowserRouter([
     element: <PrivateRoutes> <DashboardLayout></DashboardLayout></PrivateRoutes>,
     children: [
       {
-        path: 'addBooks',
-        element: <AddBooks></AddBooks>
+        path: 'addBook',
+        element: <AdminRoute><AddBooks></AddBooks></AdminRoute>
       },
       {
         path: 'manageBooks',
-        element: <ManageBooks></ManageBooks>
+        element: <AdminRoute><ManageBooks></ManageBooks></AdminRoute>
       },
       {
         path: 'allUsers',
-        element: <AllUsers></AllUsers>
+        element: <AdminRoute><AllUsers></AllUsers></AdminRoute>
 
       },
       {

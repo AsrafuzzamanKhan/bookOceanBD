@@ -27,7 +27,7 @@ const BookSlider = ({ data }) => {
                     spaceBetween: 30
                 },
                 1024: {
-                    slidesPerView: 3,
+                    slidesPerView: 4,
                     spaceBetween: 30
                 },
                 1440: {
@@ -36,7 +36,7 @@ const BookSlider = ({ data }) => {
                 },
 
             }}
-            className='productSlider mx-auto max-w-[360px] md:max-w-lg xl:max-w-[1410px]'
+            className='productSlider  w-full mx-auto max-w-[360px] md:max-w-lg xl:max-w-[1410px]'
         >
             <>
                 {data?.map(book => {
