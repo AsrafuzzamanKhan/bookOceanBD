@@ -1,23 +1,23 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import { Helmet } from "react-helmet-async";
 import Swal from "sweetalert2";
-import { AiFillDelete } from "react-icons/ai";
+import { Helmet } from "react-helmet-async";
 import { FaUserShield } from "react-icons/fa";
+import { AiFillDelete } from "react-icons/ai";
 
-const AllUsers = () => {
+const AllOrders = () => {
     const [axiosSecure] = useAxiosSecure();
-    const { data: users = [], refetch } = useQuery({
-        queryKey: ['users'],
+    const { data: orders = [], refetch } = useQuery({
+        queryKey: ['orders'],
         queryFn: async () => {
-            const res = await axiosSecure.get('/users')
+            const res = await axiosSecure.get('/orders')
             return res.data;
 
         }
     });
-    const handleMakeAdmin = user => {
-        console.log(user._id)
-        axiosSecure.patch(`/users/admin/${user._id}`)
+    const handleApproved = order => {
+        console.log(order._id)
+        axiosSecure.patch(`/orders/status/${order._id}`)
             .then(res => {
                 console.log(res.data)
                 if (res.data.modifiedCount > 0) {
@@ -25,7 +25,7 @@ const AllUsers = () => {
                     Swal.fire({
                         position: "top-end",
                         icon: "success",
-                        title: `${user.name} is an Admin Now!`,
+                        title: `order is Approved`,
                         showConfirmButton: false,
                         timer: 1500
                     });
@@ -33,8 +33,9 @@ const AllUsers = () => {
             })
     }
 
-    const handleDelete = user => {
-        console.log(user)
+
+    const handleDelete = order => {
+        console.log(order._id)
     }
     return (
         <div className="w-full">
@@ -42,7 +43,7 @@ const AllUsers = () => {
                 <title>Book Ocean BD || All Users</title>
             </Helmet>
             <h3 className="text-3xl text-center my-4">
-                Total User: {users?.length}
+                Total User: {orders?.length}
             </h3>
             <div className="overflow-x-auto">
                 <table className="table table-zebra">
@@ -52,19 +53,22 @@ const AllUsers = () => {
                             <th>S/N</th>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Role</th>
+                            <th>Order qtn</th>
+                            <th>Total</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
-                            users?.map((user, i) => <tr key={i}>
+                            orders?.map((order, i) => <tr key={i}>
                                 <th>{i + 1}</th>
-                                <td>{user.name}</td>
-                                <td>{user.email}</td>
-                                <td>{user.role === 'admin' ? 'admin' : <button onClick={() => handleMakeAdmin(user)} className="btn bg-orange-600 text-white"><FaUserShield className="text-2xl"></FaUserShield></button>}</td>
+                                <td>{order.data.name}</td>
+                                <td>{order.email}</td>
+                                <td>{order.orderQuantity}</td>
+                                <td>{order.totalAmount}</td>
+                                <td>{order.status === 'approve' ? 'Approved' : <button onClick={() => handleApproved(order)} className="btn bg-orange-600 text-white">{order.status}</button>}</td>
                                 <th>
-                                    <button onClick={() => handleDelete(user)} className="btn bg-red-600 text-white"> <AiFillDelete className='text-2xl' /></button>
+                                    <button onClick={() => handleDelete(order)} className="btn bg-red-600 text-white"> <AiFillDelete className='text-2xl' /></button>
                                 </th>
                             </tr>)
                         }
@@ -77,4 +81,4 @@ const AllUsers = () => {
     );
 };
 
-export default AllUsers;
+export default AllOrders;

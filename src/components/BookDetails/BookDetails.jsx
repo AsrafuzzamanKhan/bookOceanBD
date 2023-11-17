@@ -5,7 +5,8 @@ import RelatedBooks from "../RelatedBooks/RelatedBooks";
 import Swal from "sweetalert2";
 import useAuth from "../../hooks/useAuth";
 import useCart from "../../hooks/useCart";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { CartContext } from "../../providers/CartProvider/CartProvider";
 
 
 const BookDetails = () => {
@@ -16,27 +17,25 @@ const BookDetails = () => {
     const [, refetch] = useCart()
     const [cart, setCart] = useState([])
     const [amount, setAmount] = useState(0)
+    const { setIsOpen, isOpen } = useContext(CartContext)
 
 
 
     const productDetails = booksData.find(pd => pd._id == id)
 
     console.log('product details', productDetails)
+
     if (!productDetails) {
         return <div className="container mx-auto">loading....</div>
     }
 
     const handleAddToCart = (item) => {
-        const { category, name, image, price, _id } = item;
 
-        const cartItem = { bookId: _id, category, name, image, price, email: user?.email, amount: 1 }
+        const { category, name, image, price, _id, author } = item;
+
+        const cartItem = { bookId: _id, category, name, author, image, price, email: user?.email, quantity: 1 }
         console.log('cartItem', cartItem)
         console.log(id)
-
-
-
-
-
         // phh -------
         if (user) {
             fetch('http://localhost:5000/carts', {
@@ -50,6 +49,7 @@ const BookDetails = () => {
                 .then(data => {
                     if (data.insertedId) {
                         refetch()
+                        setIsOpen(!isOpen)
                         Swal.fire({
                             position: "top-end",
                             icon: "success",

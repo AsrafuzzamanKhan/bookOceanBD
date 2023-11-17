@@ -30,6 +30,7 @@ import AllUsers from './components/Dashboard/AllUsers/AllUsers';
 import OrderHistory from './components/Dashboard/OrderHistory/OrderHistory';
 import AdminRoute from './components/Routes/AdminRoute';
 import CartProvider from './providers/CartProvider/CartProvider';
+import AllOrders from './components/Dashboard/AllOrders/AllOrders';
 const queryClient = new QueryClient()
 
 const router = createBrowserRouter([
@@ -86,6 +87,11 @@ const router = createBrowserRouter([
       {
         path: 'allUsers',
         element: <AdminRoute><AllUsers></AllUsers></AdminRoute>
+
+      },
+      {
+        path: 'allOrders',
+        element: <AdminRoute><AllOrders></AllOrders></AdminRoute>
 
       },
       {

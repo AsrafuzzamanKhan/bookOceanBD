@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import { IoArrowForward, IoCart } from 'react-icons/io5';
 
@@ -9,10 +9,28 @@ import useCart from '../../hooks/useCart';
 import Swal from 'sweetalert2';
 import { CartContext } from '../../providers/CartProvider/CartProvider';
 
+
 const Cart = () => {
 
     const { setIsOpen, isOpen } = useContext(CartContext)
     const [cart, refetch] = useCart()
+    const sidebarRef = useRef(null);
+    useEffect(() => {
+        // Function to handle click outside of the sidebar
+        const handleClickOutside = (event) => {
+            if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+
+        // Attach the event listener when the component mounts
+        document.addEventListener('mousedown', handleClickOutside);
+
+        // Detach the event listener when the component unmounts
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const total = cart.reduce((sum, item) => item.price + sum, 0)
     const handleCartRemove = item => {
@@ -46,11 +64,14 @@ const Cart = () => {
     }
 
     return (
-        <div className="w-full h-full px-4 text-white">
+        <div className="w-full h-full px-4 text-white " ref={sidebarRef}
+        >
             <div className='overflow-y-auto overflow-x-hidden h-[70vh]'>
                 {/* close icon  */}
                 <div
                     onClick={() => setIsOpen(!isOpen)}
+
+
                     className='text-4xl w-20 h-[98px] flex justify-start items-center cursor-pointer'>
                     <IoMdClose></IoMdClose>
                 </div>
@@ -69,16 +90,10 @@ const Cart = () => {
                     <div className='px-6 py-10 flex flex-col '>
                         {/* sub  */}
                         <div className='flex justify-between'>
-                            <div>Subtotal:</div>
-
-                            <div>
-                                {/* ${parseFloat(total.toFixed(2))} */}
-                                total
-                            </div>
                         </div>
-                        {/* total  */}
+                        {/* Subtotal: */}
                         <div className='flex justify-between text-2xl'>
-                            <div>Total:</div>
+                            <div>Subtotal:</div>
                             <div>
                                 {parseFloat(total.toFixed(2))} <span>&#x09F3;</span>
 
@@ -91,9 +106,11 @@ const Cart = () => {
             <div className='p-6'>
                 {
                     cart.length >= 1 ?
-                        <div className='flex justify-between gap-x-4'>
+                        <div className='flex justify-between gap-x-4'
+                            onClick={() => setIsOpen(!isOpen)}>
                             {/* clear cart  */}
                             <button
+
                                 // onClick={clearCart}
                                 className='btn bg-blue-400 hover:bg-blue-200 text-primary'
                             >Clear Cart</button>

@@ -37,6 +37,7 @@ const DashboardLayout = () => {
                                 <NavLink to='/dashboard/addBook'>Add Book</NavLink>
                                 <NavLink to='/dashboard/manageBooks'>Manage Books</NavLink>
                                 <NavLink to='/dashboard/allUsers'>All Users</NavLink>
+                                <NavLink to='/dashboard/allOrders'>All Orders</NavLink>
                             </> : <>
                                 <NavLink to='/dashboard/orderHistory'>Order History</NavLink>
                             </>
