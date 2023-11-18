@@ -40,13 +40,14 @@ const AllOrders = () => {
     return (
         <div className="w-full">
             <Helmet>
-                <title>Book Ocean BD || All Users</title>
+                <title>Book Ocean BD || All orders</title>
             </Helmet>
-            <h3 className="text-3xl text-center my-4">
-                Total User: {orders?.length}
-            </h3>
-            <div className="overflow-x-auto">
-                <table className="table table-zebra">
+            <div className=" text-white text-2xl font-bold text-center mb-12 bg-[#081A51] py-12">
+                Total Order: {orders?.length}
+            </div>
+
+            <div className="overflow-x-auto px-8">
+                <table className="table table-zebra table-pin-rows table-pin-cols">
                     {/* head */}
                     <thead>
                         <tr>

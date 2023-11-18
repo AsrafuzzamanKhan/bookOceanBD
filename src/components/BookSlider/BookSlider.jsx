@@ -36,7 +36,8 @@ const BookSlider = ({ data }) => {
                 },
 
             }}
-            className='productSlider  w-full mx-auto max-w-[360px] md:max-w-lg xl:max-w-[1410px]'
+            className='productSlider  w-full mx-auto '
+        // className='productSlider  w-full mx-auto max-w-[360px] md:max-w-lg xl:max-w-[1410px]'
         >
             <>
                 {data?.map(book => {

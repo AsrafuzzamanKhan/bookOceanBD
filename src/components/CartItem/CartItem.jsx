@@ -11,19 +11,27 @@ const CartItem = ({ item, handleCartRemove }) => {
             <Link
                 to={`/book/${item.
                     bookId}`}
-                className="w-[70px] hi-[70px]">
+                className="w-[70px] h-[70px]">
                 <img src={item.image} alt="mage" />
             </Link>
             {/* title and remove icon  */}
             <div className="flex-1">
-                <div className="flex gap-x-4 mb-3">
-                    <Link
-                        to={`book/${item.
-                            bookId}`}
-                    > {item.name}
+                <div className="flex justify-between gap-x-4 mb-3">
+                    <div className="flex flex-col">
+                        <Link className="text-xl"
+                            to={`book/${item.
+                                bookId}`}
+                        > {item.name}
 
-                    </Link>
-                    <div className="cursor-pointer text-[24px] hover:text-blue-400 transition-all">
+                        </Link>
+                        <Link
+                            to={`book/${item.
+                                bookId}`}
+                        > by <span className="text-blue-400"> {item.author}</span>
+
+                        </Link>
+                    </div>
+                    <div className="cursor-pointer text-[24px] hover:text-red-400 transition-all">
                         <IoClose onClick={() => handleCartRemove(item)}></IoClose>
                     </div>
                 </div>

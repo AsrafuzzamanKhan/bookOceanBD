@@ -48,7 +48,7 @@ const DashboardLayout = () => {
 
                 </div>
             </div>
-            <div className={`${(open) ? 'pl-80' : 'pl-32'} w-full flex-1 h-screen duration-500`}>
+            <div className={`${(open) ? 'pl-72' : 'pl-20'} w-full flex-1 h-screen duration-500`}>
                 <div>
                     <Outlet></Outlet>
                 </div>

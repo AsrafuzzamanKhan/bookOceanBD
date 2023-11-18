@@ -46,7 +46,7 @@ const Header = () => {
                         <FiMenu></FiMenu>
                     </div>
                     {/* category mobile nav  */}
-                    <div className={`${catNavMobile ? 'left-0' : '-left-full'} fixed top-0 bottom-0 z-30 bg-slate-700 "w-2/3 h-screen transition-all duration-700 `}>
+                    <div className={`${catNavMobile ? 'left-0' : '-left-full'} fixed top-0 bottom-0 z-30 bg-slate-700 w-1/3 h-screen transition-all duration-700 `}>
                         <CategoryNavMobile
                             setCatNavMobile={setCatNavMobile}
                         ></CategoryNavMobile>

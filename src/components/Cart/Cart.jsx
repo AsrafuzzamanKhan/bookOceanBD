@@ -14,6 +14,8 @@ const Cart = () => {
 
     const { setIsOpen, isOpen } = useContext(CartContext)
     const [cart, refetch] = useCart()
+    const [removerCart, setRemoveCart] = useState([])
+
     const sidebarRef = useRef(null);
     useEffect(() => {
         // Function to handle click outside of the sidebar
@@ -33,6 +35,7 @@ const Cart = () => {
     }, []);
 
     const total = cart.reduce((sum, item) => item.price + sum, 0)
+
     const handleCartRemove = item => {
         Swal.fire({
             title: "Are you sure?",
@@ -63,6 +66,7 @@ const Cart = () => {
         });
     }
 
+
     return (
         <div className="w-full h-full px-4 text-white " ref={sidebarRef}
         >
@@ -70,11 +74,10 @@ const Cart = () => {
                 {/* close icon  */}
                 <div
                     onClick={() => setIsOpen(!isOpen)}
-
-
                     className='text-4xl w-20 h-[98px] flex justify-start items-center cursor-pointer'>
                     <IoMdClose></IoMdClose>
                 </div>
+
                 <div className='flex flex-col gap-y-10 px-2'>
 
                     {
@@ -109,17 +112,19 @@ const Cart = () => {
                         <div className='flex justify-between gap-x-4'
                             onClick={() => setIsOpen(!isOpen)}>
                             {/* clear cart  */}
-                            <button
+                            {/* <button
 
-                                // onClick={clearCart}
+                                onClick={handleclearCart}
                                 className='btn bg-blue-400 hover:bg-blue-200 text-primary'
-                            >Clear Cart</button>
+                            >Clear Cart</button> */}
 
 
                             {/* check out  */}
                             <Link to='/checkout' >
                                 <button
-                                    className='btn bg-blue-400 hover:bg-blue-200 text-primary flex-1 px-2 gap-x-2'>Check Out <IoArrowForward className='text-lg'></IoArrowForward></button>
+                                    className='btn bg-blue-400 hover:bg-blue-200 text-primary flex-1 px-2 gap-x-2'>Procced to buy ({cart.length}
+                                    {cart.length === 1 ? ' item' : ' items'})
+                                    <IoArrowForward className='text-lg'></IoArrowForward></button>
                             </Link>
 
 

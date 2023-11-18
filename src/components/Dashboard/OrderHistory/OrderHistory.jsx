@@ -1,4 +1,3 @@
-import { AiFillDelete } from "react-icons/ai";
 import useAuth from "../../../hooks/useAuth";
 import useUserOrder from "../../../hooks/useUserOrder";
 
@@ -49,7 +48,7 @@ const OrderHistory = () => {
 
                             <td>
 
-                                {order.totalAmount}
+                                <span>&#x09F3;</span>{order.totalAmount}
 
 
 

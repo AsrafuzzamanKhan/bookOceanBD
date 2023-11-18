@@ -118,6 +118,7 @@ const BookDetails = () => {
                             by <span className="text-blue-400 ">{productDetails.author}</span>
                         </div>
 
+
                         {/* price and btn   */}
                         <div className="flex items-center gap-x-8 mb-10">
                             {/* price  */}

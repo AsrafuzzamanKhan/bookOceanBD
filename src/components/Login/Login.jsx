@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 
 
 const Login = () => {
-
+    const [loginError, setLoginError] = useState('')
     const { signIn } = useContext(AuthContext)
     // navigate user 
     const navigate = useNavigate();
@@ -28,7 +28,7 @@ const Login = () => {
 
                 console.log(user)
                 Swal.fire({
-                    title: 'Login Sucessfull',
+                    title: 'Login Successfull',
                     showClass: {
                         popup: 'animate__animated animate__fadeInDown'
                     },
@@ -38,11 +38,13 @@ const Login = () => {
                 })
 
                 navigate(from, { replace: true });
+                setLoginError('')
             })
             .catch(error => {
 
                 const errorMessage = error.message;
                 console.log(errorMessage)
+                setLoginError(error)
             })
     }
     return (
@@ -62,6 +64,7 @@ const Login = () => {
                                 <div className="relative"
                                 >
                                     <input className="p-2 mt-3 rounded-xl border w-full" type="password" name="password" placeholder="Password" required />
+                                    {loginError && <div className="mt-2 text-red-600">Your password is wrong. Try again.</div>}
                                     {/* <div>
                                         <AiOutlineEye className="absolute top-1/2 right-3 -translate-y-1/2" />
                                     </div> */}

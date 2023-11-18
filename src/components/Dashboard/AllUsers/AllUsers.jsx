@@ -41,37 +41,40 @@ const AllUsers = () => {
             <Helmet>
                 <title>Book Ocean BD || All Users</title>
             </Helmet>
-            <h3 className="text-3xl text-center my-4">
+            <div className=" text-white text-2xl font-bold text-center mb-12 bg-[#081A51] py-12">
                 Total User: {users?.length}
-            </h3>
-            <div className="overflow-x-auto">
-                <table className="table table-zebra">
-                    {/* head */}
-                    <thead>
-                        <tr>
-                            <th>S/N</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            users?.map((user, i) => <tr key={i}>
-                                <th>{i + 1}</th>
-                                <td>{user.name}</td>
-                                <td>{user.email}</td>
-                                <td>{user.role === 'admin' ? 'admin' : <button onClick={() => handleMakeAdmin(user)} className="btn bg-orange-600 text-white"><FaUserShield className="text-2xl"></FaUserShield></button>}</td>
-                                <th>
-                                    <button onClick={() => handleDelete(user)} className="btn bg-red-600 text-white"> <AiFillDelete className='text-2xl' /></button>
-                                </th>
-                            </tr>)
-                        }
+            </div>
+
+            <div className="px-6 pb-12">
+                <div className="overflow-x-auto">
+                    <table className="table table-zebra">
+                        {/* head */}
+                        <thead>
+                            <tr>
+                                <th>S/N</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                users?.map((user, i) => <tr key={i}>
+                                    <th>{i + 1}</th>
+                                    <td>{user.name}</td>
+                                    <td>{user.email}</td>
+                                    <td>{user.role === 'admin' ? 'admin' : <button onClick={() => handleMakeAdmin(user)} className="btn bg-orange-600 text-white"><FaUserShield className="text-2xl"></FaUserShield></button>}</td>
+                                    <th>
+                                        <button onClick={() => handleDelete(user)} className="btn bg-red-600 text-white"> <AiFillDelete className='text-2xl' /></button>
+                                    </th>
+                                </tr>)
+                            }
 
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );

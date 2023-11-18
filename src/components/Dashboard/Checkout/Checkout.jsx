@@ -50,57 +50,17 @@ const Checkout = ({ item }) => {
     console.log(errors);
 
     return (
-        // <div className="pt-40">
-
-        //     <div className="flex gap-x-8">
-        //         <Link
-        //             to={`product/${item.id}`}
-        //             className="w-[70px] hi-[70px]">
-        //             <img src={item.image} alt="" />
-        //         </Link>
-        //         {/* title and remove icon  */}
-        //         <div className="flex-1">
-        //             <div className="flex gap-x-4 mb-3">
-        //                 <Link
-        //                     to={`book/${item.id}`}
-        //                 > {item.name}</Link>
-        //                 {/* <div className="cursor-pointer text-[24px] hover:text-blue-400 transition-all">
-        //                     <IoClose onClick={() => removerFromCart(item.id)}></IoClose>
-        //                 </div> */}
-        //             </div>
-        //             <div className=" flex items-center gap-x-12">
-        //                 {/* amount  */}
-        //                 <div className="flex gap-x-4 mb-2 items-center">
-
-        //                     <Qty item={item}></Qty>
-
-        //                     <div className="text-blue-400 text-xl"> $ {price} </div>
-        //                 </div>
-
-        //             </div>
-        //             {/* price  */}
-        //             <div>
-        //                 <span className="text-blue-400">
-        //                     {item.price} per piece
-        //                 </span>
-        //             </div>
-
-
-        //         </div>
-
-
-        //     </div>
-        // </div>
         <div className="mb-[30px] pt-36 md:pt-36 lg:pt-0 xl:pt-28 ">
-            {cart.length}
-            {user?.displayName}
-            {user?.email}
-            <div className="container mx-auto">
-                <div className="w-full flex gap-4">
+
+            <div className="container mx-auto px-2">
+                <div className="uppercase text-2xl text-center font-semibold my-12">
+                    check out
+                </div>
+                <div className="w-full flex flex-col xl:flex-row lg:flex-row  gap-4">
 
                     {/* info  */}
-                    <div className="border w-1/3 ">
-                        <div className="py-12 px-6">
+                    <div className=" lg:w-1/3 w-full ">
+                        <div className="py-12 px-6 border rounded shadow-xl">
                             <form onSubmit={handleSubmit(onSubmit)}>
                                 {/* name*/}
                                 <div className="form-control w-full">
@@ -146,11 +106,13 @@ const Checkout = ({ item }) => {
                             </form>
                         </div>
                     </div>
-                    <div className="w-2/3 border">
-                        cart detail
+                    <div className="lg:w-2/3  w-full border rounded shadow-xl">
+                        <div className="uppercase font-semibold text-2xl text-center mt-12 ">
+                            Order Details
+                        </div>
                         <div className="px-8 py-12 ">
                             <div className="overflow-x-auto">
-                                <table className="table  table-pin-rows table-pin-cols ">
+                                <table className="table   table-pin-rows table-pin-cols ">
                                     {/* head */}
                                     <thead >
                                         <tr>
@@ -174,7 +136,7 @@ const Checkout = ({ item }) => {
                                             <td>
                                                 <div className="flex items-center space-x-3">
                                                     <div className="avatar">
-                                                        <div className="mask mask-squircle w-12 h-12">
+                                                        <div className="mask mask-squircle w-[70px] h-[70px] ">
                                                             <img src={book.image} alt="Avatar Tailwind CSS Component" />
                                                         </div>
                                                     </div>
@@ -200,10 +162,15 @@ const Checkout = ({ item }) => {
                                 </table>
                                 {/* order summery  */}
                                 <div className="flex justify-end mt-12">
-                                    <div className="w-1/2 border rounded-md shadow-2xl p-5 uppercase font-semibold ">
-                                        <h2 className="text-2xl font-semibold mb-8 text-center">Order summery</h2>
+                                    <div className="lg:w-1/2 w-80 border rounded-md shadow-2xl p-5 uppercase font-semibold ">
+                                        <h2 className="text-2xl font-semibold mb-2 text-center">Order summary</h2>
+                                        <hr />
+
+                                        <div className="text-center text-xl my-4">
+                                            *** Cash on Delivery ***
+                                        </div>
                                         <div className="flex justify-between">
-                                            <div>Sub Total</div>
+                                            <div>Sub Total:</div>
                                             <div><span>&#x09F3;</span> {total}</div>
                                         </div>
                                         <div className="flex justify-between">

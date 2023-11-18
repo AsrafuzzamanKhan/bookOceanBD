@@ -120,11 +120,11 @@ const SignUp = () => {
                                         {errors.password?.type === 'pattern' && <p>
                                             Password must include one Lowercase, one uppercase one digit and one spacial charecter</p>}
 
-                                        <div>
+                                        {/* <div>
                                             <AiOutlineEye
                                                 className="absolute top-1/2 right-4 -translate-y-1/2"
                                             />
-                                        </div>
+                                        </div> */}
                                     </div>
                                     <input type="submit" value="Sign Up" className="bg-blue-400 rounded-xl py-2 hover:scale-105 duration-300" />
 
@@ -139,9 +139,7 @@ const SignUp = () => {
                                     <SocialLogin></SocialLogin>
                                 </div>
 
-                                <p className="mt-5 text-xs border-b py-4">
-                                    Forgot Your Password?
-                                </p>
+
                                 <div className="text-xm flex justify-between items-center mt-3">
                                     <p>
                                         Already have an account?
