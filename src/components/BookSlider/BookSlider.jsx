@@ -6,15 +6,20 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 // import required modules
-import { Pagination, Navigation } from 'swiper/modules';
+import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import BookCard from '../BookCard/BookCard';
 const BookSlider = ({ data }) => {
     return (
         <Swiper
+            autoplay={{
+                delay: 2500,
+
+            }}
             pagination={{
                 clickable: true,
             }}
-            modules={[Pagination, Navigation]}
+            modules={[Autoplay, Pagination, Navigation]}
+
             loop={false}
             navigation={true}
             breakpoints={{

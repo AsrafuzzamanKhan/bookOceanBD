@@ -6,6 +6,7 @@ import './index.css'
 import {
   createBrowserRouter,
   RouterProvider,
+  ScrollRestoration,
 } from "react-router-dom";
 import Roots from './Roots/Roots';
 import Home from './components/Home/Home/Home';
@@ -33,6 +34,7 @@ import CartProvider from './providers/CartProvider/CartProvider';
 import AllOrders from './components/Dashboard/AllOrders/AllOrders';
 import AdminHome from './components/Dashboard/AdminHome/AdminHome';
 import UserHome from './components/Dashboard/UserHome/UserHome';
+import ScrollToTop from './ScrollToTop/ScrollToTop';
 const queryClient = new QueryClient()
 
 const router = createBrowserRouter([
@@ -120,7 +122,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <AuthProvider>
         <HelmetProvider>
           <CartProvider>
+
             <RouterProvider router={router} />
+
           </CartProvider>
         </HelmetProvider>
       </AuthProvider>

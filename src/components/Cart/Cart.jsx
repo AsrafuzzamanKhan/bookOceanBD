@@ -14,8 +14,6 @@ const Cart = () => {
 
     const { setIsOpen, isOpen } = useContext(CartContext)
     const [cart, refetch] = useCart()
-    const [removerCart, setRemoveCart] = useState([])
-
     const sidebarRef = useRef(null);
     useEffect(() => {
         // Function to handle click outside of the sidebar
@@ -99,7 +97,6 @@ const Cart = () => {
                             <div>Subtotal:</div>
                             <div>
                                 {parseFloat(total.toFixed(2))} <span>&#x09F3;</span>
-
                             </div>
                         </div>
                     </div>

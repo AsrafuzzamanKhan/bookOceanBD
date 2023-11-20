@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, ScrollRestoration, useLocation } from "react-router-dom";
 import Header from "../components/Shared/Header/Header";
 import Footer from "../components/Shared/Footer/Footer";
 
@@ -10,7 +10,7 @@ const Roots = () => {
     return (
         <div>
             {noHeaderFooter || <Header></Header>}
-
+            <ScrollRestoration />
             <Outlet></Outlet>
             {noHeaderFooter || <Footer />}
         </div>

@@ -65,7 +65,7 @@ const AllOrders = () => {
             </div>
 
             <div className="overflow-x-auto px-8">
-                <table className="table table-zebra table-pin-rows table-pin-cols">
+                <table className="table table-zebra ">
                     {/* head */}
                     <thead>
                         <tr>

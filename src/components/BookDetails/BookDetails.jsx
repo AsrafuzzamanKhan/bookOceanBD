@@ -1,12 +1,14 @@
 import { useNavigate, useParams } from "react-router-dom";
 import useBookData from "../../hooks/useBookData";
 import RelatedBooks from "../RelatedBooks/RelatedBooks";
-
 import Swal from "sweetalert2";
 import useAuth from "../../hooks/useAuth";
 import useCart from "../../hooks/useCart";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CartContext } from "../../providers/CartProvider/CartProvider";
+import FadeIn from "../../Animation/FadeIn";
+import { motion, useAnimate, useAnimation, useScroll } from "framer-motion"
+import { useInView } from "react-intersection-observer";
 
 
 const BookDetails = () => {
@@ -20,10 +22,29 @@ const BookDetails = () => {
     const { setIsOpen, isOpen } = useContext(CartContext)
 
 
+    const { ref, inView } = useInView({
+        threshold: 0.2
+    });
+    const animation = useAnimation()
 
+    useEffect(() => {
+        console.log('isview', inView)
+        if (inView) {
+            animation.start({
+                y: 0,
+                transition: {
+                    type: 'spring', duration: 4, bounce: 0.3
+                }
+            })
+        }
+        if (!inView) {
+            animation.start({ y: '-100vw' })
+        }
+
+    }, [animation, inView])
     const productDetails = booksData.find(pd => pd._id == id)
 
-    console.log('product details', productDetails)
+    // console.log('product details', productDetails)
 
     if (!productDetails) {
         return <div className="container mx-auto">loading....</div>
@@ -103,15 +124,22 @@ const BookDetails = () => {
         <div className="mb-16 pt-36 lg:pt-[30px] xl:pt-36">
             <div className="container mx-auto px-2">
                 {/* text  */}
-                <div className="flex flex-col lg:flex-row lg:gap-[30px] gap-0 mb-[30px]">
+                <div ref={ref} className="flex flex-col lg:flex-row lg:gap-[30px] gap-0 mb-[30px]  items-center">
+                    <motion.div
 
-                    <div className="flex-1 lg:max-w-[40%] lg:h-[550px] border shadow-2xl rounded-lg flex justify-center items-center dark:border-0 dark:bg-gary-800">
+                        animate={animation}
+
+                        className="flex-1 lg:max-w-[40%] lg:h-[550px] border shadow-xl rounded-lg flex justify-center items-center dark:border-0 dark:bg-gary-800" >
+                        {/* <div className="flex-1 lg:max-w-[40%] lg:h-[550px] border shadow-2xl rounded-lg flex justify-center items-center dark:border-0 dark:bg-gary-800"> */}
 
                         <img src={productDetails.image}
                             className=" max-w-[65%] max-h-96 py-4"
                             alt="image" />
-                    </div>
-                    <div className="flex-1 py-12 px-4 xl:p-20 flex flex-col justify-center dark:bg-base-200 dark:text-white text-black rounded-[8px]">
+                        {/* </div> */}
+                    </motion.div>
+                    <motion.div
+                        animate={animation}
+                        className="flex-1 py-12 px-4 xl:p-20 flex flex-col justify-center dark:bg-base-200 dark:text-white text-black rounded-[8px] shadow-lg">
                         {/* category  */}
                         <div className="uppercase text-blue-400 text-lg font-medium mb-2"> {productDetails.category}  </div>
                         {/* title  */}
@@ -156,12 +184,14 @@ const BookDetails = () => {
                         {/* description  */}
                         <p className="mb-5">{productDetails.description}</p>
 
-                    </div>
+                    </motion.div>
                 </div>
                 {/* relatged  product  */}
-                <RelatedBooks
-                    categoryTitle={productDetails.category}
-                ></RelatedBooks>
+                <FadeIn delay={0.4} direction='up' >
+                    <RelatedBooks
+                        categoryTitle={productDetails.category}
+                    ></RelatedBooks>
+                </FadeIn>
             </div>
         </div>
     );

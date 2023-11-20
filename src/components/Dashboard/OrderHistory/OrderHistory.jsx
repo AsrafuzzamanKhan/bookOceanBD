@@ -1,6 +1,6 @@
 import useAuth from "../../../hooks/useAuth";
 import useUserOrder from "../../../hooks/useUserOrder";
-
+import { MdDelete } from "react-icons/md";
 const OrderHistory = () => {
     const [orders] = useUserOrder()
     const { user } = useAuth()
@@ -12,19 +12,19 @@ const OrderHistory = () => {
             <div className=" text-white text-2xl  text-center mb-12 bg-[#081A51] py-12">
                 {user.displayName}'s Order history
             </div>
-            <div className="px-10 dark:text-white ">
-                <div className="overflow-x-auto  ">
-                    <table className="table lg:text-[16px] lg:table-lg table-xs table-pin-rows table-pin-cols ">
+            <div className="px-10 dark:text-white  ">
+                <div className="overflow-x-auto border dark:border-gray-900 shadow-xl rounded-md ">
+                    <table className="table lg:text-[16px] lg:table-lg table-xs ">
                         {/* head */}
                         <thead>
-                            <tr className="text-center lg:text-xl">
+                            <tr className="text-center lg:text-lg">
                                 <th>S/N</th>
                                 <th>Name</th>
                                 <th>Delivery Info</th>
-
                                 <th>Book List</th>
                                 <th>Bill</th>
                                 <th>Status</th>
+                                <th>Delete</th>
 
                             </tr>
                         </thead>
@@ -74,6 +74,7 @@ const OrderHistory = () => {
                                 <td className={`${(order.status === 'pending' || order.status === 'canceled') ? 'text-red-600' : 'text-blue-600'} w-32 text-center`}>
                                     <span className="border p-2 rounded-lg bg-gray-200 uppercase font-semibold">{order.status}</span>
                                 </td>
+                                <td><MdDelete size={30} /></td>
                             </tr>)}
 
 
