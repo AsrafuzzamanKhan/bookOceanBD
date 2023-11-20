@@ -1,12 +1,14 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 
 const BookCard = ({ book }) => {
     const { _id, name, author, price, image, description, newBook, category, cover } = book;
+
     // console.log('book', book)
     return (
         <Link to={`/book/${_id}`}>
-            <div className=" border shadow-md w-full h-[400px] rounded-[8px] overflow-hidden relative group">
+            <div className=" dark:border-0 dark:bg-gray-800  dark:text-white  border shadow-xl w-full h-[400px] rounded-[8px] overflow-hidden relative group">
                 {/* badge  */}
                 {newBook === 'true' && <div className="absolute bg-blue-400 text-primary text-[12px] font-extrabold uppercase top-4 right-4 rounded-full px-2 z-10">
                     new
@@ -24,7 +26,8 @@ const BookCard = ({ book }) => {
                     {/* category  */}
                     <div className="text-sm text-blue-400">{category}</div>
                     {/* title  */}
-                    <div className="text-[15px] ">{name}</div>
+                    <div className="text-[15px] tooltip text-start" data-tip={name}>{name.substring(0, 35)}... </div>
+                    <span className="capitalize">({cover})</span>
                     <div className="text-[15px] ">by <span className="text-blue-400">{author}</span></div>
 
                     <div className="text-lg text-blue-400">

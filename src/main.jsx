@@ -31,6 +31,8 @@ import OrderHistory from './components/Dashboard/OrderHistory/OrderHistory';
 import AdminRoute from './components/Routes/AdminRoute';
 import CartProvider from './providers/CartProvider/CartProvider';
 import AllOrders from './components/Dashboard/AllOrders/AllOrders';
+import AdminHome from './components/Dashboard/AdminHome/AdminHome';
+import UserHome from './components/Dashboard/UserHome/UserHome';
 const queryClient = new QueryClient()
 
 const router = createBrowserRouter([
@@ -77,6 +79,10 @@ const router = createBrowserRouter([
     element: <PrivateRoutes> <DashboardLayout></DashboardLayout></PrivateRoutes>,
     children: [
       {
+        path: 'adminhome',
+        element: <AdminRoute><AdminHome></AdminHome></AdminRoute>
+      },
+      {
         path: 'addBook',
         element: <AdminRoute><AddBooks></AddBooks></AdminRoute>
       },
@@ -93,6 +99,10 @@ const router = createBrowserRouter([
         path: 'allOrders',
         element: <AdminRoute><AllOrders></AllOrders></AdminRoute>
 
+      },
+      {
+        path: 'userhome',
+        element: <UserHome></UserHome>
       },
       {
         path: 'orderHistory',

@@ -27,7 +27,7 @@ const SignUp = () => {
                 updateUserProfile(data.name, data.photoURL)
                     .then(() => {
                         const saveUser = { name: data.name, email: data.email }
-                        fetch('http://localhost:5000/users', {
+                        fetch('https://book-ocean-bd-server.vercel.app/users', {
                             method: 'POST',
                             headers: {
                                 'content-type': 'application/json'
@@ -60,9 +60,9 @@ const SignUp = () => {
             <Helmet>
                 <title>Book Ocean BD | Sign up</title>
             </Helmet>
-            <div className="bg-blue-200/40">
+            <div className="bg-blue-200/40 dark:glass">
                 <div className=" container mx-auto px-2">
-                    <div className="flex justify-center items-center min-h-screen ">
+                    <div className="flex justify-center items-center min-h-screen dark:text-black ">
 
                         <div className="bg-gray-100 flex items-center rounded-2xl shadow-lg max-w-3xl p-5">
                             {/* image  */}
@@ -79,7 +79,7 @@ const SignUp = () => {
 
                                     {/* name  */}
                                     <input
-                                        className="p-2 mt-8 rounded-xl border"
+                                        className="p-2 mt-8 rounded-xl border dark:bg-white"
                                         type="text"
                                         name="name"
                                         placeholder="Name"
@@ -89,7 +89,7 @@ const SignUp = () => {
 
                                     {/* email  */}
                                     <input
-                                        className="p-2 mt-2 rounded-xl border"
+                                        className="p-2 mt-2 rounded-xl border dark:bg-white"
                                         type="email"
                                         name="email"
                                         placeholder="Email"
@@ -99,7 +99,7 @@ const SignUp = () => {
                                     {/* password  */}
                                     <div className="relative">
                                         <input
-                                            className="p-2 mt-2 rounded-xl border w-full"
+                                            className="p-2 mt-2 rounded-xl border w-full dark:bg-white"
                                             type="password"
                                             name="password"
                                             placeholder="Password"

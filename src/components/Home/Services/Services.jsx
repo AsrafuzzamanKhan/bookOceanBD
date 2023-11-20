@@ -26,7 +26,7 @@ const Services = () => {
                 <div className=" grid md:grid-cols-3 xl:grid-cols-5 grid-cols-2 gap-4 my-12">
                     {services.map(service =>
 
-                        <div className=" h-40 shadow-xl bg-white rounded-[8px] p-4" key={service.id}>
+                        <div className=" h-40 shadow-xl bg-white rounded-[8px] p-4 text-black" key={service.id}>
                             <div className="flex flex-col justify-center items-center pt-4">
                                 <h2 className="text-xl font-bold text-center mb-4">{service.heading}</h2>
                                 <p>{service.subHeading}</p>

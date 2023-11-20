@@ -18,16 +18,16 @@ const SearchBook = () => {
     return (
         <div className="mb-[30px] pt-40 md:pt-40 lg:pt-28">
             <div className="container mx-auto px-2">
-                <div className="flex gap-x-[30px]">
+                <div className="flex gap-x-[30px] ">
                     {/* category nav  */}
                     <CategoryNav></CategoryNav>
                     <div>
                         {/* title  */}
-                        <div className="py-3 uppercase text-center lg:text-left text-xl">
+                        <div className="py-3 uppercase text-center lg:text-left text-xl dark:text-white">
                             {filteredResults?.length > 0 ? `${filteredResults.length} results for ${searchTerm}` : `no result found for ${searchTerm} `}
                         </div>
                         {/* products grid */}
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-[15px] md:grid-[30px]">
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-[15px] md:grid-[30px] ">
                             {
                                 filteredResults.map((book, i) => {
                                     return <BookCard key={i}

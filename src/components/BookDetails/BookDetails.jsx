@@ -38,7 +38,7 @@ const BookDetails = () => {
         console.log(id)
         // phh -------
         if (user) {
-            fetch('http://localhost:5000/carts', {
+            fetch('https://book-ocean-bd-server.vercel.app/carts', {
                 method: "POST",
                 headers: {
                     'content-type': 'application/json'
@@ -83,7 +83,7 @@ const BookDetails = () => {
         } else {
             Swal.fire({
                 title: "Please Login",
-                text: "You won't be able to revert this!",
+                text: "You won't be able to Add to cart!",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
@@ -100,16 +100,18 @@ const BookDetails = () => {
         }
     }
     return (
-        <div className="mb-16 pt-44 lg:pt-[30px] xl:pt-36">
+        <div className="mb-16 pt-36 lg:pt-[30px] xl:pt-36">
             <div className="container mx-auto px-2">
                 {/* text  */}
-                <div className="flex flex-col lg:flex-row gap-[30px] mb-[30px]">
-                    <div className="flex-1 lg:max-w-[40%] lg:h-[550px] border shadow-2xl rounded-lg flex justify-center items-center">
+                <div className="flex flex-col lg:flex-row lg:gap-[30px] gap-0 mb-[30px]">
+
+                    <div className="flex-1 lg:max-w-[40%] lg:h-[550px] border shadow-2xl rounded-lg flex justify-center items-center dark:border-0 dark:bg-gary-800">
+
                         <img src={productDetails.image}
-                            className=" max-w-[65%] max-h-96 p-4"
+                            className=" max-w-[65%] max-h-96 py-4"
                             alt="image" />
                     </div>
-                    <div className="flex-1 p-12 xl:p-20 flex flex-col justify-center border">
+                    <div className="flex-1 py-12 px-4 xl:p-20 flex flex-col justify-center dark:bg-base-200 dark:text-white text-black rounded-[8px]">
                         {/* category  */}
                         <div className="uppercase text-blue-400 text-lg font-medium mb-2"> {productDetails.category}  </div>
                         {/* title  */}
@@ -143,7 +145,7 @@ const BookDetails = () => {
                                 <div className="">
                                     <button
                                         onClick={() => handleAddToCart(productDetails)}
-                                        className="btn bg-blue-400 hover:bg-blue-200 transition-all">Add to cart
+                                        className="btn bg-blue-400 text-white hover:bg-black transition-all">Add to cart
                                     </button>
 
                                 </div>

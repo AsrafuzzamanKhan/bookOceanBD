@@ -37,9 +37,9 @@ const SearchForm = () => {
             className={`${isAnimating ? 'animate-shake' : 'animate-none'} w-full relative`} >
             <input
                 onChange={handleSeachInput}
-                className="input" type="text" placeholder="Search for a book.." />
-            <button className="btn bg-blue-400 absolute top-0 right-0 rounded-tl-none rounded-bl-none">
-                <FiSearch className="text-xl"></FiSearch>
+                className="input dark:bg-white" type="text" placeholder="Search for a book.." />
+            <button className="btn bg-blue-400 absolute top-0 right-0 rounded-tl-none rounded-bl-none border-0">
+                <FiSearch className="text-xl  dark:text-white"></FiSearch>
             </button>
         </form>
     );

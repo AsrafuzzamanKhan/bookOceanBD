@@ -4,22 +4,22 @@ import useAxiosSecure from './useAxiosSecure';
 import useAuth from './useAuth';
 
 
-const useUserOrder = () => {
+const useAllOrders = () => {
     const { user, loading } = useAuth()
     console.log(user.email)
     const [axiosSecure] = useAxiosSecure()
-    const { data: order = [], refetch, isLoading } = useQuery({
-        queryKey: ['order', user?.email],
+    const { data: allOrder = [], refetch, isLoading } = useQuery({
+        queryKey: ['allOrder'],
         enabled: !loading,
 
         queryFn: async () => {
-            const res = await axiosSecure(`/orders?email=${user.email}`)
-            console.log('order historey axios ', res)
+            const res = await axiosSecure(`/allOrders`)
+            console.log('All order historey axios ', res)
             return res.data;
             // return res.json();
         },
     })
-    return [order, refetch, isLoading]
+    return [allOrder, refetch, isLoading]
 };
 
-export default useUserOrder;
+export default useAllOrders;

@@ -23,7 +23,7 @@ const Books = () => {
                     <CategoryNav />
                     <main className="w-full">
                         {/* title  */}
-                        <div className="py-4 text-center uppercase text-xl lg:text-left">{category} Book</div>
+                        <div className="py-4 text-center uppercase text-xl lg:text-left dark:text-white">{category} Book</div>
                         {/* product grid   */}
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4  gap-[15px] md:gap-[30px]">
                             {filteredProducts.map((book, i) => {

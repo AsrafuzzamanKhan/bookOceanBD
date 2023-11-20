@@ -28,7 +28,7 @@ const Login = () => {
 
                 console.log(user)
                 Swal.fire({
-                    title: 'Login Successfull',
+                    title: 'Login Successful',
                     showClass: {
                         popup: 'animate__animated animate__fadeInDown'
                     },
@@ -48,9 +48,9 @@ const Login = () => {
             })
     }
     return (
-        <div className="bg-blue-200/40">
+        <div className="bg-blue-200/40 dark:glass">
             <div className=" container mx-auto px-2">
-                <div className="flex justify-center items-center min-h-screen ">
+                <div className="flex justify-center items-center min-h-screen text-black">
 
                     <div className="bg-gray-100 flex items-center rounded-2xl shadow-lg max-w-3xl p-5">
                         {/* form  */}
@@ -60,10 +60,10 @@ const Login = () => {
 
                             {/* form  */}
                             <form onSubmit={handleLogin} className="flex flex-col gap-4">
-                                <input className="p-2 mt-8 rounded-xl border" type="email" name="email" placeholder="Email" required />
+                                <input className="p-2 mt-8 rounded-xl border dark:bg-white" type="email" name="email" placeholder="Email" required />
                                 <div className="relative"
                                 >
-                                    <input className="p-2 mt-3 rounded-xl border w-full" type="password" name="password" placeholder="Password" required />
+                                    <input className="p-2 mt-3 rounded-xl border w-full dark:bg-white" type="password" name="password" placeholder="Password" required />
                                     {loginError && <div className="mt-2 text-red-600">Your password is wrong. Try again.</div>}
                                     {/* <div>
                                         <AiOutlineEye className="absolute top-1/2 right-3 -translate-y-1/2" />

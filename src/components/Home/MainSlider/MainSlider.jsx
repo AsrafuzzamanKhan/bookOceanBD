@@ -54,13 +54,13 @@ const MainSlider = () => {
 
                                 <div className='w-full lg:flex-1'>
                                     {/* text  */}
-                                    <div className='uppercase mb-1 text-center lg:text-left'> {slide.preTitle}</div>
-                                    <div className='text-3xl md:text-[46px] font-semibold uppercase leading-none text-center lg:text-left mb-8 xl:mb-20'>
+                                    <div className='uppercase mb-1 text-center lg:text-left text-black'> {slide.preTitle}</div>
+                                    <div className='text-3xl md:text-[46px] font-semibold uppercase leading-none text-center lg:text-left mb-8 xl:mb-20 text-black'>
                                         {slide.titlePart1} <br />
                                         {slide.titlePart2}<br />
                                         {slide.titlePart3}<br />
                                     </div>
-                                    <button className='btn bg-blue-400 border-none flex mx-auto lg:mx-0'>Shop Now</button>
+                                    <button className='btn bg-blue-400  border-none  flex mx-auto lg:mx-0 hover:bg-black hover:text-white dark:text-white '>Shop Now</button>
                                 </div>
                                 <div className='flex-1'>
                                     <img className='xl:absolute  w-[400px] xl:right-10 xl:bottom-6' src={slide.img} alt="" />

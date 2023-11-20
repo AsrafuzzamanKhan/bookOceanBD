@@ -2,16 +2,16 @@
 import { FaYoutube, FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa'
 const Footer = () => {
     return (
-        <footer className='pt-16 bg-slate-300'>
+        <footer className='pt-16 bg-slate-300 text-black'>
             <div className="container mx-auto px-2">
-                <div className='text-center'>
+                <div className='text-center text-black'>
                     <h2 className='h2 uppercase mb-6 font-semibold'>Subscribe to our newsletter</h2>
                     <p className=''>Be the first to get the latest news abour trends, promotions and much more!</p>
                 </div>
                 <form className='w-full max-w-3xl mx-auto flex flex-col md:flex-row gap-5 my-8' >
                     <input type="email" placeholder="Your Email Address"
-                        className="input " />
-                    <button className="btn bg-blue-400 hover:bg-green-600 min-w-[150px]">Join</button>
+                        className="input bg-white  " />
+                    <button className="btn bg-blue-400 hover:bg-black min-w-[150px] text-white outline-none border-0">Join</button>
                 </form>
                 {/* link  */}
                 <div className='text-base flex gap-x-6 capitalize max-w-max mx-auto mb-5'>

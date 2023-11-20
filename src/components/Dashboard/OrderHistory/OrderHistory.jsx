@@ -4,65 +4,85 @@ import useUserOrder from "../../../hooks/useUserOrder";
 const OrderHistory = () => {
     const [orders] = useUserOrder()
     const { user } = useAuth()
-
+    // console.log(orders.length);
 
     return (
         <div>
-            {user.displayName} Order historyadad
 
-            <div className="overflow-x-auto ">
-                <table className="table table-zebra table-pin-rows table-pin-cols  ">
-                    {/* head */}
-                    <thead>
-                        <tr>
-                            <th>S/N</th>
-                            <th>Name</th>
-                            <th>Order Date</th>
-                            <th>Book List</th>
-                            <th>Price</th>
-                            <th>Approval</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+            <div className=" text-white text-2xl  text-center mb-12 bg-[#081A51] py-12">
+                {user.displayName}'s Order history
+            </div>
+            <div className="px-10 dark:text-white ">
+                <div className="overflow-x-auto  ">
+                    <table className="table lg:text-[16px] lg:table-lg table-xs table-pin-rows table-pin-cols ">
+                        {/* head */}
+                        <thead>
+                            <tr className="text-center lg:text-xl">
+                                <th>S/N</th>
+                                <th>Name</th>
+                                <th>Delivery Info</th>
 
-                        {orders?.map((order, i) => <tr key={i}>
-                            <th>
-                                <label>
-                                    {i + 1}
-                                </label>
-                            </th>
-                            <td>
-                                {order.data.name}
-                            </td>
-                            <td>
-                                {order.date}
-                                <br />
+                                <th>Book List</th>
+                                <th>Bill</th>
+                                <th>Status</th>
 
-                            </td>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-                            <td> {order.cart.map((book, i) => <>
-                                <ul>
-                                    {i + 1} - {book.name}
-                                </ul></>)}
-                            </td>
+                            {orders?.map((order, i) => <tr key={i}>
+                                <th className="">
+                                    <label>
+                                        {i + 1}
+                                    </label>
+                                </th>
+                                <td className="sm:w-50">
+                                    {order.data.name}
+                                    <br />
 
-                            <td>
+                                </td>
 
-                                <span>&#x09F3;</span>{order.totalAmount}
+                                <td className="">
+                                    <span className="font-semibold leading-loose">Date: </span>
+                                    {order.date}
+                                    <br />
+                                    <div className="font-semibold leading-loose"> {user.email}</div>
+                                    <div className="  "> <span className="font-semibold leading-loose">Address:</span> {order.data.address}
 
+                                    </div>
 
-
-
-                            </td>
-                            <td className={`${order.status === 'pending' ? 'text-red-600' : 'text-blue-600'}`}>{order.status}</td>
-                        </tr>)}
-
+                                    <div>
+                                        <span className="font-semibold">Phone:</span> {order.data.phone}
+                                    </div>
+                                </td>
 
 
-                    </tbody>
+                                <td className=""> {order.cart.map((book, i) => <>
+                                    <div className="leading-loose">
+                                        {i + 1} - {book.name} - by {book.author}
+                                    </div></>)}
+                                </td>
+
+                                <td className=" text-center">
+
+                                    <span>&#x09F3;</span>{order.totalAmount}
 
 
-                </table>
+
+
+                                </td>
+                                <td className={`${(order.status === 'pending' || order.status === 'canceled') ? 'text-red-600' : 'text-blue-600'} w-32 text-center`}>
+                                    <span className="border p-2 rounded-lg bg-gray-200 uppercase font-semibold">{order.status}</span>
+                                </td>
+                            </tr>)}
+
+
+
+                        </tbody>
+
+
+                    </table>
+                </div>
             </div>
         </div >
     );

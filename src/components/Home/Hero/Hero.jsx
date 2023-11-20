@@ -9,18 +9,18 @@ const Hero = () => {
             <div className="container mx-auto">
                 <div className="flex flex-col gap-y-[20px] lg:flex-row lg:gap-x-[20px] px-1 lg:px-1">
                     {/* sidebar  */}
-                    <div className="bg-slate-300 rounded-[8px]">
+                    <div className="bg-slate-300 text-black rounded-[8px]">
                         <CategoryNav></CategoryNav>
                     </div>
                     {/* hero slider  */}
                     <div className="flex flex-col  lg:flex-row gap-4 w-full">
-                        <div className='w-full lg:max-w-[734px] mx-auto shadow-xl border rounded-[8px]'>
+                        <div className='w-full lg:max-w-[734px] mx-auto shadow-2xl glass rounded-[8px]'>
                             <MainSlider></MainSlider>
                         </div>
 
 
-                        <div className='flex flex-row lg:flex-col gap-4 w-full  mx-auto lg:h-[500px] overflow-hidden'>
-                            <div className='flex h-[240px] w-full rounded-[8px]  p-6 bg-slate-300 justify-between'>
+                        <div className='flex flex-col gap-4 w-full  mx-auto lg:h-[500px] overflow-hidden'>
+                            <div className='flex h-[240px] w-full rounded-[8px]  p-6 bg-slate-400 justify-between glass text-black'>
                                 {/* text  */}
                                 <div className='flex flex-col max-w-[144px] h-full justify-center'>
                                     <div className='text-[20px] uppercase font-medium leading-snug'>Save 30% all Book </div>
@@ -32,7 +32,7 @@ const Hero = () => {
 
                             </div>
                             {/* promo 2  */}
-                            <div className='flex  w-full h-[240px] rounded-[8px]  p-6 bg-slate-300 justify-between '>
+                            <div className='flex  w-full h-[240px] rounded-[8px]  p-6 bg-slate-400 justify-between glass text-black'>
                                 {/* text  */}
                                 <div className='flex flex-col max-w-[144px] h-full justify-center'>
                                     <div className='text-[20px] uppercase font-medium leading-snug'>Save 30% all Book </div>

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet-async";
-import { FaUserShield } from "react-icons/fa";
+
 import { AiFillDelete } from "react-icons/ai";
 
 const AllOrders = () => {
@@ -10,14 +10,15 @@ const AllOrders = () => {
     const { data: orders = [], refetch } = useQuery({
         queryKey: ['orders'],
         queryFn: async () => {
-            const res = await axiosSecure.get('/orders')
+            const res = await axiosSecure.get('/allOrders')
             return res.data;
 
         }
     });
+    // approve 
     const handleApproved = order => {
         console.log(order._id)
-        axiosSecure.patch(`/orders/status/${order._id}`)
+        axiosSecure.patch(`/orders/approve-order/${order._id}`)
             .then(res => {
                 console.log(res.data)
                 if (res.data.modifiedCount > 0) {
@@ -26,6 +27,23 @@ const AllOrders = () => {
                         position: "top-end",
                         icon: "success",
                         title: `order is Approved`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            })
+    }
+    const handleCanceled = order => {
+        console.log(order._id)
+        axiosSecure.patch(`/orders/cancel-order/${order._id}`)
+            .then(res => {
+                console.log(res.data)
+                if (res.data.modifiedCount > 0) {
+                    refetch();
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: `order is Canceled`,
                         showConfirmButton: false,
                         timer: 1500
                     });
@@ -56,7 +74,8 @@ const AllOrders = () => {
                             <th>Email</th>
                             <th>Order qtn</th>
                             <th>Total</th>
-                            <th>Action</th>
+                            <th>Approve</th>
+                            <th>Cancel</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -67,7 +86,9 @@ const AllOrders = () => {
                                 <td>{order.email}</td>
                                 <td>{order.orderQuantity}</td>
                                 <td>{order.totalAmount}</td>
-                                <td>{order.status === 'approve' ? 'Approved' : <button onClick={() => handleApproved(order)} className="btn bg-orange-600 text-white">{order.status}</button>}</td>
+                                <td>{order.status === 'approve' ? 'Approved' : <button onClick={() => handleApproved(order)} className="btn bg-green-600 text-white">{order.status}</button>}</td>
+
+                                <td>{order.status === 'canceled' ? 'Canceled' : <button onClick={() => handleCanceled(order)} className="btn bg-orange-600 text-white">{order.status}</button>}</td>
                                 <th>
                                     <button onClick={() => handleDelete(order)} className="btn bg-red-600 text-white"> <AiFillDelete className='text-2xl' /></button>
                                 </th>

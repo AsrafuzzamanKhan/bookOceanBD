@@ -41,7 +41,7 @@ const BookSlider = ({ data }) => {
         >
             <>
                 {data?.map(book => {
-                    return <SwiperSlide key={book.id}>
+                    return <SwiperSlide key={book._id}>
                         <BookCard book={book}></BookCard>
                     </SwiperSlide>
                 })}
