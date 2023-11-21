@@ -35,6 +35,8 @@ import AllOrders from './components/Dashboard/AllOrders/AllOrders';
 import AdminHome from './components/Dashboard/AdminHome/AdminHome';
 import UserHome from './components/Dashboard/UserHome/UserHome';
 import ScrollToTop from './ScrollToTop/ScrollToTop';
+import AddBanner from './components/Dashboard/AddBanner/AddBanner';
+import ManageBanner from './components/Dashboard/ManageBanner/ManageBanner';
 const queryClient = new QueryClient()
 
 const router = createBrowserRouter([
@@ -87,6 +89,14 @@ const router = createBrowserRouter([
       {
         path: 'addBook',
         element: <AdminRoute><AddBooks></AddBooks></AdminRoute>
+      },
+      {
+        path: 'addBanner',
+        element: <AdminRoute><AddBanner></AddBanner></AdminRoute>
+      },
+      {
+        path: 'manageBanner',
+        element: <AdminRoute><ManageBanner /></AdminRoute>
       },
       {
         path: 'manageBooks',

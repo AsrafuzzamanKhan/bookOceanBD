@@ -7,6 +7,10 @@ import { ImBooks } from "react-icons/im";
 import { MdManageHistory } from "react-icons/md";
 import { IoHomeSharp } from "react-icons/io5";
 import { RiFileHistoryFill } from "react-icons/ri";
+import { MdOutlineDevicesOther } from "react-icons/md";
+import { TbDeviceDesktopStar } from "react-icons/tb";
+
+
 import { FaBook, FaCalendarAlt, FaHome, FaShoppingCart, FaSitemap, FaUsers, FaUtensils, FaWallet, FaWindowClose } from 'react-icons/fa';
 
 import useAdmin from '../../../hooks/useAdmin';
@@ -48,10 +52,20 @@ const DashboardLayout = () => {
                                     <FaBook size={30} />
                                     <span className={`${!open && 'hidden'} origin-left duration-200`}>Add Book</span>
                                 </NavLink>
+                                <NavLink to='/dashboard/addBanner' className={`text-gray-300 text-xm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-600 rounded-md duration-300`}>
+                                    <MdOutlineDevicesOther size={30} />
+                                    <span className={`${!open && 'hidden'} origin-left duration-200`}>Add Banner</span>
+                                </NavLink>
                                 <NavLink to='/dashboard/manageBooks' className={`text-gray-300 text-xm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-600 rounded-md duration-300`}>
                                     <MdManageHistory size={30} />
                                     <span className={`${!open && 'hidden'} origin-left duration-200`}>Manage Books</span>
                                 </NavLink>
+
+                                <NavLink to='/dashboard/manageBanner' className={`text-gray-300 text-xm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-600 rounded-md duration-300`}>
+                                    <TbDeviceDesktopStar size={30} />
+                                    <span className={`${!open && 'hidden'} origin-left duration-200`}>Manage Banner</span>
+                                </NavLink>
+
                                 <NavLink to='/dashboard/allUsers' className={`text-gray-300 text-xm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-600 rounded-md duration-300`}>
                                     <FaUsers size={30} />
                                     <span className={`${!open && 'hidden'} origin-left duration-200`}>All Users</span>

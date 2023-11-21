@@ -35,8 +35,12 @@ const sliderData = [
         btnText: 'Shop now'
     }
 ]
+import useBanner from '../../../hooks/useBanner';
 
 const MainSlider = () => {
+    const [bannerData] = useBanner()
+    const hero = bannerData.filter(item => item.promo === 'hero');
+    console.log(hero.length)
     return (
         <Swiper
             autoplay={{
@@ -48,26 +52,30 @@ const MainSlider = () => {
             pagination={{
                 clickable: true,
             }}
-            className=' h-full xl:mainSlider xl:bg-no-repeat max-w-lg lg:max-w-none rounded-[8px] overflow-hidden drop-shadow-2xl'
+            className=' h-full border rounded-[8px] overflow-hidden drop-shadow-2xl '
         >
             <>
                 {
-                    sliderData.map((slide, i) => {
-                        return <SwiperSlide key={i}>
-                            <div className='flex flex-col lg:flex-row h-full p-[20px] md:p-[60px]'>
+                    hero?.map((slide, i) => {
 
-                                <div className='w-full lg:flex-1'>
+                        return <SwiperSlide key={i}>
+                            <div className='w-full flex flex-col justify-center items-center gap-4 lg:flex-row h-full p-8'>
+
+                                <div className='flex-1 '>
                                     {/* text  */}
-                                    <div className='uppercase mb-1 text-center lg:text-left text-black'> {slide.preTitle}</div>
-                                    <div className='text-3xl md:text-[46px] font-semibold uppercase leading-none text-center lg:text-left mb-8 xl:mb-20 text-black'>
-                                        {slide.titlePart1} <br />
-                                        {slide.titlePart2}<br />
-                                        {slide.titlePart3}<br />
+                                    <div className='uppercase mb-1 text-center lg:text-left text-black'> Amazon Pre Order</div>
+                                    <div className='text-3xl md:text-[34px] font-semibold uppercase leading-none text-center lg:text-left mb-8 xl:mb-20 text-black'>
+                                        <div className='mb-4'>  {slide.discount}% Discount</div>
+                                        <div className='mb-4'> {slide.name}</div>
+                                        <div>
+                                            by {slide.author}</div>
+
                                     </div>
-                                    {/* <button className='btn bg-blue-400  border-none  flex mx-auto lg:mx-0 hover:bg-black hover:text-white dark:text-white '>Shop Now</button> */}
+
                                 </div>
-                                <div className='flex-1'>
-                                    <img className='xl:absolute  w-[400px] xl:right-10 xl:bottom-6' src={slide.img} alt="" />
+                                <div className='flex-1 mx-auto'>
+                                    <img className='w-96' src={slide.image} alt="" />
+
                                 </div>
                             </div>
                         </SwiperSlide>

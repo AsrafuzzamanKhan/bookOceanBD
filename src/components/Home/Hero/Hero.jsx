@@ -2,8 +2,11 @@ import CategoryNav from "../../CategoryNav/CategoryNav";
 import MainSlider from "../MainSlider/MainSlider";
 import promo1 from '../../../assets/promo/hp1.jpg'
 import promo2 from '../../../assets/promo/hp3.jpg'
+import useBanner from "../../../hooks/useBanner";
 
 const Hero = () => {
+    const [bannerData] = useBanner();
+    const promo = bannerData.filter(item => item.promo === 'promo');
     return (
         <section className="mb-[30px] pt-36 md:pt-36 lg:pt-0 xl:pt-28 ">
             <div className="container mx-auto">
@@ -13,36 +16,33 @@ const Hero = () => {
                         <CategoryNav></CategoryNav>
                     </div>
                     {/* hero slider  */}
-                    <div className="flex flex-col  lg:flex-row gap-4 w-full">
-                        <div className='w-full lg:max-w-[734px] mx-auto shadow-2xl glass rounded-[8px]'>
+                    <div className="flex flex-col lg:flex-row gap-4 w-full ">
+                        <div className=' w-full lg:w-[780px] mx-auto shadow-2xl glass rounded-[8px]'>
                             <MainSlider></MainSlider>
                         </div>
 
+                        {/* promo */}
+                        <div className='flex flex-col gap-4 w-full  lg:h-[500px] mx-auto  overflow-hidden'>
 
-                        <div className='flex flex-col gap-4 w-full  mx-auto lg:h-[500px] overflow-hidden'>
-                            <div className='flex h-[240px] w-full rounded-[8px]  p-6 bg-slate-400 justify-between glass text-black'>
-                                {/* text  */}
-                                <div className='flex flex-col max-w-[144px] h-full justify-center'>
-                                    <div className='text-[20px] uppercase font-medium leading-snug'>Save 30% all Book </div>
-                                    <a href="#" className='uppercase text-blue-400'>Shop now</a>
+                            {promo.map(item => <>
+                                <div className='flex h-[240px] w-full rounded-[8px]  p-6 bg-slate-400 justify-between glass text-black overflow-hidden'>
+                                    {/* text  */}
+                                    <div className='flex flex-col h-full justify-center'>
+                                        <div className='text-[16px] uppercase font-medium leading-snug mb-2'>Amazon Pre Order   </div>
+                                        <div className='text-[16px] uppercase font-medium leading-snug mb-2'>Save {item.discount}%  </div>
+                                        <div className='text-[20px] uppercase font-medium leading-snug mb-2'>{item.name} </div>
+                                        {/* <a href="#" className='uppercase text-blue-400'>Shop now</a> */}
+                                    </div>
+
+
+                                    <img className=' ' src={item.image} alt="" />
+
                                 </div>
+                            </>)}
 
 
-                                <img className='flex ' src={promo1} alt="" />
-
-                            </div>
-                            {/* promo 2  */}
-                            <div className='flex  w-full h-[240px] rounded-[8px]  p-6 bg-slate-400 justify-between glass text-black'>
-                                {/* text  */}
-                                <div className='flex flex-col max-w-[144px] h-full justify-center'>
-                                    <div className='text-[20px] uppercase font-medium leading-snug'>Save 30% all Book </div>
-                                    <a href="#" className='uppercase text-blue-400'>Shop now</a>
-                                </div>
 
 
-                                <img className='flex ' src={promo2} alt="" />
-
-                            </div>
                         </div>
                     </div>
 
