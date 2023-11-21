@@ -12,7 +12,7 @@ const BookSlider = ({ data }) => {
     return (
         <Swiper
             autoplay={{
-                delay: 2500,
+                delay: 6000,
 
             }}
             pagination={{

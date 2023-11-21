@@ -2,6 +2,7 @@
 import { useForm } from 'react-hook-form';
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
+import { Helmet } from 'react-helmet-async';
 const img_hosting_token = import.meta.env.VITE_image_Upload_token;
 
 const AddBooks = () => {
@@ -49,6 +50,9 @@ const AddBooks = () => {
     console.log(img_hosting_token)
     return (
         <div className=" w-full flex flex-col ">
+            <Helmet>
+                <title>Book Ocean BD || Add book</title>
+            </Helmet>
             <div>
                 <h1 className="text-2xl text-center mb-12 text-white uppercase font-semibold bg-[#081A51] py-12">Add books</h1>
             </div>
@@ -58,7 +62,7 @@ const AddBooks = () => {
                         {/* name  */}
                         <div className="form-control w-full">
                             <label className="label">
-                                <span className="label-text font-semibold ">Recipe name*</span>
+                                <span className="label-text font-semibold ">Book name*</span>
                             </label>
                             <input type="text" placeholder="Type here" className="input input-bordered w-full"
                                 {...register("name", { required: true })} />

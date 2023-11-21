@@ -58,7 +58,7 @@ const AllOrders = () => {
     return (
         <div className="w-full">
             <Helmet>
-                <title>Book Ocean BD || All orders</title>
+                <title>Book Ocean BD || All Orders</title>
             </Helmet>
             <div className=" text-white text-2xl font-bold text-center mb-12 bg-[#081A51] py-12">
                 Total Order: {orders?.length}

@@ -5,12 +5,25 @@ import { motion } from "framer-motion"
 
 const FadeIn = ({ children, delay, direction, fullWidth, padding }) => {
     const ref = useRef(null)
-    const isInView = useInView(ref, { once: true })
+    // const isInView = useInView(ref, { once: true })
+    const isInView = useInView(ref, {
+        threshold: 0.2
+    })
+
+
     const controls = useAnimation()
     useEffect(() => {
         if (isInView) {
             controls.start('visible')
         }
+        if (!isInView) {
+            controls.start('visible')
+        }
+
+
+        // if (isInView) {
+        //     controls.start('visible')
+        // }
     }, [isInView, controls])
     return (
         <div

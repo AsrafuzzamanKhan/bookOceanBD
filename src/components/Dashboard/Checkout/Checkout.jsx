@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { format } from 'date-fns';
+import { Helmet } from "react-helmet-async";
 
 const Checkout = ({ item }) => {
     const [cart, refetch] = useCart()
@@ -53,7 +54,9 @@ const Checkout = ({ item }) => {
 
     return (
         <div className="mb-[30px] pt-36 md:pt-36 lg:pt-0 xl:pt-28 ">
-
+            <Helmet>
+                <title>Book Ocean BD || Checkout</title>
+            </Helmet>
             <div className="container mx-auto px-1 lg:px-2 dark:text-white">
                 <div className="uppercase text-2xl text-center font-semibold mb-12">
                     check out

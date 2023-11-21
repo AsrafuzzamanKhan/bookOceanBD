@@ -11,7 +11,7 @@ import { FaBook, FaCalendarAlt, FaHome, FaShoppingCart, FaSitemap, FaUsers, FaUt
 
 import useAdmin from '../../../hooks/useAdmin';
 const DashboardLayout = () => {
-    const [open, setOpen] = useState(true)
+    const [open, setOpen] = useState(false)
     const { user } = useAuth()
     const [isAdmin] = useAdmin()
     // const isAdmin = true

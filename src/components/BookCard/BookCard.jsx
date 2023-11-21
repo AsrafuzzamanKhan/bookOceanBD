@@ -1,12 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
+import FadeIn from "../../Animation/FadeIn";
+import { motion, useAnimate, useAnimation, useScroll } from "framer-motion"
+import { useInView } from "react-intersection-observer";
 
 const BookCard = ({ book }) => {
     const { _id, name, author, price, image, description, newBook, category, cover } = book;
 
     // console.log('book', book)
+
+
+    // const { ref, inView } = useInView({
+    //     threshold: 0.1
+    // });
+    // const animation = useAnimation()
+
+    // useEffect(() => {
+    //     console.log('isview', inView)
+    //     if (inView) {
+    //         animation.start({
+    //             y: 0,
+    //             transition: {
+    //                 type: 'tween', duration: 4
+    //             }
+    //         })
+    //     }
+    //     if (!inView) {
+    //         animation.start({ y: '-100vw' })
+    //     }
+
+    // }, [animation, inView])
+
+
     return (
+
         <Link to={`/book/${_id}`}>
             <div className=" dark:border-0 dark:bg-gray-800  dark:text-white  border shadow-xl w-full h-[400px] rounded-[8px] overflow-hidden relative group">
                 {/* badge  */}
@@ -36,6 +63,7 @@ const BookCard = ({ book }) => {
                 </div>
             </div>
         </Link>
+
     );
 };
 

@@ -12,7 +12,7 @@ const LatestBook = () => {
     return (
         <div className='my-16'>
             <div className='container mx-auto px-4 lg:px-0'>
-                <FadeIn delay={0.4} direction='up'  >
+                <FadeIn delay={0.6} direction='up'  >
                     <div className="w-full">
                         <h2 className='text-2xl text-center xl:text-left mb-5 font-semibold dark:text-white'>Latest Books</h2>
 

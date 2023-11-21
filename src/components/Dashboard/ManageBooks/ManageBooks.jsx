@@ -2,6 +2,7 @@ import { AiFillDelete } from "react-icons/ai";
 import useBookData from "../../../hooks/useBookData";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { Helmet } from "react-helmet-async";
 
 const ManageBooks = () => {
     const [booksData, , refetch] = useBookData()
@@ -38,12 +39,15 @@ const ManageBooks = () => {
     }
     return (
         <div className="w-full">
+            <Helmet>
+                <title>Book Ocean BD || Manage Books</title>
+            </Helmet>
             <div className=" text-white text-2xl font-bold text-center mb-12 bg-[#081A51] py-12">
                 Manage Books
             </div>
             <div className="px-6 pb-12">
                 <div className="overflow-x-auto">
-                    <table className="table table-pin-rows table-pin-cols">
+                    <table className="table lg:text-[16px] lg:table-lg table-xs">
                         {/* head */}
                         <thead>
                             <tr>

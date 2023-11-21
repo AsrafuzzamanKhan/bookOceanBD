@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import useBookData from "../../hooks/useBookData";
 
 const CategoryNav = () => {
@@ -13,11 +13,11 @@ const CategoryNav = () => {
                 <div className="flex flex-col gap-y-2 p-6 font-semibold">
                     {
                         uniqueCategories.map((category, i) =>
-                            <Link className="dark:hover:text-gray-400 "
+                            <NavLink className="dark:hover:text-gray-400 px-2 rounded "
                                 to={`/books/${category}`}
                                 key={i}>
                                 {category}
-                            </Link>)
+                            </NavLink>)
                     }
                 </div>
             </div>

@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import useUserOrder from "../../../hooks/useUserOrder";
 
 const UserHome = () => {
@@ -9,7 +10,9 @@ const UserHome = () => {
     console.log('approve', approve.lenght)
     return (
         <div>
-
+            <Helmet>
+                <title>Book Ocean BD ||  Order Summary</title>
+            </Helmet>
 
             <div className=" text-white text-2xl font-semibold text-center mb-12 bg-[#081A51] py-12">
                 Order Summary

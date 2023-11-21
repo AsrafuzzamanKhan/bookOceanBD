@@ -12,6 +12,10 @@ html,
 body {
   overflow-x: hidden;
 }
+.active {
+  color: #0b9fd4;
+  background-color: rgb(230, 231, 231);
+}
 @layer base {
   .h2 {
     @apply text-3xl capitalize;

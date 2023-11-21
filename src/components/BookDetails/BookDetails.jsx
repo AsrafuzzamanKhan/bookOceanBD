@@ -9,6 +9,7 @@ import { CartContext } from "../../providers/CartProvider/CartProvider";
 import FadeIn from "../../Animation/FadeIn";
 import { motion, useAnimate, useAnimation, useScroll } from "framer-motion"
 import { useInView } from "react-intersection-observer";
+import { Helmet } from "react-helmet-async";
 
 
 const BookDetails = () => {
@@ -123,6 +124,9 @@ const BookDetails = () => {
     return (
         <div className="mb-16 pt-36 lg:pt-[30px] xl:pt-36">
             <div className="container mx-auto px-2">
+                <Helmet>
+                    <title>Book Ocean BD || Book Details</title>
+                </Helmet>
                 {/* text  */}
                 <div ref={ref} className="flex flex-col lg:flex-row lg:gap-[30px] gap-0 mb-[30px]  items-center">
                     <motion.div

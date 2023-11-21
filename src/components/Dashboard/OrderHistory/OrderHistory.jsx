@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import useAuth from "../../../hooks/useAuth";
 import useUserOrder from "../../../hooks/useUserOrder";
 import { MdDelete } from "react-icons/md";
@@ -8,6 +9,9 @@ const OrderHistory = () => {
 
     return (
         <div>
+            <Helmet>
+                <title>Book Ocean BD || Order History</title>
+            </Helmet>
 
             <div className=" text-white text-2xl  text-center mb-12 bg-[#081A51] py-12">
                 {user.displayName}'s Order history
