@@ -42,10 +42,10 @@ const Cart = () => {
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
+            confirmButtonText: "Yes, remove it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`https://book-ocean-bd-server.vercel.app/carts/${item._id}`, {
+                fetch(`http://localhost:5000/carts/${item._id}`, {
                     method: "DELETE"
                 })
                     .then(res => res.json())
@@ -53,8 +53,8 @@ const Cart = () => {
                         if (data.deletedCount > 0) {
                             refetch()
                             Swal.fire({
-                                title: "Deleted!",
-                                text: "Your file has been deleted.",
+                                title: "Removed!",
+                                text: "Book has been removed from cart.",
                                 icon: "success"
                             });
                         }

@@ -73,6 +73,7 @@ const AllOrders = () => {
                             <th>Name</th>
                             <th>Email</th>
                             <th>Order qtn</th>
+                            <th>Books</th>
                             <th>Total</th>
                             <th>Approve</th>
                             <th>Cancel</th>
@@ -85,6 +86,13 @@ const AllOrders = () => {
                                 <td>{order.data.name}</td>
                                 <td>{order.email}</td>
                                 <td>{order.orderQuantity}</td>
+
+                                <td className=""> {order.cart.map((book, i) => <>
+                                    <div className="leading-loose">
+                                        {i + 1} - {book.name} - by {book.author}
+                                    </div></>)}
+                                </td>
+
                                 <td>{order.totalAmount}</td>
                                 <td>{order.status === 'approve' ? 'Approved' : <button onClick={() => handleApproved(order)} className="btn bg-green-600 text-white">{order.status}</button>}</td>
 

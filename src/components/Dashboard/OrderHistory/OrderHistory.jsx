@@ -2,10 +2,42 @@ import { Helmet } from "react-helmet-async";
 import useAuth from "../../../hooks/useAuth";
 import useUserOrder from "../../../hooks/useUserOrder";
 import { MdDelete } from "react-icons/md";
+import Swal from "sweetalert2";
 const OrderHistory = () => {
-    const [orders] = useUserOrder()
+    const [orders, refetch] = useUserOrder()
     const { user } = useAuth()
     // console.log(orders.length);
+    const handleCancelOrder = item => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, cancel it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`http://localhost:5000/orders/${item._id}`, {
+                    method: "DELETE"
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.deletedCount > 0) {
+                            refetch()
+                            Swal.fire({
+                                title: "Canceled!",
+                                text: "Your Order has been Canceled.",
+                                icon: "success"
+                            });
+                        }
+                        // setIsOpen(false)
+                    })
+            }
+        });
+    }
+
+
 
     return (
         <div>
@@ -28,7 +60,7 @@ const OrderHistory = () => {
                                 <th>Book List</th>
                                 <th>Bill</th>
                                 <th>Status</th>
-                                <th>Delete</th>
+                                <th></th>
 
                             </tr>
                         </thead>
@@ -75,10 +107,27 @@ const OrderHistory = () => {
 
 
                                 </td>
-                                <td className={`${(order.status === 'pending' || order.status === 'canceled') ? 'text-red-600' : 'text-blue-600'} w-32 text-center`}>
+                                <td className={`${(order.status === 'pending' || order.status === 'canceled') ? 'text-yellow-600' : 'text-blue-600'} w-32 text-center`}>
                                     <span className="border p-2 rounded-lg bg-gray-200 uppercase font-semibold">{order.status}</span>
                                 </td>
-                                <td><MdDelete size={30} /></td>
+
+
+                                <td>
+                                    {
+                                        (order.status === 'pending') &&
+                                        <button onClick={() => handleCancelOrder(order)} className="btn bg-red-200 "> Cancel</button>
+
+                                    }
+                                    {
+                                        (order.status === 'canceled') && <span className="text-sm text-red-600">Limited Stock... </span>
+                                    }
+                                    {
+
+                                        (order.status === 'approve') && <span className="text-sm text-green-600">The Parcel is ready for delivery </span>
+
+                                    }
+
+                                </td>
                             </tr>)}
 
 
