@@ -24,7 +24,7 @@ const BookDetails = () => {
 
 
     const { ref, inView } = useInView({
-        threshold: 0.2
+        threshold: 0.1
     });
     const animation = useAnimation()
 
@@ -133,7 +133,7 @@ const BookDetails = () => {
 
                         animate={animation}
 
-                        className="flex-1 lg:max-w-[40%] lg:h-[550px] border shadow-xl rounded-lg flex justify-center items-center dark:border-0 dark:bg-gary-800" >
+                        className="flex-1 max-w-[40%] lg:h-[550px]  lg:shadow-xl shadow-none rounded-lg flex justify-center items-center dark:border-0 dark:bg-gary-800" >
                         {/* <div className="flex-1 lg:max-w-[40%] lg:h-[550px] border shadow-2xl rounded-lg flex justify-center items-center dark:border-0 dark:bg-gary-800"> */}
 
                         <img src={productDetails.image}

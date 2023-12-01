@@ -126,6 +126,11 @@ const OrderHistory = () => {
                                         (order.status === 'approve') && <span className="text-sm text-green-600">The Parcel is ready for delivery </span>
 
                                     }
+                                    {
+
+                                        (order.status === 'delivered') && <span className="text-sm text-green-600">Delivered</span>
+
+                                    }
 
                                 </td>
                             </tr>)}

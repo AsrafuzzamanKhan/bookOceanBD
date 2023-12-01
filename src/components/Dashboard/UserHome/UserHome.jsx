@@ -7,6 +7,7 @@ const UserHome = () => {
     const approve = order.filter(pd => pd.status === 'approve');
     const pending = order.filter(pd => pd.status === 'pending');
     const cancel = order.filter(pd => pd.status === 'canceled');
+    const deliver = order.filter(pd => pd.status === 'delivered');
     console.log('approve', approve.lenght)
     return (
         <div>
@@ -21,18 +22,22 @@ const UserHome = () => {
             <div className="px-12">
                 <div className="stats stats-vertical lg:stats-horizontal shadow w-full dark:text-white ">
 
+                    <div className="stat bg-green-600 flex flex-col justify-center items-center ">
+                        <div className="stat-title dark:text-white font-semibold">Delivered</div>
+                        <div className="stat-value">{deliver.length}  </div>
+                    </div>
                     <div className="stat bg-green-400 flex flex-col justify-center items-center ">
-                        <div className="stat-title dark:text-white">Approved</div>
+                        <div className="stat-title dark:text-white font-semibold">Approved</div>
                         <div className="stat-value">{approve.length}  </div>
                     </div>
 
                     <div className="stat bg-blue-400 flex flex-col justify-center items-center  ">
-                        <div className="stat-title dark:text-white">Pending</div>
+                        <div className="stat-title dark:text-white font-semibold">Pending</div>
                         <div className="stat-value">  {pending.length}</div>
 
                     </div>
                     <div className="stat bg-red-400 flex flex-col justify-center items-center ">
-                        <div className="stat-title dark:text-white">Canceled</div>
+                        <div className="stat-title dark:text-white font-semibold">Canceled</div>
                         <div className="stat-value">  {cancel.length}</div>
 
                     </div>

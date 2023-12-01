@@ -33,6 +33,7 @@ const AllOrders = () => {
                 }
             })
     }
+    // cancel 
     const handleCanceled = order => {
         console.log(order._id)
         axiosSecure.patch(`/orders/cancel-order/${order._id}`)
@@ -44,6 +45,24 @@ const AllOrders = () => {
                         position: "top-end",
                         icon: "success",
                         title: `order is Canceled`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            })
+    }
+    // Delievery 
+    const handleDelivery = order => {
+        console.log(order._id)
+        axiosSecure.patch(`/orders/delivery-order/${order._id}`)
+            .then(res => {
+                console.log(res.data)
+                if (res.data.modifiedCount > 0) {
+                    refetch();
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: `Delivered`,
                         showConfirmButton: false,
                         timer: 1500
                     });
@@ -78,6 +97,7 @@ const AllOrders = () => {
                             <th>Total</th>
                             <th>Approve</th>
                             <th>Cancel</th>
+                            <th>Delivered</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -88,15 +108,18 @@ const AllOrders = () => {
                                 <td>{order.email}</td>
                                 <td>{order.orderQuantity}</td>
 
+
                                 <td className=""> {order.cart.map((book, i) => <>
-                                    <div className="leading-loose">
-                                        {i + 1} - {book.name} - by {book.author}
-                                    </div></>)}
-                                </td>
-                                <td className=""> {order.cart.map((book, i) => <>
-                                    <div className="leading-loose">
-                                        {i + 1} - {book.name} - by {book.author}
-                                    </div></>)}
+
+                                    <div className="flex mb-4">
+                                        <div className="w-1/4">
+                                            <img className="w-12" src={book.image} alt="Avatar Tailwind CSS Component" />
+                                        </div>
+                                        <div className="w-3/4">
+                                            <span className="text-blue-600">  {i + 1} </span> - {book.name} - by <span className="text-blue-400">{book.author}</span>
+                                        </div>
+                                    </div>
+                                </>)}
                                 </td>
 
                                 <td className="">
@@ -116,9 +139,13 @@ const AllOrders = () => {
                                 <td>{order.status === 'approve' ? 'Approved' : <button onClick={() => handleApproved(order)} className="btn bg-green-600 text-white">{order.status}</button>}</td>
 
                                 <td>{order.status === 'canceled' ? 'Canceled' : <button onClick={() => handleCanceled(order)} className="btn bg-orange-600 text-white">{order.status}</button>}</td>
+
+
+                                <td>{order.status === 'delivered' ? 'Delivered' : <button onClick={() => handleDelivery(order)} className="btn bg-orange-600 text-white">{order.status}</button>}</td>
+                                {/* 
                                 <th>
                                     <button onClick={() => handleDelete(order)} className="btn bg-red-600 text-white"> <AiFillDelete className='text-2xl' /></button>
-                                </th>
+                                </th> */}
                             </tr>)
                         }
 

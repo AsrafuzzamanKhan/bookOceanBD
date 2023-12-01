@@ -42,10 +42,10 @@ const ManageBanner = () => {
     return (
         <div className="w-full">
             <Helmet>
-                <title>Book Ocean BD || Manage Books</title>
+                <title>Book Ocean BD || Manage Banner</title>
             </Helmet>
             <div className=" text-white text-2xl font-bold text-center mb-12 bg-[#081A51] py-12">
-                Manage Books
+                Manage Banner
             </div>
             <div className="px-6 pb-12">
                 <div className="overflow-x-auto">

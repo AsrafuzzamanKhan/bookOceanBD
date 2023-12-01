@@ -52,14 +52,16 @@ const DashboardLayout = () => {
                                     <FaBook size={30} />
                                     <span className={`${!open && 'hidden'} origin-left duration-200`}>Add Book</span>
                                 </NavLink>
-                                <NavLink to='/dashboard/addBanner' className={`text-gray-300 text-xm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-600 rounded-md duration-300`}>
-                                    <MdOutlineDevicesOther size={30} />
-                                    <span className={`${!open && 'hidden'} origin-left duration-200`}>Add Banner</span>
-                                </NavLink>
+
                                 <NavLink to='/dashboard/manageBooks' className={`text-gray-300 text-xm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-600 rounded-md duration-300`}>
                                     <MdManageHistory size={30} />
                                     <span className={`${!open && 'hidden'} origin-left duration-200`}>Manage Books</span>
                                 </NavLink>
+                                <NavLink to='/dashboard/addBanner' className={`text-gray-300 text-xm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-600 rounded-md duration-300`}>
+                                    <MdOutlineDevicesOther size={30} />
+                                    <span className={`${!open && 'hidden'} origin-left duration-200`}>Add Banner</span>
+                                </NavLink>
+
 
                                 <NavLink to='/dashboard/manageBanner' className={`text-gray-300 text-xm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-600 rounded-md duration-300`}>
                                     <TbDeviceDesktopStar size={30} />
