@@ -84,17 +84,22 @@ const AddBooks = () => {
                                 </label>
                                 <select defaultValue='Pick one' className="select select-bordered uppercase"  {...register("category", { required: true })}>
                                     <option disabled >Pick one</option>
-                                    <option>Fantasy</option>
-                                    <option>Horror</option>
-                                    <option>Romance</option>
-                                    <option>Fiction</option>
+                                    <option>Barnes & Noble</option>
+                                    <option>Biographies</option>
+                                    <option>Classic</option>
                                     <option>Comics</option>
-                                    <option>Manga</option>
+                                    <option>Crime</option>
+                                    <option>Fantasy</option>
+                                    <option>Fiction</option>
+                                    <option>Horror</option>
+                                    <option>History</option>
                                     <option>Islamic</option>
+                                    <option>Manga</option>
                                     <option>Mythology</option>
                                     <option>Non-Fiction</option>
-                                    <option>Crime</option>
-                                    <option>Classic</option>
+                                    <option>Romance</option>
+                                    <option>Scienece Fiction</option>
+                                    <option>Thriller</option>
                                 </select>
 
                             </div>

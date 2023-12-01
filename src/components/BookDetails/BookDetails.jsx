@@ -60,7 +60,7 @@ const BookDetails = () => {
         console.log(id)
         // phh -------
         if (user) {
-            fetch('http://localhost:5000/carts', {
+            fetch('https://book-ocean-bd-server.vercel.app/carts', {
                 method: "POST",
                 headers: {
                     'content-type': 'application/json'

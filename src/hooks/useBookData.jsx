@@ -5,7 +5,7 @@ const useBookData = () => {
   const { data: booksData = [], isLoading: loading, refetch } = useQuery({
     queryKey: ['booksData'],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/books")
+      const res = await fetch("https://book-ocean-bd-server.vercel.app/books")
       return res.json()
     }
   })
@@ -19,7 +19,7 @@ export default useBookData;
 // const [loading, setLoading] = useState(true);
 
 // useEffect(() => {
-//   fetch("http://localhost:5000/books")
+//   fetch("https://book-ocean-bd-server.vercel.app/books")
 //     .then((res) => res.json())
 //     .then((data) => {
 //       // console.log(data)
