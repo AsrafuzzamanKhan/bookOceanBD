@@ -98,7 +98,7 @@ const AddBooks = () => {
                                     <option>Mythology</option>
                                     <option>Non-Fiction</option>
                                     <option>Romance</option>
-                                    <option>Scienece Fiction</option>
+                                    <option>Science Fiction</option>
                                     <option>Thriller</option>
                                 </select>
 

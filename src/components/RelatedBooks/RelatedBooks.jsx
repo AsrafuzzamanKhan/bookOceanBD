@@ -9,7 +9,7 @@ const RelatedBooks = ({ categoryTitle }) => {
     // Use the filter method to get products of the selected category
     const filteredProducts = booksData.filter(item => item.category === categoryTitle);
 
-    const sliceData = filteredProducts.slice(1, 20)
+    const sliceData = filteredProducts.slice(0, 20)
 
     return (
         <div className="my-16">

@@ -35,7 +35,7 @@ const BookCard = ({ book }) => {
     return (
 
         <Link to={`/book/${_id}`}>
-            <div className=" dark:border-0 dark:bg-gray-800  dark:text-white  border shadow-xl w-full h-[400px] rounded-[8px] overflow-hidden relative group">
+            <div className=" dark:border-0 dark:bg-gray-800  dark:text-white  border shadow-xl w-full h-[420px] rounded-[8px] overflow-hidden relative group">
                 {/* badge  */}
                 {newBook === 'true' && <div className="absolute bg-blue-400 text-primary text-[12px] font-extrabold uppercase top-4 right-4 rounded-full px-2 z-10">
                     new
@@ -48,7 +48,7 @@ const BookCard = ({ book }) => {
                         src={image} alt="books" />
                 </div>
                 {/* text  */}
-                <div className="flex flex-col px-2 lg:px-6 ">
+                <div className="flex flex-col px-3 lg:px-6 ">
 
                     {/* category  */}
                     <div className="text-sm text-blue-400">{category}</div>

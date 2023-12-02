@@ -45,12 +45,12 @@ const OrderHistory = () => {
                 <title>Book Ocean BD || Order History</title>
             </Helmet>
 
-            <div className=" text-white text-2xl  text-center mb-12 bg-[#081A51] py-12">
+            <div className=" text-white text-2xl  text-center mb-5 bg-[#081A51] py-12">
                 {user.displayName}'s Order history
             </div>
-            <div className="px-10 dark:text-white  ">
+            <div className="lg:px-10 p-2 dark:text-white  ">
                 <div className="overflow-x-auto border dark:border-gray-900 shadow-xl rounded-md ">
-                    <table className="table lg:text-[16px] lg:table-lg table-xs ">
+                    <table className=" table-fixed lg:text-[16px] lg:table-lg table-xs ">
                         {/* head */}
                         <thead>
                             <tr className="text-center lg:text-lg">
@@ -72,7 +72,7 @@ const OrderHistory = () => {
                                         {i + 1}
                                     </label>
                                 </th>
-                                <td className="sm:w-50">
+                                <td className="">
                                     {order.data.name}
                                     <br />
 
@@ -93,19 +93,31 @@ const OrderHistory = () => {
                                 </td>
 
 
-                                <td className=""> {order.cart.map((book, i) => <>
+                                {/* <td className=""> {order.cart.map((book, i) => <>
                                     <div className="leading-loose">
                                         {i + 1} - {book.name} - by {book.author}
                                     </div></>)}
+                                </td> */}
+
+                                <td className=""> {order.cart.map((book, i) => <>
+
+                                    <div className="flex mb-4">
+                                        <div className="w-1/4">
+                                            <img className="w-12" src={book.image} alt="Avatar Tailwind CSS Component" />
+                                        </div>
+                                        <div className="w-3/4">
+                                            <span className="text-blue-600">  {i + 1} </span> - {book.name} - by <span className="text-blue-400">{book.author}</span>
+                                        </div>
+                                    </div>
+                                </>)}
                                 </td>
 
-                                <td className=" text-center">
+                                <td className="text-center font-semibold">
 
-                                    <span>&#x09F3;</span>{order.totalAmount}
-
-
-
-
+                                    <div className="flex">
+                                        <span>&#x09F3; </span>
+                                        <p className="mx-1"> {order.totalAmount}</p>
+                                    </div>
                                 </td>
                                 <td className={`${(order.status === 'pending' || order.status === 'canceled') ? 'text-yellow-600' : 'text-blue-600'} w-32 text-center`}>
                                     <span className="border p-2 rounded-lg bg-gray-200 uppercase font-semibold">{order.status}</span>

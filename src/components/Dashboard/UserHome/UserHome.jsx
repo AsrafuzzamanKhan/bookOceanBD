@@ -22,21 +22,21 @@ const UserHome = () => {
             <div className="px-12">
                 <div className="stats stats-vertical lg:stats-horizontal shadow w-full dark:text-white ">
 
-                    <div className="stat bg-green-600 flex flex-col justify-center items-center ">
+                    <div className="stat bg-blue-200 flex flex-col justify-center items-center h-[250px] ">
                         <div className="stat-title dark:text-white font-semibold">Delivered</div>
                         <div className="stat-value">{deliver.length}  </div>
                     </div>
-                    <div className="stat bg-green-400 flex flex-col justify-center items-center ">
+                    <div className="stat bg-green-400 flex flex-col justify-center items-center h-[250px]  ">
                         <div className="stat-title dark:text-white font-semibold">Approved</div>
                         <div className="stat-value">{approve.length}  </div>
                     </div>
 
-                    <div className="stat bg-blue-400 flex flex-col justify-center items-center  ">
+                    <div className="stat bg-blue-400 flex flex-col justify-center items-center h-[250px]  ">
                         <div className="stat-title dark:text-white font-semibold">Pending</div>
                         <div className="stat-value">  {pending.length}</div>
 
                     </div>
-                    <div className="stat bg-red-400 flex flex-col justify-center items-center ">
+                    <div className="stat bg-red-400 flex flex-col justify-center items-center h-[250px] ">
                         <div className="stat-title dark:text-white font-semibold">Canceled</div>
                         <div className="stat-value">  {cancel.length}</div>
 
