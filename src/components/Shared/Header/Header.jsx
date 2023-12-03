@@ -47,7 +47,7 @@ const Header = () => {
                         <FiMenu></FiMenu>
                     </div>
                     {/* category mobile nav  */}
-                    <div className={`${catNavMobile ? 'left-0' : '-left-full'} fixed top-0 bottom-0 z-30 bg-slate-700 lg:w-1/3 w-1/2 h-screen transition-all duration-700 `}>
+                    <div className={`${catNavMobile ? 'left-0' : '-left-full'} fixed top-0 bottom-0 z-30 bg-slate-700 lg:w-1/3 w-1/2 h-screen transition-all duration-700  overflow-y-auto`}>
                         <CategoryNavMobile
                             setCatNavMobile={setCatNavMobile}
                         ></CategoryNavMobile>
@@ -82,16 +82,16 @@ const Header = () => {
                                 {
                                     user?.email && <li className="mt-4">
                                         <NavLink to={isAdmin ? '/dashboard/adminhome' : "/dashboard/userhome"
-                                        } className='text-black text-xl dark:hover:text-gray-300'>Dashbord</NavLink></li>
+                                        } className='text-black text-lg dark:hover:text-gray-300'>Dashbord</NavLink></li>
                                 }
-                                <li>
+                                <li className="mx-auto mt-2">
                                     <div className=" text-black hover:scale-95 hover:bg-slate-400 dark:hover:bg-blue-400
                                     dark:hover:text-white
                                     ">
                                         {user?.email ?
                                             <button onClick={handleLogOut} className="text-xl ">Logout</button>
                                             :
-                                            <Link className="text-xl " to='/login'> Login</Link>
+                                            <Link className="text-xl" to='/login'> Login</Link>
                                         }
                                     </div>
                                 </li>

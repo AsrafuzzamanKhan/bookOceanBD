@@ -41,14 +41,14 @@ const BookCard = ({ book }) => {
                     new
                 </div>}
                 {/* image  */}
-                <div className="w-full h-[250px] flex items-center justify-center relative">
+                <div className="w-full h-[230px] flex items-center justify-center relative">
 
                     <img
                         className=" w-32 group-hover:scale-90 transition-all"
                         src={image} alt="books" />
                 </div>
                 {/* text  */}
-                <div className="flex flex-col px-3 lg:px-6 ">
+                <div className="flex flex-col px-2 lg:px-6 text-[14px]">
 
                     {/* category  */}
                     <div className="text-sm text-blue-400">{category}</div>

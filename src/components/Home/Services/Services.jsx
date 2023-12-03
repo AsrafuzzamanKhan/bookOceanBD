@@ -24,13 +24,13 @@ const Services = () => {
         >
             <div className="container mx-auto px-2 ">
 
-                <div className=" grid md:grid-cols-3 xl:grid-cols-5 grid-cols-2 gap-4 my-12">
+                <div className=" grid md:grid-cols-3 xl:grid-cols-5 grid-cols-2 gap-4 my-12 w-full">
                     {services.map(service =>
                         <FadeIn delay={0.4} direction='down' key={service.id} >
-                            <div className=" h-32 shadow-xl bg-white rounded-[8px] flex justify-center items-center text-black" >
+                            <div className=" h-36 shadow-xl bg-white rounded-[8px] flex justify-center items-center text-black" >
                                 <div className="flex flex-col px-2">
-                                    <h2 className="lg:text-xl font-bold text-center text-lg">{service.heading}</h2>
-                                    <p className="lg:text-lg text-xm ">{service.subHeading}</p>
+                                    <h2 className="lg:text-xl lg:font-bold font-semibold text-center text-lg mb-2">{service.heading}</h2>
+                                    <p className="lg:text-lg text-sm ">{service.subHeading}</p>
 
                                 </div>
 

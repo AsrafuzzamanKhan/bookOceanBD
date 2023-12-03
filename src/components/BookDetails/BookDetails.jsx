@@ -122,13 +122,13 @@ const BookDetails = () => {
         }
     }
     return (
-        <div className="mb-16 pt-36 lg:pt-[30px] xl:pt-36">
+        <div className="mb-16 pt-36 lg:pt-[30px] xl:pt-32">
             <div className="container mx-auto px-2">
                 <Helmet>
                     <title>Book Ocean BD || Book Details</title>
                 </Helmet>
                 {/* text  */}
-                <div ref={ref} className="flex flex-col lg:flex-row lg:gap-[30px] gap-0 mb-[30px]  items-center">
+                <div ref={ref} className="flex flex-col lg:flex-row lg:gap-[30px] gap-0 mb-[30px] items-center">
                     <motion.div
 
                         animate={animation}
@@ -137,13 +137,13 @@ const BookDetails = () => {
                         {/* <div className="flex-1 lg:max-w-[40%] lg:h-[550px] border shadow-2xl rounded-lg flex justify-center items-center dark:border-0 dark:bg-gary-800"> */}
 
                         <img src={productDetails.image}
-                            className=" max-w-[65%] max-h-96 py-4"
+                            className=" lg:max-w-[65%] lg:max-h-96  h-full py-4"
                             alt="image" />
                         {/* </div> */}
                     </motion.div>
                     <motion.div
                         animate={animation}
-                        className="flex-1 py-12 px-4 xl:p-20 flex flex-col justify-center dark:bg-base-200 dark:text-white text-black rounded-[8px] shadow-lg">
+                        className="flex-1 py-10 px-6 xl:p-16 flex flex-col justify-center dark:bg-base-200 dark:text-white text-black rounded-[8px] shadow-lg">
                         {/* category  */}
                         <div className="uppercase text-blue-400 text-lg font-medium mb-2"> {productDetails.category}  </div>
                         {/* title  */}
@@ -160,13 +160,16 @@ const BookDetails = () => {
 
                             <div className=" flex justify-center items-center gap-4">
 
-                                <div className="border rounded-[8px] shadow-md flex flex-col h-auto p-2">
+                                <div className="border rounded-[8px] shadow-md flex flex-col text-center h-auto p-2">
                                     <div >
                                         {
                                             productDetails.cover === 'hardcover' && <span className="text-[15px] "> Hardcover </span>
                                         }
                                         {
                                             productDetails.cover == 'paperback' && <span className="text-[15px] "> Paperback </span>
+                                        }
+                                        {
+                                            productDetails.cover == 'leather bound' && <span className="text-[15px] "> Leather Bound </span>
                                         }
                                     </div>
                                     <div className="text-xl font-semibold text-blue-400"><span>&#x09F3;</span> {productDetails.price}</div>

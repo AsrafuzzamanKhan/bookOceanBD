@@ -5,10 +5,11 @@ import BookCard from '../BookCard/BookCard';
 import CategoryNav from '../CategoryNav/CategoryNav';
 
 const SearchBook = () => {
+    const [booksData] = useBookData()
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const searchTerm = searchParams.get('query')
-    const [booksData] = useBookData()
+
     console.log('search', searchTerm)
     // Filter the data array based on the search term
     const filteredResults = booksData.filter((item) =>

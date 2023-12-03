@@ -85,7 +85,7 @@ const AddBooks = () => {
                                 <select defaultValue='Pick one' className="select select-bordered uppercase"  {...register("category", { required: true })}>
                                     <option disabled >Pick one</option>
                                     <option>Barnes & Noble</option>
-                                    <option>Biographies</option>
+                                    <option>Biography</option>
                                     <option>Classic</option>
                                     <option>Comics</option>
                                     <option>Crime</option>
@@ -123,6 +123,7 @@ const AddBooks = () => {
                                     <option disabled >Pick one</option>
                                     <option value="hardcover">Hardcover</option>
                                     <option value="paperback">Paperback</option>
+                                    <option value="leather bound">Leather Bound</option>
                                 </select>
 
                             </div>

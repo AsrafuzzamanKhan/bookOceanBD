@@ -15,7 +15,7 @@ const CategoryNavMobile = ({ setCatNavMobile }) => {
                 className=" flex justify-end mb-8 cursor-pointer">
                 <FiX className="text-3xl" />
             </div>
-            <div className="flex flex-col gap-y-8" >
+            <div className="flex flex-col gap-y-4  pb-12" >
                 {
                     uniqueCategories?.map((category, i) => {
                         return <Link key={i} to={`/books/${category}`} className='uppercase font-medium hover:text-green-600 duration-300 '
