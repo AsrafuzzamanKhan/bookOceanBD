@@ -24,8 +24,8 @@ const Hero = () => {
                         {/* promo */}
                         <div className='flex flex-col gap-4 w-full  lg:h-[500px] mx-auto  overflow-hidden'>
 
-                            {promo.map(item => <>
-                                <div className='flex h-[240px] w-full rounded-[8px]  p-6 bg-slate-400 justify-between glass text-black overflow-hidden'>
+                            {promo.map((item, i) =>
+                                <div key={i} className='flex h-[240px] w-full rounded-[8px]  p-6 bg-slate-400 justify-between glass text-black overflow-hidden'>
                                     {/* text  */}
                                     <div className='flex flex-col h-full justify-center'>
                                         <div className='text-[16px] uppercase font-medium leading-snug mb-2'>Amazon Pre Order   </div>
@@ -38,7 +38,7 @@ const Hero = () => {
                                     <img className=' ' src={item.image} alt="" />
 
                                 </div>
-                            </>)}
+                            )}
 
 
 

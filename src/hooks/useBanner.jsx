@@ -5,7 +5,7 @@ const useBanner = () => {
     const { data: bannerData = [], isLoading: loading, refetch } = useQuery({
         queryKey: ['bannerData'],
         queryFn: async () => {
-            const res = await fetch("https://book-ocean-bd-server.vercel.app/banners")
+            const res = await fetch("http://localhost:5000/banners")
             return res.json()
         }
     })

@@ -34,9 +34,9 @@ import CartProvider from './providers/CartProvider/CartProvider';
 import AllOrders from './components/Dashboard/AllOrders/AllOrders';
 import AdminHome from './components/Dashboard/AdminHome/AdminHome';
 import UserHome from './components/Dashboard/UserHome/UserHome';
-import ScrollToTop from './ScrollToTop/ScrollToTop';
 import AddBanner from './components/Dashboard/AddBanner/AddBanner';
 import ManageBanner from './components/Dashboard/ManageBanner/ManageBanner';
+import UpdateBook from './components/Dashboard/UpdateBook/UpdateBook';
 const queryClient = new QueryClient()
 
 const router = createBrowserRouter([
@@ -101,6 +101,10 @@ const router = createBrowserRouter([
       {
         path: 'manageBooks',
         element: <AdminRoute><ManageBooks></ManageBooks></AdminRoute>
+      },
+      {
+        path: 'updateBook/:id',
+        element: <AdminRoute><UpdateBook></UpdateBook></AdminRoute>
       },
       {
         path: 'allUsers',

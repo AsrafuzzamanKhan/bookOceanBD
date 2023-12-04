@@ -3,11 +3,12 @@ import useBookData from "../../../hooks/useBookData";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
 
 const ManageBooks = () => {
     const [booksData, , refetch] = useBookData()
     const [axiosSecure] = useAxiosSecure()
-    console.log(booksData)
+    // console.log(booksData)
     const handleDeleteBook = book => {
         console.log('selected bookd', book)
         Swal.fire({
@@ -86,7 +87,10 @@ const ManageBooks = () => {
                                 <td>{book.category}</td>
                                 <td>{book.price}</td>
                                 <td>
-                                    <button className="btn btn-ghost btn-xs">Edit</button>
+                                    <Link to={`/dashboard/updateBook/${book._id}`}>
+
+                                        <button className="btn btn-ghost btn-xs">Edit</button>
+                                    </Link>
                                 </td>
                                 <th>
                                     <button onClick={() => handleDeleteBook(book)} className="btn bg-red-600 text-white"> <AiFillDelete className='text-2xl' /></button>

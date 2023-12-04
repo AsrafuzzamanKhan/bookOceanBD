@@ -6,41 +6,13 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 // import required modules
 import { Autoplay, Pagination } from 'swiper/modules';
-import book1 from '../../../assets/hero/book1.png'
-import book2 from '../../../assets/hero/book2.png'
-import book3 from '../../../assets/hero/book3.png'
-const sliderData = [
-    {
-        img: book1,
-        preTitle: 'Special Offer',
-        titlePart1: 'Save 20%',
-        titlePart2: 'On Your',
-        titlePart3: 'first order',
-        btnText: 'Shop now'
-    },
-    {
-        img: book2,
-        preTitle: 'Special Offer',
-        titlePart1: 'Save 20%',
-        titlePart2: 'On Your',
-        titlePart3: 'first order',
-        btnText: 'Shop now'
-    },
-    {
-        img: book3,
-        preTitle: 'Special Offer',
-        titlePart1: 'Save 20%',
-        titlePart2: 'On Your',
-        titlePart3: 'first order',
-        btnText: 'Shop now'
-    }
-]
+
 import useBanner from '../../../hooks/useBanner';
 
 const MainSlider = () => {
     const [bannerData] = useBanner()
     const hero = bannerData.filter(item => item.promo === 'hero');
-    console.log(hero.length)
+    // console.log(hero.length)
     return (
         <Swiper
             autoplay={{

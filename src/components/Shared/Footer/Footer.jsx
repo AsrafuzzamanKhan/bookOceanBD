@@ -20,14 +20,15 @@ const Footer = () => {
                     <a href="#" className="hover:text-green-600 transition-all">Shipping & delivery</a>
                 </div>
                 {/* social  */}
+                <div className='text-xl text-blue-400 text-center mb-5'>Follow our social media platform</div>
                 <div className=' flex max-w-max mx-auto gap-x-6 text-lg mb-5'>
-                    <a href="#" className="hover:text-green-600 transition-all">
-                        <FaYoutube></FaYoutube> </a>
-                    <a href="#" className="hover:text-green-600 transition-all">
-                        <FaFacebook></FaFacebook>
+                    {/* <a href="#" className="hover:text-green-600 transition-all">
+                        <FaYoutube></FaYoutube> </a> */}
+                    <a href="https://www.facebook.com/bookoceanbd/" target="_blank" rel="noreferrer" className="hover:text-green-600 transition-all">
+                        <FaFacebook size={30}></FaFacebook>
                     </a>
-                    <a href="#" className="hover:text-green-600 transition-all"><FaTwitter></FaTwitter></a>
-                    <a href="#" className="hover:text-green-600 transition-all"><FaInstagram></FaInstagram></a>
+                    {/* <a href="#" className="hover:text-green-600 transition-all"><FaTwitter></FaTwitter></a> */}
+                    <a href="https://www.instagram.com/bookoceanbd/" target="_blank" rel="noreferrer" className="hover:text-green-600 transition-all"><FaInstagram size={30}></FaInstagram></a>
                 </div>
             </div>
             {/* copy rigte  */}

@@ -84,7 +84,7 @@ const Header = () => {
                                         <NavLink to={isAdmin ? '/dashboard/adminhome' : "/dashboard/userhome"
                                         } className='text-black text-lg dark:hover:text-gray-300'>Dashbord</NavLink></li>
                                 }
-                                <li className="mx-auto mt-2">
+                                <li className="mt-2">
                                     <div className=" text-black hover:scale-95 hover:bg-slate-400 dark:hover:bg-blue-400
                                     dark:hover:text-white
                                     ">
