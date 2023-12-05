@@ -11,10 +11,11 @@ import { CartContext } from '../../providers/CartProvider/CartProvider';
 
 
 const Cart = () => {
-
     const { setIsOpen, isOpen } = useContext(CartContext)
     const [cart, refetch] = useCart()
     const sidebarRef = useRef(null);
+
+
     useEffect(() => {
         // Function to handle click outside of the sidebar
         const handleClickOutside = (event) => {
@@ -30,9 +31,10 @@ const Cart = () => {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, []);
+    }, [setIsOpen]);
 
-    const total = cart.reduce((sum, item) => item.price + sum, 0)
+    const total = cart.reduce((sum, item) => parseInt(item.price) + sum, 0)
+    // console.log(parseInt(total))
 
     const handleCartRemove = item => {
         Swal.fire({
@@ -45,20 +47,24 @@ const Cart = () => {
             confirmButtonText: "Yes, remove it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`http://localhost:5000/carts/${item._id}`, {
+                fetch(`https://book-ocean-bd-server.vercel.app/carts/${item._id}`, {
                     method: "DELETE"
                 })
                     .then(res => res.json())
                     .then(data => {
                         if (data.deletedCount > 0) {
+
                             refetch()
                             Swal.fire({
                                 title: "Removed!",
                                 text: "Book has been removed from cart.",
-                                icon: "success"
+                                icon: "success",
+                                showConfirmButton: false,
+                                timer: 1500
+
                             });
                         }
-                        // setIsOpen(false)
+
                     })
             }
         });
@@ -96,7 +102,8 @@ const Cart = () => {
                         <div className='flex justify-between text-2xl'>
                             <div>Subtotal:</div>
                             <div>
-                                {parseFloat(total.toFixed(2))} <span>&#x09F3;</span>
+                                {total} <span>&#x09F3;</span>
+                                {/* {parseFloat(total.toFixed(2))} <span>&#x09F3;</span> */}
                             </div>
                         </div>
                     </div>

@@ -12,7 +12,7 @@ const Checkout = ({ item }) => {
     const [cart, refetch] = useCart()
     const [axiosSecure] = useAxiosSecure()
     const { user } = useAuth()
-    const total = cart.reduce((sum, item) => item.price + sum, 0);
+    const total = cart.reduce((sum, item) => parseInt(item.price) + sum, 0);
     const deliveryCharge = 80;
     const totalAmount = (total + deliveryCharge);
     const { register, handleSubmit, reset, formState: { errors } } = useForm();

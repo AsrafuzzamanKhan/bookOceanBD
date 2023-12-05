@@ -2,6 +2,11 @@ import { Helmet } from "react-helmet-async";
 import useAuth from "../../../hooks/useAuth";
 import useUserOrder from "../../../hooks/useUserOrder";
 import { MdDelete } from "react-icons/md";
+import { FaUser, FaMapMarkerAlt } from "react-icons/fa";
+import { IoCalendar } from "react-icons/io5";
+import { IoMdPricetags } from "react-icons/io";
+import { FaPhone } from "react-icons/fa6";
+
 import Swal from "sweetalert2";
 const OrderHistory = () => {
     const [orders, refetch] = useUserOrder()
@@ -18,7 +23,7 @@ const OrderHistory = () => {
             confirmButtonText: "Yes, cancel it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`http://localhost:5000/orders/${item._id}`, {
+                fetch(`https://book-ocean-bd-server.vercel.app/orders/${item._id}`, {
                     method: "DELETE"
                 })
                     .then(res => res.json())
@@ -48,7 +53,7 @@ const OrderHistory = () => {
             <div className=" text-white text-2xl  text-center mb-5 bg-[#081A51] py-12">
                 {user.displayName}'s Order history
             </div>
-            <div className="lg:px-10 p-2 dark:text-white  ">
+            <div className="lg:px-10 p-2 dark:text-white hidden ">
                 <div className="overflow-x-auto border dark:border-gray-900 shadow-xl rounded-md ">
                     <table className=" table-fixed lg:text-[16px] lg:table-lg table-xs ">
                         {/* head */}
@@ -154,6 +159,72 @@ const OrderHistory = () => {
 
                     </table>
                 </div>
+            </div>
+            {/* mobile responsive  */}
+            <div className="px-2 lg:px-8 dark:text-white pb-12 ">
+                {
+                    orders.map((order, i) =>
+                        <div key={i} className=" border dark:border-none dark:bg-gray-800  rounded-[8px] my-4 hover:bg-gray-100 dark:hover:bg-slate-700 duration-300">
+
+                            <div className="card-body">
+                                <div className="flex justify-between items-center">
+                                    <div className="border p-2 rounded-lg bg-gray-200 dark:bg-gray-800 uppercase font-semibold">{order.status}</div>
+
+                                    <div className="flex font-semibold">
+                                        <span>&#x09F3; </span>
+                                        <p className="mx-1"> {order.totalAmount}</p>
+                                    </div>
+                                </div>
+                                <div>
+
+                                    {
+                                        (order.status === 'pending') &&
+                                        <button onClick={() => handleCancelOrder(order)} className="btn bg-red-200 dark:bg-white"> Cancel</button>
+
+                                    }
+                                    {
+                                        (order.status === 'canceled') && <span className="text-sm text-red-400">Limited Stock... </span>
+                                    }
+                                    {
+
+                                        (order.status === 'approve') && <span className="text-sm text-green-600">The Parcel is ready for delivery </span>
+
+                                    }
+                                    {
+
+                                        (order.status === 'delivered') && <span className="text-sm text-green-600">Delivered</span>
+
+                                    }
+
+                                </div>
+                                <div className="flex lg:flex-row md:flex-col flex-col">
+                                    <div className="flex-1 leading-loose">
+                                        <div className="flex items-center "><IoCalendar className="mr-2" /> {order.date}</div>
+                                        <div className="flex items-center "><FaUser className="mr-2" />{order.data.name}</div>
+                                        <div className="flex items-center"><FaPhone className="mr-2" />{order.data.phone}</div>
+                                        <div className="flex items-center"> <FaMapMarkerAlt className="mr-2" />{order.data.address}</div>
+                                    </div>
+
+                                    <div className="flex-1 mt-4 lg:mt-0">
+                                        {order.cart.map((book, i) => <>
+
+                                            <div className="flex mb-4">
+                                                <div className="w-1/4">
+                                                    <img className="w-12" src={book.image} alt="Avatar Tailwind CSS Component" />
+                                                </div>
+                                                <div className="w-3/4">
+                                                    <span className="text-blue-600">  {i + 1} </span> - {book.name} - by <span className="text-blue-400">{book.author}</span>
+                                                    <div className="flex items-center"> <IoMdPricetags className="me-2" /><span className="me-1">&#x09F3; </span> {book.price}  </div>
+                                                </div>
+                                            </div>
+                                        </>)}
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
             </div>
         </div >
     );

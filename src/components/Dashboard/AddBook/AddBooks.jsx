@@ -89,6 +89,7 @@ const AddBooks = () => {
                                     <option>Classic</option>
                                     <option>Comics</option>
                                     <option>Crime</option>
+                                    <option>Deluxe Edition</option>
                                     <option>Fantasy</option>
                                     <option>Fiction</option>
                                     <option>Horror</option>

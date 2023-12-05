@@ -62,7 +62,7 @@ const BookDetails = () => {
         console.log(id)
         // phh -------
         if (user) {
-            fetch('http://localhost:5000/carts', {
+            fetch('https://book-ocean-bd-server.vercel.app/carts', {
                 method: "POST",
                 headers: {
                     'content-type': 'application/json'
@@ -124,7 +124,7 @@ const BookDetails = () => {
         }
     }
     return (
-        <div className="mb-16 pt-36 lg:pt-[30px] xl:pt-32">
+        <div className="mb-16 pt-36 lg:pt-[30px] xl:pt-28">
             <div className="container mx-auto px-2">
                 <Helmet>
                     <title>Book Ocean BD || Book Details</title>
@@ -145,7 +145,7 @@ const BookDetails = () => {
                     </motion.div>
                     <motion.div
                         animate={animation}
-                        className="flex-1 py-10 px-6 xl:p-16 flex flex-col justify-center dark:bg-base-200 dark:text-white text-black rounded-[8px] shadow-lg">
+                        className="flex-1 py-10 px-8 xl:py-10 xl:p-16 flex flex-col justify-center dark:bg-base-200 dark:text-white text-black rounded-[8px] shadow-lg">
                         {/* category  */}
                         <div className="uppercase text-blue-400 text-lg font-medium mb-2"> {productDetails.category}  </div>
                         {/* title  */}
@@ -174,18 +174,28 @@ const BookDetails = () => {
                                             productDetails.cover == 'leather bound' && <span className="text-[15px] "> Leather Bound </span>
                                         }
                                     </div>
-                                    <div className="text-xl font-semibold text-blue-400"><span>&#x09F3;</span> {productDetails.price}</div>
+
+                                    {
+                                        productDetails.available === 'false' ? <div className=" text-red-600">---</div> : <div className="text-xl font-semibold text-blue-400"><span>&#x09F3;</span> {productDetails.price}</div>
+
+                                    }
+
                                 </div>
 
 
                                 {/* add to cart button  */}
-                                <div className="">
-                                    <button
-                                        onClick={() => handleAddToCart(productDetails)}
-                                        className="btn bg-blue-400 text-white hover:bg-black transition-all">Add to cart
-                                    </button>
 
-                                </div>
+                                {
+                                    productDetails.available === 'false' ? <div className="text-xl text-red-600">Stock Out</div> : <div className="">
+                                        <button
+                                            onClick={() => handleAddToCart(productDetails)}
+                                            className="btn bg-blue-400 text-white hover:bg-black transition-all">Add to cart
+                                        </button>
+
+                                    </div>
+
+                                }
+
                             </div>
 
 

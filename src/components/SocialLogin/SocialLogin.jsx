@@ -16,7 +16,7 @@ const SocialLogin = () => {
                 // console.log('google login user: ', loggedGoogleUser)
                 const saveUser = { name: loggedGoogleUser.displayName, email: loggedGoogleUser.email }
                 // console.log('saveUser', saveUser);
-                fetch('http://localhost:5000/users', {
+                fetch('https://book-ocean-bd-server.vercel.app/users', {
                     method: "POST",
                     headers: {
                         'content-type': 'application/json'
