@@ -32,15 +32,15 @@ const CategoryNavMobile = ({ setCatNavMobile }) => {
         <div className="w-full h-full bg-primary p-8" ref={sidebarRef}>
             {/* close icon  */}
             <div onClick={() => setCatNavMobile(false)}
-                className=" flex justify-end mb-8 cursor-pointer">
+                className=" flex justify-end mb-6 cursor-pointer">
                 <FiX className="text-3xl" />
             </div>
-            <div className="flex flex-col gap-y-4  pb-12 overflow-x-hidden h-[70vh]" >
+            <div className="flex flex-col gap-y-4  pb-12 overflow-x-hidden h-[80vh]" >
                 {
                     uniqueCategories?.map((category, i) => {
-                        return <Link key={i} to={`/books/${category}`} className='uppercase font-medium hover:text-green-600 duration-300 '
+                        return <Link key={i} to={`/books/${category}`} className='capitalize font-semibold hover:text-green-600 duration-300 '
                             onClick={() => setCatNavMobile(false)}
-                        >  {category} Book
+                        >  {category} Books
                         </Link>
 
                     })

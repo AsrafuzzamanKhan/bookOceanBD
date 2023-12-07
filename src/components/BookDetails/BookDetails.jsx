@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import useBookData from "../../hooks/useBookData";
 import RelatedBooks from "../RelatedBooks/RelatedBooks";
 import Swal from "sweetalert2";
@@ -21,6 +21,8 @@ const BookDetails = () => {
     const [cart, setCart] = useState([])
     const [amount, setAmount] = useState(0)
     const { setIsOpen, isOpen } = useContext(CartContext)
+
+
 
 
     const { ref, inView } = useInView({
@@ -124,19 +126,19 @@ const BookDetails = () => {
         }
     }
     return (
-        <div className="mb-16 pt-36 lg:pt-[30px] xl:pt-28">
-            <div className="container mx-auto px-2">
+        <div className="mb-16 pt-36 lg:pt-[30px] xl:pt-24">
+            <div className="container mx-auto px-1 lg:px-0">
                 <Helmet>
                     <title>Book Ocean BD || Book Details</title>
                 </Helmet>
                 {/* text  */}
-                <div ref={ref} className="flex flex-col lg:flex-row lg:gap-[30px] gap-0 mb-[30px] items-center">
+                <div ref={ref} className="flex flex-col lg:flex-row lg:gap-[20px] gap-0 mb-[30px] items-center">
                     <motion.div
 
                         animate={animation}
 
-                        className="flex-1 max-w-[40%] lg:h-[550px]  lg:shadow-xl shadow-none rounded-lg flex justify-center items-center dark:border-0 dark:bg-gary-800" >
-                        {/* <div className="flex-1 lg:max-w-[40%] lg:h-[550px] border shadow-2xl rounded-lg flex justify-center items-center dark:border-0 dark:bg-gary-800"> */}
+                        className="flex-1 max-w-[40%] lg:h-[550px]  lg:shadow-md shadow-none rounded-[4px] flex justify-center items-center" >
+
 
                         <img src={productDetails.image}
                             className=" lg:max-w-[65%] lg:max-h-96  h-full py-4"
@@ -145,13 +147,15 @@ const BookDetails = () => {
                     </motion.div>
                     <motion.div
                         animate={animation}
-                        className="flex-1 py-10 px-8 xl:py-10 xl:p-16 flex flex-col justify-center dark:bg-base-200 dark:text-white text-black rounded-[8px] shadow-lg">
+                        className="flex-1 py-10 px-8 xl:py-10 xl:p-16 flex flex-col justify-center dark:bg-base-200 dark:text-white text-black rounded-[4px] shadow-md lg:border dark:border-none">
                         {/* category  */}
-                        <div className="uppercase text-blue-400 text-lg font-medium mb-2"> {productDetails.category}  </div>
+                        <Link to={`/books/${productDetails.category}`}>
+                            <div className="uppercase text-blue-400 text-lg font-medium mb-2 hover:text-green-600 duration-300"> {productDetails.category}  </div>
+                        </Link>
                         {/* title  */}
                         <h2 className="h2 mb-2"> {productDetails.name}</h2>
                         <div className="mb-6">
-                            by <span className="text-blue-400 ">{productDetails.author}</span>
+                            by <Link to={`/authorbooks/${productDetails.author}`} author={productDetails.author}><span className="text-blue-400 hover:text-green-600 duration-300 ">{productDetails.author}</span></Link>
                         </div>
 
 
@@ -160,7 +164,7 @@ const BookDetails = () => {
                             {/* price  */}
 
 
-                            <div className=" flex justify-center items-center gap-4">
+                            <div className=" flex justify-center items-center gap-4 ">
 
                                 <div className="border rounded-[8px] shadow-md flex flex-col text-center h-auto p-2">
                                     <div >
@@ -189,7 +193,7 @@ const BookDetails = () => {
                                     productDetails.available === 'false' ? <div className="text-xl text-red-600">Stock Out</div> : <div className="">
                                         <button
                                             onClick={() => handleAddToCart(productDetails)}
-                                            className="btn bg-blue-400 text-white hover:bg-black transition-all">Add to cart
+                                            className="btn bg-blue-400 text-black hover:text-white hover:bg-black transition-all text-[13px] md:text-sm ">Add to cart
                                         </button>
 
                                     </div>

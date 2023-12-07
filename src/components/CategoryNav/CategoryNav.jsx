@@ -1,10 +1,11 @@
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import useBookData from "../../hooks/useBookData";
 
 const CategoryNav = () => {
     const [booksData] = useBookData()
     // Extract unique category types
     const uniqueCategories = [...new Set(booksData.map(item => item.category))];
+
     // console.log(uniqueCategories)
     return (
         <aside className="hidden lg:block ">
@@ -19,6 +20,7 @@ const CategoryNav = () => {
                                 {category}
                             </NavLink>)
                     }
+
                 </div>
             </div>
         </aside>

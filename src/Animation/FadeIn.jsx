@@ -7,7 +7,7 @@ const FadeIn = ({ children, delay, direction, fullWidth, padding }) => {
     const ref = useRef(null)
     // const isInView = useInView(ref, { once: true })
     const isInView = useInView(ref, {
-        threshold: 0.2
+        threshold: 0.1
     })
 
 

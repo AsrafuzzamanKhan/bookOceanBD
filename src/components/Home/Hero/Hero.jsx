@@ -8,7 +8,7 @@ const Hero = () => {
     const [bannerData] = useBanner();
     const promo = bannerData.filter(item => item.promo === 'promo');
     return (
-        <section className="mb-[30px] pt-36 md:pt-36 lg:pt-0 xl:pt-28 ">
+        <section className="mb-[30px] pt-28 md:pt-32 lg:pt-0 xl:pt-28 ">
             <div className="container mx-auto">
                 <div className="flex flex-col gap-y-[20px] lg:flex-row lg:gap-x-[20px] px-1 lg:px-1">
                     {/* sidebar  */}
@@ -22,7 +22,7 @@ const Hero = () => {
                         </div>
 
                         {/* promo */}
-                        <div className='flex flex-col gap-4 w-full  lg:h-[500px] mx-auto  overflow-hidden'>
+                        <div className='flex flex-col gap-4 w-full  lg:h-[500px] mx-auto  overflow-hidden '>
 
                             {promo.map((item, i) =>
                                 <div key={i} className='flex h-[240px] w-full rounded-[8px]  p-6 bg-slate-400 justify-between glass text-black overflow-hidden'>
