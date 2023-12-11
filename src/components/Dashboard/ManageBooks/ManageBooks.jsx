@@ -4,13 +4,14 @@ import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
+import BookDetails from "../../BookDetails/BookDetails";
 
 const ManageBooks = () => {
     const [booksData, , refetch] = useBookData()
     const [axiosSecure] = useAxiosSecure()
     // console.log(booksData)
     const handleDeleteBook = book => {
-        console.log('selected bookd', book)
+        console.log('selected book', book)
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -39,15 +40,17 @@ const ManageBooks = () => {
         })
     }
     return (
-        <div className="w-full">
+        <div className="container mx-auto">
             <Helmet>
                 <title>Book Ocean BD || Manage Books</title>
             </Helmet>
-            <div className=" text-white text-2xl font-bold text-center mb-12 bg-[#081A51] py-12">
-                Manage Books
+
+
+            <div className='pt-24 items-center  mb-8 flex flex-col'>
+                <p className=' bg-slate-800 text-white px-8 py-3 rounded'>Manage Books: {booksData.length}</p>
             </div>
             <div className="px-6 pb-12">
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto border">
                     <table className="table lg:text-[16px] lg:table-lg table-xs">
                         {/* head */}
                         <thead>
@@ -94,6 +97,7 @@ const ManageBooks = () => {
                                 </td>
                                 <th>
                                     <button onClick={() => handleDeleteBook(book)} className="btn bg-red-600 text-white"> <AiFillDelete className='text-2xl' /></button>
+                                    <BookDetails handleDeleteBook={handleDeleteBook}></BookDetails>
                                 </th>
                             </tr>)}
 

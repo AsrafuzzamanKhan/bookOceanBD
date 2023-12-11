@@ -3,7 +3,7 @@ import { FiSearch } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 const SearchForm = () => {
     const navigate = useNavigate();
-    const [searchTerm, setSeachTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
     const [isAnimating, setIsAnimating] = useState(false);
 
     useEffect(() => {
@@ -13,17 +13,21 @@ const SearchForm = () => {
         // clear time out 
         return () => clearTimeout(timeout)
     }, [])
+
     const handleSeachInput = e => {
-        console.log(e.target.value)
-        setSeachTerm(e.target.value)
+        // console.log(e.target.value)
+        setSearchTerm(e.target.value)
     }
     const handleSubmit = e => {
         e.preventDefault()
         // console.log(searchTerm)
+
         if (searchTerm.length > 0) {
+            setSearchTerm('')
             navigate(`/search?query=${searchTerm}`)
             document.querySelector('input').value = '';
-            setSeachTerm('')
+
+
         } else {
             // if input is empty set animation to true
             setIsAnimating(true)

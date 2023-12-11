@@ -9,15 +9,16 @@ import Swal from "sweetalert2";
 
 
 const Login = () => {
+    const [loginLoading, SetLoginLoading] = useState(false)
     const [loginError, setLoginError] = useState('')
-    const { signIn } = useContext(AuthContext)
+    const { signIn, loading } = useContext(AuthContext)
     // navigate user 
     const navigate = useNavigate();
     const location = useLocation()
     const from = location.state?.from?.pathname || "/";
     const handleLogin = event => {
         event.preventDefault();
-
+        SetLoginLoading(true)
         const form = event.target;
         const email = form.email.value;
         const password = form.password.value;
@@ -69,7 +70,9 @@ const Login = () => {
                                         <AiOutlineEye className="absolute top-1/2 right-3 -translate-y-1/2" />
                                     </div> */}
                                 </div>
-                                <input className="bg-blue-400 rounded-xl py-2 hover:scale-105 duration-300" type="submit" value="Login" />
+                                {
+                                    loginLoading ? <><span className="loading loading-bars loading-lg mx-auto"></span></> : <input className="bg-blue-400 rounded-xl py-2 hover:scale-105 duration-300" type="submit" value="Login" />
+                                }
 
                             </form>
                             <div className="mt-10 grid  grid-cols-3 items-center text-gray-500">

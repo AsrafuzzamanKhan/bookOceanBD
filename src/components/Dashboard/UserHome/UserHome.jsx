@@ -10,13 +10,12 @@ const UserHome = () => {
     const deliver = order.filter(pd => pd.status === 'delivered');
     console.log('approve', approve.lenght)
     return (
-        <div>
+        <div className="flex flex-col">
             <Helmet>
                 <title>Book Ocean BD ||  Order Summary</title>
             </Helmet>
-
-            <div className=" text-white text-2xl font-semibold text-center mb-12 bg-[#081A51] py-12">
-                Order Summary
+            <div className='pt-24 mx-auto mb-8'>
+                <div className=' bg-slate-800 text-white px-8 py-3 rounded'>   Order Summary</div>
             </div>
 
             <div className="px-12">
@@ -43,6 +42,7 @@ const UserHome = () => {
                     </div>
                 </div>
             </div>
+
 
         </div>
     );

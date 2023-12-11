@@ -22,12 +22,12 @@ const Services = () => {
 
             }}
         >
-            <div className="container mx-auto px-2 ">
+            <div className="container mx-auto px-1 lg:px-0 ">
 
-                <div className=" grid md:grid-cols-3 xl:grid-cols-5 grid-cols-2 gap-4 my-12 w-full">
+                <div className=" grid md:grid-cols-3 xl:grid-cols-5 grid-cols-2 gap-4 lg:my-6 my-2 w-full">
                     {services.map(service =>
                         <FadeIn delay={0.4} direction='down' key={service.id} >
-                            <div className=" h-36 shadow-xl bg-white rounded-[8px] flex justify-center items-center text-black" >
+                            <div className="h-36 shadow-xl bg-white rounded-[8px] flex justify-center lg:py-4 py-2  text-black outline-none overflow-y-auto" >
                                 <div className="flex flex-col px-2">
                                     <h2 className="lg:text-xl lg:font-bold font-semibold text-center text-lg mb-2">{service.heading}</h2>
                                     <p className="lg:text-lg text-sm ">{service.subHeading}</p>

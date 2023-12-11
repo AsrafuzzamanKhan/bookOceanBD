@@ -40,15 +40,15 @@ const ManageBanner = () => {
         })
     }
     return (
-        <div className="w-full">
+        <div className="container mx-auto">
             <Helmet>
                 <title>Book Ocean BD || Manage Banner</title>
             </Helmet>
-            <div className=" text-white text-2xl font-bold text-center mb-12 bg-[#081A51] py-12">
-                Manage Banner
+            <div className='pt-24 items-center  mb-8 flex flex-col'>
+                <p className=' bg-slate-800 text-white px-8 py-3 rounded'>Manage Banner</p>
             </div>
             <div className="px-6 pb-12">
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto border">
                     <table className="table lg:text-[16px] lg:table-lg table-xs">
                         {/* head */}
                         <thead>

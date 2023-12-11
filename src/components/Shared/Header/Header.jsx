@@ -66,6 +66,7 @@ const Header = () => {
                      */}
 
                     <div className="flex items-center justify-center gap-x-[10px] ">
+
                         {/* drop down  */}
                         <div className="dropdown dropdown-hover dropdown-bottom dropdown-end ">
                             <label tabIndex={0} >
@@ -81,7 +82,7 @@ const Header = () => {
                                 <li className="bg-black p-2 rounded">Hello, {user?.displayName}</li>
                                 {
                                     user?.email && <li className="mt-4">
-                                        <NavLink to={isAdmin ? '/dashboard/adminhome' : "/dashboard/userhome"
+                                        <NavLink to={isAdmin ? '/dashboard/adminhome' : "/dashboard/orderHistory"
                                         } className='text-black text-lg dark:hover:text-gray-300'>Dashbord</NavLink></li>
                                 }
                                 <li className="mt-2">

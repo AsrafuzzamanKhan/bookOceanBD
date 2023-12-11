@@ -47,15 +47,15 @@ const AddBanner = () => {
     // console.log(errors);
     console.log(img_hosting_token)
     return (
-        <div className=" w-full flex flex-col ">
+        <div className=" container mx-auto">
             <Helmet>
                 <title>Book Ocean BD || Add Banner</title>
             </Helmet>
-            <div>
-                <h1 className="text-2xl text-center mb-12 text-white uppercase font-semibold bg-[#081A51] py-12">Add Banners</h1>
+            <div className='pt-24 items-center  mb-8 flex flex-col'>
+                <p className=' bg-slate-800 text-white px-8 py-3 rounded'>Add Banner</p>
             </div>
             <div className='w-full flex items-center justify-center'>
-                <div className=" border p-4 shadow-2xl rounded-[8px] ">
+                <div className=" w-full lg:w-1/2 border p-4 shadow-2xl rounded-[8px] ">
                     <form onSubmit={handleSubmit(onSubmit)} >
                         {/* name  */}
                         <div className="form-control w-full">

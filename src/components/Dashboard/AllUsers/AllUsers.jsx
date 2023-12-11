@@ -37,12 +37,14 @@ const AllUsers = () => {
         console.log(user)
     }
     return (
-        <div className="w-full">
+        <div className="container mx-auto">
             <Helmet>
                 <title>Book Ocean BD || All Users</title>
             </Helmet>
-            <div className=" text-white text-2xl font-bold text-center mb-12 bg-[#081A51] py-12">
-                Total User: {users?.length}
+
+
+            <div className='pt-24 items-center  mb-8 flex flex-col'>
+                <p className=' bg-slate-800 text-white px-8 py-3 rounded'>Total User:  {users?.length}</p>
             </div>
 
             <div className="px-6 pb-12">

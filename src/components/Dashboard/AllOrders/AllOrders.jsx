@@ -4,6 +4,9 @@ import Swal from "sweetalert2";
 import { Helmet } from "react-helmet-async";
 
 import { AiFillDelete } from "react-icons/ai";
+import { IoMdPricetags } from "react-icons/io";
+import { IoCalendar } from "react-icons/io5";
+import { FaMapMarkerAlt, FaPhone, FaUser } from "react-icons/fa";
 
 const AllOrders = () => {
     const [axiosSecure] = useAxiosSecure();
@@ -71,29 +74,124 @@ const AllOrders = () => {
     }
 
 
-    const handleDelete = order => {
-        console.log(order._id)
-    }
+    // const handleDelete = order => {
+    //     console.log(order._id)
+    // }
     return (
-        <div className="w-full">
+        <div className='container mx-auto'>
             <Helmet>
                 <title>Book Ocean BD || All Orders</title>
             </Helmet>
-            <div className=" text-white text-2xl font-bold text-center mb-12 bg-[#081A51] py-12">
-                Total Order: {orders?.length}
+
+            <div className='pt-24 items-center  mb-8 flex flex-col'>
+                <p className=' bg-slate-800 text-white px-8 py-3 rounded'>Total Order: {orders?.length}</p>
             </div>
 
-            <div className="overflow-x-auto px-8">
+            {/* mobile responsive  */}
+            <div className="px-1 lg:px-0 dark:text-white pb-12 ">
+                {
+                    orders.map((order, i) =>
+                        <div key={i} className=" border dark:border-none dark:bg-gray-800  rounded-[8px] my-4 hover:bg-gray-100 dark:hover:bg-slate-700 duration-300">
+
+                            <div className="card-body">
+                                <div className="flex justify-between items-center">
+                                    <div className="dropdown">
+                                        <div tabIndex={0} role="button" className="btn m-1">{order.status}</div>
+                                        <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                                            {order.status === 'pending' ?
+
+                                                <li>
+                                                    <a >{order.status === 'approve' ? 'Approved' : <button onClick={() => handleApproved(order)} className="btn bg-green-600 text-white">{order.status}-Aprrove</button>}
+                                                    </a>
+                                                </li> : <>{order.status === 'canceled' ||
+                                                    < li >
+                                                        <a> {order.status === 'delivered' ? 'Delivered' : <button onClick={() => handleDelivery(order)} className="btn bg-blue-600 text-white">Delivery-{order.status}</button>}</a>
+                                                    </li>
+                                                }</>
+
+                                            }
+                                            {(order.status === 'approve' || order.status === 'delivered') ||
+
+                                                <li>
+                                                    <a> {order.status === 'canceled' ? 'Canceled' : <button onClick={() => handleCanceled(order)} className="btn bg-orange-600 text-white">{order.status}--Cancel</button>}
+                                                    </a>
+                                                </li>}
+
+                                            {/* <li>
+                                                <a> {order.status === 'canceled' ? 'Canceled' : <button onClick={() => handleCanceled(order)} className="btn bg-orange-600 text-white">{order.status}</button>}
+                                                </a>
+                                            </li> */}
+
+                                        </ul>
+                                    </div>
+
+                                    <div className="flex font-semibold">
+                                        <span>&#x09F3; </span>
+                                        <p className="mx-1"> {order.totalAmount}</p>
+                                    </div>
+                                </div>
+
+                                {/* <div>
+
+                                    {
+                                        (order.status === 'pending') &&
+                                        <button onClick={() => handleCancelOrder(order)} className="btn bg-red-200 dark:bg-white"> Cancel</button>
+
+                                    }
+                                    {
+                                        (order.status === 'canceled') && <span className="text-sm text-red-400">Limited Stock... </span>
+                                    }
+                                    {
+
+                                        (order.status === 'approve') && <span className="text-sm text-green-600">The Parcel is ready for delivery.</span>
+
+                                    }
+                                    {
+
+                                        (order.status === 'delivered') && <span className="text-sm text-green-600">Thank you for purchasing.</span>
+
+                                    }
+
+                                </div> */}
+                                <div className="flex lg:flex-row md:flex-col flex-col">
+                                    <div className="flex-1 leading-loose">
+                                        <div className="flex items-center "><IoCalendar className="mr-2" /> {order.date}</div>
+                                        <div className="flex items-center "><FaUser className="mr-2" />{order.data.name}</div>
+                                        <div className="flex items-center "><FaUser className="mr-2" />{order.email}</div>
+                                        <div className="flex items-center"><FaPhone className="mr-2" />{order.data.phone}</div>
+                                        <div className="flex items-center"> <FaMapMarkerAlt className="mr-2" />{order.data.address}</div>
+                                    </div>
+
+                                    <div className="flex-1 mt-4 lg:mt-0">
+                                        {order.cart.map((book, i) => <>
+
+                                            <div className="flex mb-4">
+                                                <div className="w-1/4">
+                                                    <img className="w-12" src={book.image} alt="Avatar Tailwind CSS Component" />
+                                                </div>
+                                                <div className="w-3/4">
+                                                    <span className="text-blue-600">  {i + 1} </span> - {book.name} - by <span className="text-blue-400">{book.author}</span>
+                                                    <div className="flex items-center"> <IoMdPricetags className="me-2" /><span className="me-1">&#x09F3; </span> {book.price}  </div>
+                                                </div>
+                                            </div>
+                                        </>)}
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
+            </div>
+            {/* <div className="overflow-x-auto px-8">
                 <table className="table table-zebra ">
-                    {/* head */}
+
                     <thead>
                         <tr>
                             <th>S/N</th>
                             <th>Name</th>
-                            <th>Email</th>
-                            <th>Order qtn</th>
+                            <th>qtn</th>
                             <th>Books</th>
-                            <th>Address</th>
                             <th>Total</th>
                             <th>Approve</th>
                             <th>Cancel</th>
@@ -104,29 +202,13 @@ const AllOrders = () => {
                         {
                             orders?.map((order, i) => <tr key={i}>
                                 <th>{i + 1}</th>
-                                <td>{order.data.name}</td>
-                                <td>{order.email}</td>
-                                <td>{order.orderQuantity}</td>
-
-
-                                <td className=""> {order.cart.map((book, i) => <>
-
-                                    <div className="flex mb-4">
-                                        <div className="w-1/4">
-                                            <img className="w-12" src={book.image} alt="Avatar Tailwind CSS Component" />
-                                        </div>
-                                        <div className="w-3/4">
-                                            <span className="text-blue-600">  {i + 1} </span> - {book.name} - by <span className="text-blue-400">{book.author}</span>
-                                        </div>
+                                <td>
+                                    <div>
+                                        {order.data.name}
                                     </div>
-                                </>)}
-                                </td>
-
-                                <td className="">
-                                    <span className="font-semibold leading-loose">Date: </span>
-                                    {order.date}
-                                    <br />
-
+                                    <div>
+                                        {order.email}
+                                    </div>
                                     <div className="  "> <span className="font-semibold leading-loose">Address:</span> {order.data.address}
 
                                     </div>
@@ -135,6 +217,29 @@ const AllOrders = () => {
                                         <span className="font-semibold">Phone:</span> {order.data.phone}
                                     </div>
                                 </td>
+
+                                <td>{order.orderQuantity}</td>
+
+
+                                <td className="">
+                                    <div>
+                                        <span className="font-semibold leading-loose">Date: </span>
+                                        {order.date}
+                                    </div>
+                                    {order.cart.map((book, i) => <>
+
+                                        <div className="flex mb-4">
+                                            <div className="w-1/4">
+                                                <img className="w-12" src={book.image} alt="Avatar Tailwind CSS Component" />
+                                            </div>
+                                            <div className="w-3/4">
+                                                <span className="text-blue-600">  {i + 1} </span> - {book.name} - by <span className="text-blue-400">{book.author}</span>
+                                            </div>
+                                        </div>
+                                    </>)}
+                                </td>
+
+
                                 <td>{order.totalAmount}</td>
                                 <td>{order.status === 'approve' ? 'Approved' : <button onClick={() => handleApproved(order)} className="btn bg-green-600 text-white">{order.status}</button>}</td>
 
@@ -142,17 +247,14 @@ const AllOrders = () => {
 
 
                                 <td>{order.status === 'delivered' ? 'Delivered' : <button onClick={() => handleDelivery(order)} className="btn bg-orange-600 text-white">{order.status}</button>}</td>
-                                {/* 
-                                <th>
-                                    <button onClick={() => handleDelete(order)} className="btn bg-red-600 text-white"> <AiFillDelete className='text-2xl' /></button>
-                                </th> */}
+
                             </tr>)
                         }
 
 
                     </tbody>
                 </table>
-            </div>
+            </div> */}
         </div>
     );
 };

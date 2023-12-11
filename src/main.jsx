@@ -37,6 +37,7 @@ import UserHome from './components/Dashboard/UserHome/UserHome';
 import AddBanner from './components/Dashboard/AddBanner/AddBanner';
 import ManageBanner from './components/Dashboard/ManageBanner/ManageBanner';
 import UpdateBook from './components/Dashboard/UpdateBook/UpdateBook';
+import DashBoardLayout2 from './components/Layout/DashBoardLayout2/DashBoardLayout2';
 const queryClient = new QueryClient()
 
 const router = createBrowserRouter([
@@ -84,7 +85,8 @@ const router = createBrowserRouter([
   },
   {
     path: 'dashboard',
-    element: <PrivateRoutes> <DashboardLayout></DashboardLayout></PrivateRoutes>,
+    element: <PrivateRoutes> <DashBoardLayout2></DashBoardLayout2></PrivateRoutes>,
+    // element: <PrivateRoutes> <DashboardLayout></DashboardLayout></PrivateRoutes>,
     children: [
       {
         path: 'adminhome',

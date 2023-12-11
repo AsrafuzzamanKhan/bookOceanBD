@@ -53,12 +53,12 @@ const Checkout = ({ item }) => {
     console.log(errors);
 
     return (
-        <div className="mb-[30px] pt-36 md:pt-36 lg:pt-0 xl:pt-28 ">
+        <div className="mb-[30px] pt-32 md:pt-36 lg:pt-0 xl:pt-28 ">
             <Helmet>
                 <title>Book Ocean BD || Checkout</title>
             </Helmet>
             <div className="container mx-auto px-1 lg:px-2 dark:text-white">
-                <div className="uppercase text-2xl text-center font-semibold mb-12">
+                <div className="uppercase text-2xl text-center font-semibold mb-4">
                     check out
                 </div>
                 <div className="w-full flex flex-col xl:flex-row lg:flex-row  gap-4">
@@ -141,7 +141,7 @@ const Checkout = ({ item }) => {
                                 <table className="table lg:table-lg table-xs table-pin-rows table-pin-cols ">
                                     {/* head */}
                                     <thead >
-                                        <tr>
+                                        <tr className="dark:text-white" >
                                             <th>S/N</th>
                                             <th>Image</th>
                                             <th>Name</th>

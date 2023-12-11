@@ -7,14 +7,20 @@ import useCart from "../../hooks/useCart";
 import { useContext, useEffect, useState } from "react";
 import { CartContext } from "../../providers/CartProvider/CartProvider";
 import FadeIn from "../../Animation/FadeIn";
-import { motion, useAnimate, useAnimation, useScroll } from "framer-motion"
+import { motion, useAnimation } from "framer-motion"
 import { useInView } from "react-intersection-observer";
 import { Helmet } from "react-helmet-async";
+import { MdEdit } from "react-icons/md";
+
+import useAdmin from "../../hooks/useAdmin";
+
 
 
 const BookDetails = () => {
+
     const { id } = useParams()
     const { user } = useAuth()
+    const [isAdmin] = useAdmin()
     const [booksData] = useBookData()
     const navigate = useNavigate()
     const [, refetch] = useCart()
@@ -137,7 +143,7 @@ const BookDetails = () => {
 
                         animate={animation}
 
-                        className="flex-1 max-w-[40%] lg:h-[550px]  lg:shadow-md shadow-none rounded-[4px] flex justify-center items-center" >
+                        className="flex-1 max-w-[40%] lg:h-[550px]  lg:shadow-md shadow-none rounded-[4px] flex justify-center items-center " >
 
 
                         <img src={productDetails.image}
@@ -155,7 +161,7 @@ const BookDetails = () => {
                         {/* title  */}
                         <h2 className="h2 mb-2"> {productDetails.name}</h2>
                         <div className="mb-6">
-                            by <Link to={`/authorbooks/${productDetails.author}`} author={productDetails.author}><span className="text-blue-400 hover:text-green-600 duration-300 ">{productDetails.author}</span></Link>
+                            by <Link to={`/authorbooks/${productDetails.author}`} author={productDetails.author}><span className="text-blue-400 hover:text-blue-800 hover:underline duration-300 ">{productDetails.author}</span></Link>
                         </div>
 
 
@@ -200,11 +206,30 @@ const BookDetails = () => {
 
                                 }
 
+                                {
+                                    isAdmin ? <div>
+                                        <Link to={`/dashboard/updateBook/${productDetails._id}`}>
+
+                                            <div className="flex justify-center items-center gap-1 btn"><MdEdit></MdEdit><span>Edit</span></div>
+                                        </Link>
+
+                                    </div> : ''
+                                }
+
                             </div>
 
 
                         </div>
                         {/* description  */}
+                        {/* <div tabIndex={0} className="collapse collapse-arrow border border-base-300  ">
+                            <div className="collapse-title text-xl font-medium">
+                                Description
+                            </div>
+                            <div className="collapse-content">
+                                <p>{productDetails.description}</p>
+                            </div>
+                        </div> */}
+
                         <p className="mb-5">{productDetails.description}</p>
 
                     </motion.div>

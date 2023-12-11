@@ -9,7 +9,7 @@ const SearchBook = () => {
     const searchParams = new URLSearchParams(location.search);
     const searchTerm = searchParams.get('query')
 
-    console.log('search', searchTerm)
+    // console.log('search', searchTerm)
     // Filter the data array based on the search term
     const filteredResults = booksData.filter((item) =>
         item.name.toLowerCase().includes(searchTerm.toLowerCase()) || item.author.toLowerCase().includes(searchTerm.toLowerCase()) || item.category.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -28,14 +28,14 @@ const SearchBook = () => {
                 <div className="flex gap-x-[30px] ">
                     {/* category nav  */}
                     <CategoryNav></CategoryNav>
-                    <div className='flex flex-col'>
+                    <div className='flex flex-col w-full '>
                         <div>
                             {/* title  */}
                             <div className="my-4 capitalize text-center font-semibold lg:text-left text-xl dark:text-white">
                                 {filteredResults?.length > 0 ? `${filteredResults.length} results for ${searchTerm}` : `no result found for ${searchTerm} `}
                             </div>
                             {/* products grid */}
-                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-[15px] md:grid-[30px] w-full">
+                            <div className=" grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-[15px] md:grid-[30px] w-full">
                                 {
                                     filteredResults.map((book, i) => {
                                         return <BookCard key={i}
