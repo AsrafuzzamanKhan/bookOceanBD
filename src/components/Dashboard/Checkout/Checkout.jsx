@@ -25,9 +25,9 @@ const Checkout = ({ item }) => {
         const date = format(currentDate, 'yyyy-MM-dd HH:mm:ss');
         const order = {
             cart, orderQuantity: cart.length, total, deliveryCharge, totalAmount, data, date, email: user?.email,
-            cartItems: cart.map(item => item._id),
-            itemNames: cart.map(item => item.name),
-            bookItems: cart.map(item => item.bookId),
+            cartItems: cart.map(item => item?._id),
+            itemNames: cart.map(item => item?.name),
+            bookItems: cart.map(item => item?.bookId),
             status: 'pending'
         }
         axiosSecure.post('/orders', order)
@@ -128,57 +128,75 @@ const Checkout = ({ item }) => {
                                     </div>
                                 </div>
 
-                                <input className="mt-4 w-full py-4 rounded font-semibold bg-black dark:bg-gray-700 dark:text-green-400 text-white hover:scale-105 hover:text-green-600 duration-300 cursor-pointer uppercase leading-tight tracking-wider" type="submit" value="Confirm" />
+                                <input className="mt-4 w-full py-4 rounded font-semibold bg-black dark:bg-gray-700 dark:text-green-400 text-white hover:scale-95 hover:text-green-600 duration-300 cursor-pointer uppercase leading-tight tracking-wider" type="submit" value="Confirm" />
                             </form>
                         </div>
                     </div>
                     <div className="lg:w-2/3  w-full border dark:border-none rounded shadow-2xl">
-                        <div className="uppercase font-semibold text-2xl text-center mt-12 ">
+                        <div className="uppercase font-semibold text-2xl text-center mt-4 lg:mt-8 ">
                             Order Details
                         </div>
-                        <div className="flex flex-col items-center py-12 ">
-                            <div className="overflow-x-auto w-full lg:px-10 px-2">
+                        <div className="flex flex-col items-center py-4 lg:py-6 ">
+                            <div className="overflow-x-auto w-full">
                                 <table className="table lg:table-lg table-xs table-pin-rows table-pin-cols ">
                                     {/* head */}
                                     <thead >
                                         <tr className="dark:text-white" >
-                                            <th>S/N</th>
-                                            <th>Image</th>
-                                            <th>Name</th>
-                                            <th>Category</th>
-                                            <th>Quantity</th>
-                                            <th>Price</th>
+                                            <th className="!p-1" >S/N</th>
+                                            <th className="!p-1">Image</th>
+                                            <th className="!p-1" >Book Info</th>
+                                            <th className="!p-1">Qty</th>
+                                            <th className="!p-1">Price</th>
 
                                         </tr>
                                     </thead>
-                                    <tbody className="text-xl" >
+                                    <tbody >
 
-                                        {cart?.map((book, i) => <tr key={i}>
-                                            <th>
-                                                <label>
-                                                    {i + 1}
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <div className="flex items-center space-x-3">
-                                                    <div className="avatar">
-                                                        <div className="mask mask-squircle w-12 h-12">
-                                                            <img className=" " src={book.image} alt="Avatar Tailwind CSS Component" />
-                                                        </div>
+                                        {cart?.map((book, i) =>
+
+
+
+                                            <tr key={i} >
+                                                <th className="!p-4">
+                                                    <label>
+                                                        {i + 1}
+                                                    </label>
+                                                </th>
+                                                <td className="!p-1">
+                                                    <div className="w-12  object-cover overflow-hidden ">
+                                                        <img className="w-full " src={book.image} alt="Avatar Tailwind CSS Component" />
                                                     </div>
+                                                </td>
+                                                <td className="!px-1">
+                                                    <Link
+                                                        to={`/book/${book.bookId}`}
+                                                    >
+                                                        <div className="flex flex-col gap-y-1 hover:scale-95 duration-300">
+                                                            <div>
+                                                                {book.name}
+                                                            </div>
+                                                            <div>
+                                                                Author - {book.author}
+                                                            </div>
+                                                            <div>Genre - {book.category}</div>
+                                                        </div>
+                                                    </Link>
+                                                </td>
 
-                                                </div>
-                                            </td>
-                                            <td className="">
-                                                {book.name}
-                                                <br />
-                                                <span className="badge badge-ghost badge-sm">{book.author}</span>
-                                            </td>
-                                            <td>{book.category}</td>
-                                            <td className="text-center">{book.quantity}</td>
-                                            <td><span>&#x09F3;</span> {book.price}</td>
+                                                <td className="!p-1">
+                                                    {book.quantity}
 
-                                        </tr>)}
+                                                </td>
+                                                <td className="!p-1">
+
+                                                    <div className="flex gap-1">
+                                                        <span>&#x09F3;</span> <div>{book.price}</div>
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+
+                                        )}
 
 
 

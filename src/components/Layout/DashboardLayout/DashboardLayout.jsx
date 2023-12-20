@@ -9,7 +9,7 @@ import { IoHomeSharp } from "react-icons/io5";
 import { RiFileHistoryFill } from "react-icons/ri";
 import { MdOutlineDevicesOther } from "react-icons/md";
 import { TbDeviceDesktopStar } from "react-icons/tb";
-
+import logoSvg from '../../../assets/logo/book.gif'
 
 import { FaBook, FaCalendarAlt, FaHome, FaShoppingCart, FaSitemap, FaUsers, FaUtensils, FaWallet, FaWindowClose } from 'react-icons/fa';
 
@@ -31,10 +31,7 @@ const DashboardLayout = () => {
                     </div>
                     {/* logo  */}
                     <Link to='/' className='flex gap-x-4 items-center hover:scale-95 duration-300'>
-                        <img src={logo}
-                            className={`cursor-pointer duration-500 w-14 
-                       `} alt="logo" />
-                        <h2 className={`text-white origin-left font-medium text-2xl duration-300 ${(!open) && 'scale-0'}`}>Book Ocaen BD</h2>
+                        <img src={logoSvg} alt="" />
                     </Link>
                     <div className='mt-10 max-w-full'>
                         <hr />

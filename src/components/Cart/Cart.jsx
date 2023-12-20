@@ -37,37 +37,56 @@ const Cart = () => {
     // console.log(parseInt(total))
 
     const handleCartRemove = item => {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, remove it!"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                fetch(`https://book-ocean-bd-server.vercel.app/carts/${item._id}`, {
-                    method: "DELETE"
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.deletedCount > 0) {
+        fetch(`https://book-ocean-bd-server.vercel.app/carts/${item._id}`, {
+            method: "DELETE"
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.deletedCount > 0) {
 
-                            refetch()
-                            Swal.fire({
-                                title: "Removed!",
-                                text: "Book has been removed from cart.",
-                                icon: "success",
-                                showConfirmButton: false,
-                                timer: 1500
+                    refetch()
+                    Swal.fire({
+                        title: "Removed!",
+                        text: "Book has been removed from cart.",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500
 
-                            });
-                        }
+                    });
+                }
 
-                    })
-            }
-        });
+            })
+        // Swal.fire({
+        //     title: "Are you sure?",
+        //     text: "You won't be able to revert this!",
+        //     icon: "warning",
+        //     showCancelButton: true,
+        //     confirmButtonColor: "#3085d6",
+        //     cancelButtonColor: "#d33",
+        //     confirmButtonText: "Yes, remove it!"
+        // }).then((result) => {
+        //     if (result.isConfirmed) {
+        //         fetch(`https://book-ocean-bd-server.vercel.app/carts/${item._id}`, {
+        //             method: "DELETE"
+        //         })
+        //             .then(res => res.json())
+        //             .then(data => {
+        //                 if (data.deletedCount > 0) {
+
+        //                     refetch()
+        //                     Swal.fire({
+        //                         title: "Removed!",
+        //                         text: "Book has been removed from cart.",
+        //                         icon: "success",
+        //                         showConfirmButton: false,
+        //                         timer: 1500
+
+        //                     });
+        //                 }
+
+        //             })
+        //     }
+        // });
     }
 
 

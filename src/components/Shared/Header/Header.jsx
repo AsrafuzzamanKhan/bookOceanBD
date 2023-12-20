@@ -11,6 +11,8 @@ import { AuthContext } from "../../../providers/AuthProvider/AuthProvider";
 import useCart from "../../../hooks/useCart";
 import { CartContext } from "../../../providers/CartProvider/CartProvider";
 import useAdmin from "../../../hooks/useAdmin";
+import logoSvg from '../../../assets/logo/book.gif'
+
 
 const Header = () => {
 
@@ -54,7 +56,9 @@ const Header = () => {
                     </div>
 
                     {/* logo  */}
-                    <Link to={'/'} className="text-lg md:text-xl lg:text-2xl font-bold"> BOOK OCEAN BD</Link>
+                    <Link to={'/'} className="w-64 hover:scale-95 duration-300" >
+                        <img src={logoSvg} alt="" />
+                    </Link>
 
                     {/* search in dextop  */}
                     <div className="hidden lg:flex lg:max-w-[738px] rounded-lg w-full ">

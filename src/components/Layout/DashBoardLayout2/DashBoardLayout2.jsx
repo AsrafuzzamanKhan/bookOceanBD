@@ -6,7 +6,7 @@ import { MdManageHistory, MdOutlineDevicesOther } from "react-icons/md";
 import { TbDeviceDesktopStar } from "react-icons/tb";
 import { ImBooks } from "react-icons/im";
 import { RiFileHistoryFill } from "react-icons/ri";
-import logo from '../../../assets/logo/book.png'
+import logoSvg from '../../../assets/logo/book.gif'
 
 const DashBoardLayout2 = () => {
     const [isAdmin] = useAdmin()
@@ -24,11 +24,8 @@ const DashBoardLayout2 = () => {
                     </div>
                     <div className="flex-1 px-2 mx-0">
                         {/* logo  */}
-                        <Link to='/' className='flex mx-auto gap-x-2 items-center hover:scale-95 duration-300'>
-                            <img src={logo}
-                                className={`cursor-pointer duration-500 w-14 
-                       `} alt="logo" />
-                            <h2 className={`text-white uppercase font-semibold origin-left text-2xl duration-300`}>Book Ocean BD</h2>
+                        <Link to='/' className='flex mx-auto w-64 hover:scale-95 duration-300'>
+                            <img src={logoSvg} alt="" />
 
                         </Link>
 

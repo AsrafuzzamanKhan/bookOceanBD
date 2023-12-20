@@ -57,14 +57,14 @@ const AddBooks = () => {
                 <p className=' bg-slate-800 text-white px-8 py-3 rounded'>Add Book</p>
             </div>
             <div className='w-full flex items-center justify-center'>
-                <div className=" w-full lg:w-1/2 border p-4 shadow-2xl rounded-[8px] ">
+                <div className=" w-full lg:w-1/2 border p-4 shadow-2xl rounded-[8px] dark:text-white dark:border-0">
                     <form onSubmit={handleSubmit(onSubmit)} >
                         {/* name  */}
                         <div className="form-control w-full">
                             <label className="label">
                                 <span className="label-text font-semibold ">Book name*</span>
                             </label>
-                            <input type="text" placeholder="Type here" className="input input-bordered w-full"
+                            <input type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
                                 {...register("name", { required: true })} />
                         </div>
                         {/* author  */}
@@ -72,7 +72,7 @@ const AddBooks = () => {
                             <label className="label">
                                 <span className="label-text font-semibold ">Author name*</span>
                             </label>
-                            <input type="text" placeholder="Type here" className="input input-bordered w-full"
+                            <input type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
                                 {...register("author", { required: true })} />
                         </div>
                         {/* category  */}
@@ -111,7 +111,7 @@ const AddBooks = () => {
                                 <label className="label">
                                     <span className="label-text font-semibold ">Price*</span>
                                 </label>
-                                <input type="number" placeholder="Type here" className="input input-bordered w-full"
+                                <input type="number" placeholder="Type here" className="input input-bordered w-full dark:text-white "
                                     {...register("price", { required: true })} />
                             </div>
                         </div>

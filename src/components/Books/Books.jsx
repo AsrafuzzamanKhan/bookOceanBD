@@ -43,27 +43,31 @@ const Books = () => {
 
 
                     <main className="w-full px-1 lg:px-0">
-                        {/* title  */}
-                        <div className="my-4 text-center capitalize text-xl lg:text-left dark:text-white font-semibold">
+                        <FadeIn delay={0.4} direction='down' >
+                            {/* title  */}
 
-                            <div><span className="text-blue-400 me-2"> {category}{author}</span>Book</div>
-                        </div>
-                        {/* product grid   */}
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4  gap-[6px] md:gap-[30px] w-full">
-                            {filteredProducts.map((book, i) => {
-                                return <BookCard key={i} book={book}>
-                                </BookCard>
+                            <div className="my-4 text-center capitalize text-xl lg:text-left dark:text-white font-semibold">
 
-                            })}
+                                <div><span className="text-blue-400 me-2"> {category}{author}</span>Book</div>
+                            </div>
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4  gap-[6px] md:gap-[30px] w-full">
+                                {filteredProducts.map((book, i) => {
+                                    return <BookCard key={i} book={book}>
+                                    </BookCard>
 
-                            {/* get author books  */}
-                            {filteredAuthor.map((book, i) => {
-                                return <BookCard key={i} book={book}>
-                                </BookCard>
+                                })}
 
-                            })}
+                                {/* get author books  */}
+                                {filteredAuthor.map((book, i) => {
+                                    return <BookCard key={i} book={book}>
+                                    </BookCard>
 
-                        </div>
+                                })}
+
+                            </div>
+                            {/* product grid   */}
+
+                        </FadeIn>
                     </main>
 
                     {/* author  */}
