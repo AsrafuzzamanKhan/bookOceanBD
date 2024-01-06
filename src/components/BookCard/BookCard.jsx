@@ -5,7 +5,7 @@ import { motion, useAnimate, useAnimation, useScroll } from "framer-motion"
 import { useInView } from "react-intersection-observer";
 
 const BookCard = ({ book }) => {
-    const { _id, name, author, price, image, description, newBook, category, cover } = book;
+    const { _id, name, author, price, image, description, available, newBook, category, cover } = book;
 
     // console.log('book', book)
 
@@ -45,21 +45,27 @@ const BookCard = ({ book }) => {
 
                     <img
                         className=" w-32 group-hover:scale-90 transition-all"
-                        src={image} alt="books" />
+                        src={image} alt={image} />
                 </div>
                 {/* text  */}
                 <div className="flex flex-col px-2 lg:px-6 text-[14px]">
 
                     {/* category  */}
-                    <div className="text-sm text-blue-400">{category}</div>
+                    <h4 className="text-sm text-blue-400">{category}</h4>
                     {/* title  */}
-                    <div className="text-[15px] tooltip text-start" data-tip={name}>{name.substring(0, 35)}... </div>
+                    <h1 className="text-[15px] tooltip text-start" data-tip={name}>{name.substring(0, 35)}... </h1>
                     <span className="capitalize">({cover})</span>
-                    <div className="text-[15px] ">by <span className="text-blue-400">{author}</span></div>
+                    <p className="text-[15px] ">by <span className="text-blue-400">{author}</span></p>
+                    {
+                        available === 'false' ? <p className="text-lg text-red-600">Stock Out</p> : <p className="text-lg text-blue-400">
+                            <span>&#x09F3;</span> {price}
+                        </p>
 
-                    <div className="text-lg text-blue-400">
+                    }
+
+                    {/* <p className="text-lg text-blue-400">
                         <span>&#x09F3;</span> {price}
-                    </div>
+                    </p> */}
                 </div>
             </div>
         </Link>

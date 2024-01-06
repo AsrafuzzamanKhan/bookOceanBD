@@ -42,40 +42,41 @@ const AllUsers = () => {
                 <title>Book Ocean BD || All Users</title>
             </Helmet>
 
+            <div className="mb-[30px] pt-28 md:pt-28 lg:pt-0 xl:pt-24 min-h-screen">
+                <div className=' items-center  mb-8 flex flex-col'>
+                    <h1 className=' bg-slate-800 text-white px-8 py-3 rounded'>Total User:  {users?.length}</h1>
+                </div>
 
-            <div className='pt-24 items-center  mb-8 flex flex-col'>
-                <p className=' bg-slate-800 text-white px-8 py-3 rounded'>Total User:  {users?.length}</p>
-            </div>
-
-            <div className="px-6 pb-12">
-                <div className="overflow-x-auto">
-                    <table className="table table-zebra">
-                        {/* head */}
-                        <thead>
-                            <tr>
-                                <th>S/N</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                users?.map((user, i) => <tr key={i}>
-                                    <th>{i + 1}</th>
-                                    <td>{user.name}</td>
-                                    <td>{user.email}</td>
-                                    <td>{user.role === 'admin' ? 'admin' : <button onClick={() => handleMakeAdmin(user)} className="btn bg-orange-600 text-white"><FaUserShield className="text-2xl"></FaUserShield></button>}</td>
-                                    <th>
-                                        <button onClick={() => handleDelete(user)} className="btn bg-red-600 text-white"> <AiFillDelete className='text-2xl' /></button>
-                                    </th>
-                                </tr>)
-                            }
+                <div className="px-6 pb-12">
+                    <div className="overflow-x-auto">
+                        <table className="table table-zebra">
+                            {/* head */}
+                            <thead>
+                                <tr>
+                                    <th>S/N</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    users?.map((user, i) => <tr key={i}>
+                                        <th>{i + 1}</th>
+                                        <td>{user.name}</td>
+                                        <td>{user.email}</td>
+                                        <td>{user.role === 'admin' ? 'admin' : <button onClick={() => handleMakeAdmin(user)} className="btn bg-orange-600 text-white"><FaUserShield className="text-2xl"></FaUserShield></button>}</td>
+                                        <th>
+                                            <button onClick={() => handleDelete(user)} className="btn bg-red-600 text-white"> <AiFillDelete className='text-2xl' /></button>
+                                        </th>
+                                    </tr>)
+                                }
 
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

@@ -58,9 +58,9 @@ const Checkout = ({ item }) => {
                 <title>Book Ocean BD || Checkout</title>
             </Helmet>
             <div className="container mx-auto px-1 lg:px-2 dark:text-white">
-                <div className="uppercase text-2xl text-center font-semibold mb-4">
+                <h1 className="uppercase text-2xl text-center font-semibold mb-4">
                     check out
-                </div>
+                </h1>
                 <div className="w-full flex flex-col xl:flex-row lg:flex-row  gap-4">
 
                     {/* info  */}
@@ -106,11 +106,11 @@ const Checkout = ({ item }) => {
                                             *** Cash on Delivery ***
                                         </div>
                                         <div className="flex justify-between">
-                                            <div>Sub Total:</div>
-                                            <div><span>&#x09F3;</span> {total}</div>
+                                            <h2>Sub Total:</h2>
+                                            <p><span>&#x09F3;</span> {total}</p>
                                         </div>
                                         <div className="flex justify-between">
-                                            <div>Delivery charge:</div>
+                                            <h2>Delivery charge:</h2>
                                             {
                                                 cart.length > 0 ? <div><span>&#x09F3;</span>  {deliveryCharge}
                                                 </div> : <div><span>&#x09F3;</span>  0
@@ -118,7 +118,7 @@ const Checkout = ({ item }) => {
                                             }
                                         </div>
                                         <div className="flex justify-between">
-                                            <div>Total:</div>
+                                            <h2>Total:</h2>
                                             {
                                                 cart.length > 0 ? <div><span>&#x09F3;</span>  {totalAmount}
                                                 </div> : <div><span>&#x09F3;</span>  0
@@ -133,9 +133,9 @@ const Checkout = ({ item }) => {
                         </div>
                     </div>
                     <div className="lg:w-2/3  w-full border dark:border-none rounded shadow-2xl">
-                        <div className="uppercase font-semibold text-2xl text-center mt-4 lg:mt-8 ">
+                        <h1 className="uppercase font-semibold text-2xl text-center mt-4 lg:mt-8 ">
                             Order Details
-                        </div>
+                        </h1>
                         <div className="flex flex-col items-center py-4 lg:py-6 ">
                             <div className="overflow-x-auto w-full">
                                 <table className="table lg:table-lg table-xs table-pin-rows table-pin-cols ">
@@ -164,7 +164,7 @@ const Checkout = ({ item }) => {
                                                 </th>
                                                 <td className="!p-1">
                                                     <div className="w-12  object-cover overflow-hidden ">
-                                                        <img className="w-full " src={book.image} alt="Avatar Tailwind CSS Component" />
+                                                        <img className="w-full " src={book.image} alt={book.image} />
                                                     </div>
                                                 </td>
                                                 <td className="!px-1">
@@ -172,13 +172,13 @@ const Checkout = ({ item }) => {
                                                         to={`/book/${book.bookId}`}
                                                     >
                                                         <div className="flex flex-col gap-y-1 hover:scale-95 duration-300">
-                                                            <div>
+                                                            <h2>
                                                                 {book.name}
-                                                            </div>
-                                                            <div>
+                                                            </h2>
+                                                            <h2>
                                                                 Author - {book.author}
-                                                            </div>
-                                                            <div>Genre - {book.category}</div>
+                                                            </h2>
+                                                            <h2>Genre - {book.category}</h2>
                                                         </div>
                                                     </Link>
                                                 </td>
@@ -190,7 +190,7 @@ const Checkout = ({ item }) => {
                                                 <td className="!p-1">
 
                                                     <div className="flex gap-1">
-                                                        <span>&#x09F3;</span> <div>{book.price}</div>
+                                                        <span>&#x09F3;</span> <p>{book.price}</p>
                                                     </div>
                                                 </td>
 

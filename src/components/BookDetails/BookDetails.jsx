@@ -11,23 +11,22 @@ import { motion, useAnimation } from "framer-motion"
 import { useInView } from "react-intersection-observer";
 import { Helmet } from "react-helmet-async";
 import { MdEdit } from "react-icons/md";
+import facebook from '../../assets/social/facebook.png'
+import instagram from '../../assets/social/instagram.png'
+import { TbTruckDelivery } from "react-icons/tb";
+import { MdPayment } from "react-icons/md";
+import { MdOutlineGppGood } from "react-icons/md";
 
 import useAdmin from "../../hooks/useAdmin";
 
-
-
 const BookDetails = () => {
-
     const { id } = useParams()
     const { user } = useAuth()
     const [isAdmin] = useAdmin()
     const [booksData] = useBookData()
     const navigate = useNavigate()
     const [, refetch] = useCart()
-    const [cart, setCart] = useState([])
-    const [amount, setAmount] = useState(0)
     const { setIsOpen, isOpen } = useContext(CartContext)
-
 
 
 
@@ -42,7 +41,7 @@ const BookDetails = () => {
             animation.start({
                 y: 0,
                 transition: {
-                    type: 'spring', duration: 4, bounce: 0.3
+                    type: 'spring', duration: 3, bounce: 0.3
                 }
             })
         }
@@ -53,12 +52,12 @@ const BookDetails = () => {
     }, [animation, inView])
 
 
-    const productDetails = booksData.find(pd => pd._id == id)
+    const productDetails = booksData?.find(pd => pd._id == id)
 
     // console.log('product details', productDetails)
 
     if (!productDetails) {
-        return <div className="container mx-auto">loading....</div>
+        return (<div className="container mx-auto text-center">loading...</div>)
     }
 
     const handleAddToCart = (item) => {
@@ -90,26 +89,6 @@ const BookDetails = () => {
                             timer: 1500
                         });
 
-
-                        setCart([...cart, cartItem])
-                        const allCartItem = cart.find(item => item.bookId === _id)
-                        if (allCartItem) {
-                            const newCart = cart.map(item => {
-                                if (item.bookId === _id) {
-                                    setAmount(allCartItem.amount + 1)
-                                    return { ...item, amount: allCartItem.amount + 1 }
-                                }
-                                else { return item }
-                            }
-                            );
-                            setCart(newCart)
-                        }
-                        else {
-                            setCart([...cart, cartItem])
-                        }
-
-
-
                     }
                 })
         } else {
@@ -132,36 +111,46 @@ const BookDetails = () => {
         }
     }
     return (
-        <div className="mb-16 pt-36 lg:pt-[30px] xl:pt-24">
+        <div className="mb-16 pt-32 lg:pt-[30px] xl:pt-24">
             <div className="container mx-auto px-1 lg:px-0">
                 <Helmet>
                     <title>Book Ocean BD || Book Details</title>
                 </Helmet>
                 {/* text  */}
-                <div ref={ref} className="flex flex-col lg:flex-row lg:gap-[20px] gap-0 mb-[30px] items-center">
+                <div ref={ref} className="flex flex-col lg:flex-row lg:gap-[20px] gap-0 mb-[30px] items-center w-full  ">
                     <motion.div
-
                         animate={animation}
 
-                        className="flex-1 max-w-[40%] lg:h-[550px]  lg:shadow-md shadow-none rounded-[4px] flex justify-center items-center " >
+                        className="flex-1 w-full h-full rounded-[4px] flex justify-center items-center " >
 
 
-                        <img src={productDetails.image}
-                            className=" lg:max-w-[65%] lg:max-h-96  h-full py-4"
-                            alt="image" />
+                        <img src={productDetails?.image}
+                            className=" lg:max-w-[65%] max-h-96  h-full lg:p-0 p-4 "
+                            alt={productDetails?.image} />
                         {/* </div> */}
                     </motion.div>
                     <motion.div
                         animate={animation}
-                        className="flex-1 py-10 px-8 xl:py-10 xl:p-16 flex flex-col justify-center dark:bg-base-200 dark:text-white text-black rounded-[4px] shadow-md lg:border dark:border-none">
+                        className="  w-full flex-1 lg:py-10 py-4 px-8  flex flex-col justify-center dark:bg-base-200 dark:text-white text-black  rounded-[4px]  dark:border-none shadow-md ">
                         {/* category  */}
                         <Link to={`/books/${productDetails.category}`}>
-                            <div className="uppercase text-blue-400 text-lg font-medium mb-2 hover:text-green-600 duration-300"> {productDetails.category}  </div>
+                            <h4 className="uppercase text-blue-400 text-lg font-medium mb-2 hover:text-green-600 duration-300">
+                                {productDetails?.category}
+                            </h4>
                         </Link>
                         {/* title  */}
-                        <h2 className="h2 mb-2"> {productDetails.name}</h2>
+                        <h1 className="text-xl lg:text-2xl mb-2">
+                            {productDetails?.name}
+                        </h1>
                         <div className="mb-6">
-                            by <Link to={`/authorbooks/${productDetails.author}`} author={productDetails.author}><span className="text-blue-400 hover:text-blue-800 hover:underline duration-300 ">{productDetails.author}</span></Link>
+                            by <Link
+                                to={`/authorbooks/${productDetails.author}`}
+                                author={productDetails.author}>
+                                <span
+                                    className="text-blue-400 hover:text-blue-900 hover:underline duration-300 ">
+                                    {productDetails?.author}
+                                </span>
+                            </Link>
                         </div>
 
 
@@ -199,7 +188,7 @@ const BookDetails = () => {
                                     productDetails.available === 'false' ? <div className="text-xl text-red-600">Stock Out</div> : <div className="">
                                         <button
                                             onClick={() => handleAddToCart(productDetails)}
-                                            className="btn bg-blue-400 text-black hover:text-white hover:bg-black transition-all text-[13px] md:text-sm ">Add to cart
+                                            className="btn bg-blue-400 text-black hover:text-white hover:bg-black transition-all text-[12px] lg:text-[16px]  ">Add to cart
                                         </button>
 
                                     </div>
@@ -220,6 +209,37 @@ const BookDetails = () => {
 
 
                         </div>
+                        {/* original  */}
+                        <div className="flex flex-col gap-y-2 mb-4">
+                            <div className="flex gap-2 items-center">
+                                <TbTruckDelivery size={25} />
+                                <p>Fast Shipping</p>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                                <MdOutlineGppGood size={25} />
+                                <p> Get Premium Quality Original Books</p>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                                <MdPayment size={25} />
+                                <p>Cash On Delivery Service is Available</p></div>
+                        </div>
+                        <hr />
+                        {/* social  */}
+                        <div>
+                            <h2 className='font-semibold my-4'>
+                                Follow Our Social Medias:
+                            </h2>
+                            <div className=' flex max-w-max gap-x-4 text-lg mb-5'>
+
+                                <a href="https://www.facebook.com/bookoceanbd/" target="_blank" rel="noreferrer" className="hover:text-green-600 transition-all">
+                                    <img className='w-8' src={facebook} alt="" />
+                                </a>
+
+                                <a href="https://www.instagram.com/bookoceanbd/" target="_blank" rel="noreferrer" className="hover:text-green-600 transition-all">
+                                    <img className='w-8' src={instagram} alt="" />
+                                </a>
+                            </div>
+                        </div>
                         {/* description  */}
                         {/* <div tabIndex={0} className="collapse collapse-arrow border border-base-300  ">
                             <div className="collapse-title text-xl font-medium">
@@ -229,11 +249,22 @@ const BookDetails = () => {
                                 <p>{productDetails.description}</p>
                             </div>
                         </div> */}
-
-                        <p className="mb-5">{productDetails.description}</p>
+                        {/* 
+                        <p className="mb-5">{productDetails.description}</p> */}
 
                     </motion.div>
+
+
                 </div>
+                {/* Description  */}
+                <FadeIn delay={0.4} direction='up' >
+                    <div className="px-4 lg:px-0 dark:text-gray-300">
+                        <h3 className="text-xl my-2 font-semibold">Description</h3>
+                        <hr className="mb-4" />
+
+                        <p className="mb-5">{productDetails.description}</p>
+                    </div>
+                </FadeIn>
                 {/* relatged  product  */}
                 <FadeIn delay={0.4} direction='up' >
                     <RelatedBooks

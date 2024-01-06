@@ -1,7 +1,5 @@
 import CategoryNav from "../../CategoryNav/CategoryNav";
 import MainSlider from "../MainSlider/MainSlider";
-import promo1 from '../../../assets/promo/hp1.jpg'
-import promo2 from '../../../assets/promo/hp3.jpg'
 import useBanner from "../../../hooks/useBanner";
 
 const Hero = () => {

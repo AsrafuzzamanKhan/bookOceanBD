@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import useAuth from "../../../hooks/useAuth";
 import useUserOrder from "../../../hooks/useUserOrder";
-import { MdDelete } from "react-icons/md";
+
 import { FaUser, FaMapMarkerAlt } from "react-icons/fa";
 import { IoCalendar } from "react-icons/io5";
 import { IoMdPricetags } from "react-icons/io";
@@ -60,104 +60,105 @@ const OrderHistory = () => {
 
             <div className="container mx-auto">
 
+                <div className="mb-[30px] pt-28 md:pt-28 lg:pt-0 xl:pt-24 min-h-screen">
+                    <div className=' items-center  mb-8 flex flex-col'>
+                        <p className=' bg-slate-800 text-white px-8 py-3 rounded'> {user.displayName}'s Order history</p>
+                    </div>
 
-                <div className='pt-24 items-center  mb-8 flex flex-col'>
-                    <p className=' bg-slate-800 text-white px-8 py-3 rounded'> {user.displayName}'s Order history</p>
-                </div>
-
-                {/* order stats 
+                    {/* order stats 
             
             */}
 
 
-                <div className=" w-full grid grid-cols-2 lg:grid-cols-4 dark:text-white px-1 lg:px-0 ">
+                    <div className=" w-full grid grid-cols-2 lg:grid-cols-4 dark:text-white px-1 lg:px-0 ">
 
-                    <div className=" bg-blue-200 flex flex-col justify-center items-center py-4  ">
-                        <div className=" dark:text-white font-semibold">Delivered</div>
-                        <div className="text-2xl font-bold">{deliver.length}  </div>
+                        <div className=" bg-blue-200 flex flex-col justify-center items-center py-4  ">
+                            <div className=" dark:text-white font-semibold">Delivered</div>
+                            <div className="text-2xl font-bold">{deliver.length}  </div>
+                        </div>
+                        <div className=" bg-green-400 flex flex-col justify-center items-center  py-4   ">
+                            <div className="dark:text-white font-semibold">Approved</div>
+                            <div className="text-2xl font-bold">{approve.length}  </div>
+                        </div>
+
+                        <div className=" bg-blue-400 flex flex-col justify-center items-center py-4   ">
+                            <div className=" dark:text-white font-semibold">Pending</div>
+                            <div className="text-2xl font-bold">  {pending.length}</div>
+
+                        </div>
+                        <div className=" bg-red-400 flex flex-col justify-center items-center  py-4  ">
+                            <div className=" dark:text-white font-semibold">Canceled</div>
+                            <div className="text-2xl font-bold">  {cancel.length}</div>
+
+                        </div>
+
                     </div>
-                    <div className=" bg-green-400 flex flex-col justify-center items-center  py-4   ">
-                        <div className="dark:text-white font-semibold">Approved</div>
-                        <div className="text-2xl font-bold">{approve.length}  </div>
-                    </div>
+                    {/* mobile responsive  */}
+                    <div className="px-1 lg:px-0 dark:text-white pb-12 ">
+                        {
+                            order.map((order, i) =>
+                                <div key={i} className=" border dark:border-none dark:bg-gray-800  rounded-[8px] my-4 hover:bg-gray-100 dark:hover:bg-slate-700 duration-300">
 
-                    <div className=" bg-blue-400 flex flex-col justify-center items-center py-4   ">
-                        <div className=" dark:text-white font-semibold">Pending</div>
-                        <div className="text-2xl font-bold">  {pending.length}</div>
+                                    <div className="card-body">
+                                        <div className="flex justify-between items-center">
+                                            <div className="border p-2 rounded-lg bg-gray-200 dark:bg-gray-800 uppercase font-semibold">{order.status}</div>
 
-                    </div>
-                    <div className=" bg-red-400 flex flex-col justify-center items-center  py-4  ">
-                        <div className=" dark:text-white font-semibold">Canceled</div>
-                        <div className="text-2xl font-bold">  {cancel.length}</div>
-
-                    </div>
-
-                </div>
-                {/* mobile responsive  */}
-                <div className="px-1 lg:px-0 dark:text-white pb-12 ">
-                    {
-                        order.map((order, i) =>
-                            <div key={i} className=" border dark:border-none dark:bg-gray-800  rounded-[8px] my-4 hover:bg-gray-100 dark:hover:bg-slate-700 duration-300">
-
-                                <div className="card-body">
-                                    <div className="flex justify-between items-center">
-                                        <div className="border p-2 rounded-lg bg-gray-200 dark:bg-gray-800 uppercase font-semibold">{order.status}</div>
-
-                                        <div className="flex font-semibold">
-                                            <span>&#x09F3; </span>
-                                            <p className="mx-1"> {order.totalAmount}</p>
+                                            <div className="flex font-semibold">
+                                                <span>&#x09F3; </span>
+                                                <p className="mx-1"> {order.totalAmount}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div>
+                                        <div>
 
-                                        {
-                                            (order.status === 'pending') &&
-                                            <button onClick={() => handleCancelOrder(order)} className="btn bg-red-200 dark:bg-white"> Cancel</button>
+                                            {
+                                                (order.status === 'pending') &&
+                                                <button onClick={() => handleCancelOrder(order)} className="btn bg-red-200 dark:bg-white"> Cancel</button>
 
-                                        }
-                                        {
-                                            (order.status === 'canceled') && <span className="text-sm text-red-400">Limited Stock... </span>
-                                        }
-                                        {
+                                            }
+                                            {
+                                                (order.status === 'canceled') && <span className="text-sm text-red-400">Limited Stock... </span>
+                                            }
+                                            {
 
-                                            (order.status === 'approve') && <span className="text-sm text-green-600">The Parcel is ready for delivery.</span>
+                                                (order.status === 'approve') && <span className="text-sm text-green-600">The Parcel is ready for delivery.</span>
 
-                                        }
-                                        {
+                                            }
+                                            {
 
-                                            (order.status === 'delivered') && <span className="text-sm text-green-600">Thank you for purchasing.</span>
+                                                (order.status === 'delivered') && <span className="text-sm text-green-600">Thank you for purchasing.</span>
 
-                                        }
+                                            }
 
-                                    </div>
-                                    <div className="flex lg:flex-row md:flex-col flex-col">
-                                        <div className="flex-1 leading-loose">
-                                            <div className="flex items-center "><IoCalendar className="mr-2" /> {order.date}</div>
-                                            <div className="flex items-center "><FaUser className="mr-2" />{order.data.name}</div>
-                                            <div className="flex items-center"><FaPhone className="mr-2" />{order.data.phone}</div>
-                                            <div className="flex items-center"> <FaMapMarkerAlt className="mr-2" />{order.data.address}</div>
                                         </div>
+                                        <div className="flex lg:flex-row md:flex-col flex-col">
+                                            <div className="flex-1 leading-loose">
+                                                <div className="flex items-center "><IoCalendar className="mr-2" /> {order.date}</div>
+                                                <div className="flex items-center "><FaUser className="mr-2" />{order.data.name}</div>
+                                                <div className="flex items-center"><FaPhone className="mr-2" />{order.data.phone}</div>
+                                                <div className="flex items-center"> <FaMapMarkerAlt className="mr-2" />{order.data.address}</div>
+                                            </div>
 
-                                        <div className="flex-1 mt-4 lg:mt-0">
-                                            {order.cart.map((book, i) => <>
+                                            <div className="flex-1 mt-4 lg:mt-0">
+                                                {order.cart.map((book, i) => <>
 
-                                                <div className="flex mb-4">
-                                                    <div className="w-1/4">
-                                                        <img className="w-12" src={book.image} alt="Avatar Tailwind CSS Component" />
+                                                    <div className="flex mb-4">
+                                                        <div className="w-1/4">
+                                                            <img className="w-12" src={book.image} alt="Avatar Tailwind CSS Component" />
+                                                        </div>
+                                                        <div className="w-3/4">
+                                                            <span className="text-blue-600">  {i + 1} </span> - {book.name} - by <span className="text-blue-400">{book.author}</span>
+                                                            <div className="flex items-center"> <IoMdPricetags className="me-2" /><span className="me-1">&#x09F3; </span> {book.price}  </div>
+                                                        </div>
                                                     </div>
-                                                    <div className="w-3/4">
-                                                        <span className="text-blue-600">  {i + 1} </span> - {book.name} - by <span className="text-blue-400">{book.author}</span>
-                                                        <div className="flex items-center"> <IoMdPricetags className="me-2" /><span className="me-1">&#x09F3; </span> {book.price}  </div>
-                                                    </div>
-                                                </div>
-                                            </>)}
+                                                </>)}
 
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        )
-                    }
+                            )
+                        }
+                    </div>
                 </div>
             </div>
         </div >

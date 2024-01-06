@@ -82,56 +82,56 @@ const AllOrders = () => {
             <Helmet>
                 <title>Book Ocean BD || All Orders</title>
             </Helmet>
+            <div className="mb-[30px] pt-28 md:pt-28 lg:pt-0 xl:pt-24 min-h-screen">
+                <div className='items-center  mb-8 flex flex-col'>
+                    <h1 className=' bg-slate-800 text-white px-8 py-3 rounded'>Total Order: {orders?.length}</h1>
+                </div>
 
-            <div className='pt-24 items-center  mb-8 flex flex-col'>
-                <p className=' bg-slate-800 text-white px-8 py-3 rounded'>Total Order: {orders?.length}</p>
-            </div>
+                {/* mobile responsive  */}
+                <div className="px-1 lg:px-0 dark:text-white pb-12 ">
+                    {
+                        orders.map((order, i) =>
+                            <div key={i} className=" border dark:border-none dark:bg-gray-800  rounded-[8px] my-4 hover:bg-gray-100 dark:hover:bg-slate-700 duration-300">
 
-            {/* mobile responsive  */}
-            <div className="px-1 lg:px-0 dark:text-white pb-12 ">
-                {
-                    orders.map((order, i) =>
-                        <div key={i} className=" border dark:border-none dark:bg-gray-800  rounded-[8px] my-4 hover:bg-gray-100 dark:hover:bg-slate-700 duration-300">
+                                <div className="card-body">
+                                    <div className="flex justify-between items-center">
+                                        <div className="dropdown">
+                                            <div tabIndex={0} role="button" className="btn m-1">{order.status}</div>
+                                            <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                                                {order.status === 'pending' ?
 
-                            <div className="card-body">
-                                <div className="flex justify-between items-center">
-                                    <div className="dropdown">
-                                        <div tabIndex={0} role="button" className="btn m-1">{order.status}</div>
-                                        <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-                                            {order.status === 'pending' ?
+                                                    <li>
+                                                        <a >{order.status === 'approve' ? 'Approved' : <button onClick={() => handleApproved(order)} className="btn bg-green-600 text-white">{order.status}-Aprrove</button>}
+                                                        </a>
+                                                    </li> : <>{order.status === 'canceled' ||
+                                                        < li >
+                                                            <a> {order.status === 'delivered' ? 'Delivered' : <button onClick={() => handleDelivery(order)} className="btn bg-blue-600 text-white">Delivery-{order.status}</button>}</a>
+                                                        </li>
+                                                    }</>
 
-                                                <li>
-                                                    <a >{order.status === 'approve' ? 'Approved' : <button onClick={() => handleApproved(order)} className="btn bg-green-600 text-white">{order.status}-Aprrove</button>}
-                                                    </a>
-                                                </li> : <>{order.status === 'canceled' ||
-                                                    < li >
-                                                        <a> {order.status === 'delivered' ? 'Delivered' : <button onClick={() => handleDelivery(order)} className="btn bg-blue-600 text-white">Delivery-{order.status}</button>}</a>
-                                                    </li>
-                                                }</>
+                                                }
+                                                {(order.status === 'approve' || order.status === 'delivered') ||
 
-                                            }
-                                            {(order.status === 'approve' || order.status === 'delivered') ||
+                                                    <li>
+                                                        <a> {order.status === 'canceled' ? 'Canceled' : <button onClick={() => handleCanceled(order)} className="btn bg-orange-600 text-white">{order.status}--Cancel</button>}
+                                                        </a>
+                                                    </li>}
 
-                                                <li>
-                                                    <a> {order.status === 'canceled' ? 'Canceled' : <button onClick={() => handleCanceled(order)} className="btn bg-orange-600 text-white">{order.status}--Cancel</button>}
-                                                    </a>
-                                                </li>}
-
-                                            {/* <li>
+                                                {/* <li>
                                                 <a> {order.status === 'canceled' ? 'Canceled' : <button onClick={() => handleCanceled(order)} className="btn bg-orange-600 text-white">{order.status}</button>}
                                                 </a>
                                             </li> */}
 
-                                        </ul>
+                                            </ul>
+                                        </div>
+
+                                        <div className="flex font-semibold">
+                                            <span>&#x09F3; </span>
+                                            <p className="mx-1"> {order.totalAmount}</p>
+                                        </div>
                                     </div>
 
-                                    <div className="flex font-semibold">
-                                        <span>&#x09F3; </span>
-                                        <p className="mx-1"> {order.totalAmount}</p>
-                                    </div>
-                                </div>
-
-                                {/* <div>
+                                    {/* <div>
 
                                     {
                                         (order.status === 'pending') &&
@@ -153,37 +153,37 @@ const AllOrders = () => {
                                     }
 
                                 </div> */}
-                                <div className="flex lg:flex-row md:flex-col flex-col">
-                                    <div className="flex-1 leading-loose">
-                                        <div className="flex items-center "><IoCalendar className="mr-2" /> {order.date}</div>
-                                        <div className="flex items-center "><FaUser className="mr-2" />{order.data.name}</div>
-                                        <div className="flex items-center "><FaUser className="mr-2" />{order.email}</div>
-                                        <div className="flex items-center"><FaPhone className="mr-2" />{order.data.phone}</div>
-                                        <div className="flex items-center"> <FaMapMarkerAlt className="mr-2" />{order.data.address}</div>
-                                    </div>
+                                    <div className="flex lg:flex-row md:flex-col flex-col">
+                                        <div className="flex-1 leading-loose">
+                                            <div className="flex items-center "><IoCalendar className="mr-2" /> {order.date}</div>
+                                            <div className="flex items-center "><FaUser className="mr-2" />{order.data.name}</div>
+                                            <div className="flex items-center "><FaUser className="mr-2" />{order.email}</div>
+                                            <div className="flex items-center"><FaPhone className="mr-2" />{order.data.phone}</div>
+                                            <div className="flex items-center"> <FaMapMarkerAlt className="mr-2" />{order.data.address}</div>
+                                        </div>
 
-                                    <div className="flex-1 mt-4 lg:mt-0">
-                                        {order.cart.map((book, i) => <>
+                                        <div className="flex-1 mt-4 lg:mt-0">
+                                            {order.cart.map((book, i) => <div key={i} >
 
-                                            <div className="flex mb-4">
-                                                <div className="w-1/4">
-                                                    <img className="w-12" src={book.image} alt="Avatar Tailwind CSS Component" />
+                                                <div className="flex mb-4">
+                                                    <div className="w-1/4">
+                                                        <img className="w-12" src={book.image} alt={book.image} />
+                                                    </div>
+                                                    <div className="w-3/4">
+                                                        <span className="text-blue-600">  {i + 1} </span> - {book.name} - by <span className="text-blue-400">{book.author}</span>
+                                                        <div className="flex items-center"> <IoMdPricetags className="me-2" /><span className="me-1">&#x09F3; </span> {book.price}  </div>
+                                                    </div>
                                                 </div>
-                                                <div className="w-3/4">
-                                                    <span className="text-blue-600">  {i + 1} </span> - {book.name} - by <span className="text-blue-400">{book.author}</span>
-                                                    <div className="flex items-center"> <IoMdPricetags className="me-2" /><span className="me-1">&#x09F3; </span> {book.price}  </div>
-                                                </div>
-                                            </div>
-                                        </>)}
+                                            </div>)}
 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    )
-                }
-            </div>
-            {/* <div className="overflow-x-auto px-8">
+                        )
+                    }
+                </div>
+                {/* <div className="overflow-x-auto px-8">
                 <table className="table table-zebra ">
 
                     <thead>
@@ -255,6 +255,7 @@ const AllOrders = () => {
                     </tbody>
                 </table>
             </div> */}
+            </div>
         </div>
     );
 };

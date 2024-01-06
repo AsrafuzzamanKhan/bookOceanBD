@@ -53,152 +53,154 @@ const AddBooks = () => {
             <Helmet>
                 <title>Book Ocean BD || Add book</title>
             </Helmet>
-            <div className='pt-24 items-center  mb-8 flex flex-col'>
-                <p className=' bg-slate-800 text-white px-8 py-3 rounded'>Add Book</p>
-            </div>
-            <div className='w-full flex items-center justify-center'>
-                <div className=" w-full lg:w-1/2 border p-4 shadow-2xl rounded-[8px] dark:text-white dark:border-0">
-                    <form onSubmit={handleSubmit(onSubmit)} >
-                        {/* name  */}
-                        <div className="form-control w-full">
-                            <label className="label">
-                                <span className="label-text font-semibold ">Book name*</span>
-                            </label>
-                            <input type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
-                                {...register("name", { required: true })} />
-                        </div>
-                        {/* author  */}
-                        <div className="form-control w-full">
-                            <label className="label">
-                                <span className="label-text font-semibold ">Author name*</span>
-                            </label>
-                            <input type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
-                                {...register("author", { required: true })} />
-                        </div>
-                        {/* category  */}
-                        <div className="flex gap-4 w-full">
-                            <div className="form-control w-full ">
-                                <label className="label">
-                                    <span className="label-text font-semibold">Category*</span>
-
-                                </label>
-                                <select defaultValue='Pick one' className="select select-bordered uppercase"  {...register("category", { required: true })}>
-                                    <option disabled >Pick one</option>
-                                    <option>Barnes & Noble</option>
-                                    <option>Biography</option>
-                                    <option>Children's</option>
-                                    <option>Classic</option>
-                                    <option>Comics</option>
-                                    <option>Crime</option>
-                                    <option>Deluxe Edition</option>
-                                    <option>Fantasy</option>
-                                    <option>Fiction</option>
-                                    <option>Horror</option>
-                                    <option>History</option>
-                                    <option>Islamic</option>
-                                    <option>Manga</option>
-                                    <option>Mythology</option>
-                                    <option>Non-Fiction</option>
-                                    <option>Poetry</option>
-                                    <option>Romance</option>
-                                    <option>Science Fiction</option>
-                                    <option>Thriller</option>
-                                </select>
-
-                            </div>
-                            {/* price  */}
+            <div className="mb-[30px] pt-28 md:pt-28 lg:pt-0 xl:pt-24 min-h-screen">
+                <div className=' items-center  mb-8 flex flex-col'>
+                    <h1 className=' bg-slate-800 text-white px-8 py-3 rounded'>Add Book</h1>
+                </div>
+                <div className='w-full flex items-center justify-center'>
+                    <div className=" w-full lg:w-1/2 border p-4 shadow-2xl rounded-[8px] dark:text-white dark:border-0">
+                        <form onSubmit={handleSubmit(onSubmit)} >
+                            {/* name  */}
                             <div className="form-control w-full">
                                 <label className="label">
-                                    <span className="label-text font-semibold ">Price*</span>
+                                    <span className="label-text font-semibold ">Book name*</span>
                                 </label>
-                                <input type="number" placeholder="Type here" className="input input-bordered w-full dark:text-white "
-                                    {...register("price", { required: true })} />
+                                <input type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                    {...register("name", { required: true })} />
                             </div>
-                        </div>
-                        <div className='flex gap-4 w-full'>
-                            {/* hardcover / paperback  */}
-                            <div className="form-control w-full ">
+                            {/* author  */}
+                            <div className="form-control w-full">
                                 <label className="label">
-                                    <span className="label-text font-semibold">cover*</span>
-
+                                    <span className="label-text font-semibold ">Author name*</span>
                                 </label>
-                                <select defaultValue='Pick one' className="select select-bordered uppercase"  {...register("cover", { required: true })}>
-                                    <option disabled >Pick one</option>
-                                    <option value="hardcover">Hardcover</option>
-                                    <option value="paperback">Paperback</option>
-                                    <option value="leather bound">Leather Bound</option>
-                                </select>
+                                <input type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                    {...register("author", { required: true })} />
+                            </div>
+                            {/* category  */}
+                            <div className="flex gap-4 w-full">
+                                <div className="form-control w-full ">
+                                    <label className="label">
+                                        <span className="label-text font-semibold">Category*</span>
+
+                                    </label>
+                                    <select defaultValue='Pick one' className="select select-bordered uppercase"  {...register("category", { required: true })}>
+                                        <option disabled >Pick one</option>
+                                        <option>Barnes & Noble</option>
+                                        <option>Biography</option>
+                                        <option>Children's</option>
+                                        <option>Classic</option>
+                                        <option>Comics</option>
+                                        <option>Crime</option>
+                                        <option>Deluxe Edition</option>
+                                        <option>Fantasy</option>
+                                        <option>Fiction</option>
+                                        <option>Horror</option>
+                                        <option>History</option>
+                                        <option>Islamic</option>
+                                        <option>Manga</option>
+                                        <option>Mythology</option>
+                                        <option>Non-Fiction</option>
+                                        <option>Poetry</option>
+                                        <option>Romance</option>
+                                        <option>Science Fiction</option>
+                                        <option>Thriller</option>
+                                    </select>
+
+                                </div>
+                                {/* price  */}
+                                <div className="form-control w-full">
+                                    <label className="label">
+                                        <span className="label-text font-semibold ">Price*</span>
+                                    </label>
+                                    <input type="number" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                        {...register("price", { required: true })} />
+                                </div>
+                            </div>
+                            <div className='flex gap-4 w-full'>
+                                {/* hardcover / paperback  */}
+                                <div className="form-control w-full ">
+                                    <label className="label">
+                                        <span className="label-text font-semibold">cover*</span>
+
+                                    </label>
+                                    <select defaultValue='Pick one' className="select select-bordered uppercase"  {...register("cover", { required: true })}>
+                                        <option disabled >Pick one</option>
+                                        <option value="hardcover">Hardcover</option>
+                                        <option value="paperback">Paperback</option>
+                                        <option value="leather bound">Leather Bound</option>
+                                    </select>
+
+                                </div>
+                                {/* available */}
+                                <div className="form-control w-full ">
+                                    <label className="label">
+                                        <span className="label-text font-semibold">Available*</span>
+
+                                    </label>
+                                    <select defaultValue='Pick one' className="select select-bordered uppercase"  {...register("available", { required: true })}>
+                                        <option disabled >Pick one</option>
+                                        <option value="true">True</option>
+                                        <option value="false">False</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                            {/* new best selling  */}
+                            <div className='flex gap-4 w-full'>
+                                {/* new*/}
+                                <div className="form-control w-full ">
+                                    <label className="label">
+                                        <span className="label-text font-semibold">New*</span>
+
+                                    </label>
+                                    <select defaultValue='Pick one' className="select select-bordered uppercase"  {...register("new", { required: true })}>
+                                        <option disabled >Pick one</option>
+                                        <option value="true">True</option>
+                                        <option value="false">False</option>
+                                    </select>
+
+                                </div>
+                                {/* best selling  */}
+                                <div className="form-control w-full ">
+                                    <label className="label">
+                                        <span className="label-text font-semibold">Best Selling*</span>
+
+                                    </label>
+                                    <select defaultValue='Pick one' className="select select-bordered uppercase"  {...register("best", { required: true })}>
+                                        <option disabled >Pick one</option>
+                                        <option value="true">True</option>
+                                        <option value="false">False</option>
+                                    </select>
+
+                                </div>
+                            </div>
+
+                            <div className='mt-2'>
 
                             </div>
-                            {/* available */}
-                            <div className="form-control w-full ">
+                            {/* details */}
+                            <div className="form-control">
                                 <label className="label">
-                                    <span className="label-text font-semibold">Available*</span>
+                                    <span className="label-text">Description</span>
 
                                 </label>
-                                <select defaultValue='Pick one' className="select select-bordered uppercase"  {...register("available", { required: true })}>
-                                    <option disabled >Pick one</option>
-                                    <option value="true">True</option>
-                                    <option value="false">False</option>
-                                </select>
+                                <textarea className="textarea textarea-bordered h-24" placeholder="Description"
+                                    {...register("description", { required: true })}></textarea>
 
                             </div>
-                        </div>
-                        {/* new best selling  */}
-                        <div className='flex gap-4 w-full'>
-                            {/* new*/}
-                            <div className="form-control w-full ">
+                            {/* fill upload  */}
+                            <div className="form-control w-full">
                                 <label className="label">
-                                    <span className="label-text font-semibold">New*</span>
+                                    <span className="label-text">Item image</span>
 
                                 </label>
-                                <select defaultValue='Pick one' className="select select-bordered uppercase"  {...register("new", { required: true })}>
-                                    <option disabled >Pick one</option>
-                                    <option value="true">True</option>
-                                    <option value="false">False</option>
-                                </select>
+                                <input type="file" className="file-input file-input-bordered w-full "
+                                    {...register("image", { required: true })} />
 
                             </div>
-                            {/* best selling  */}
-                            <div className="form-control w-full ">
-                                <label className="label">
-                                    <span className="label-text font-semibold">Best Selling*</span>
-
-                                </label>
-                                <select defaultValue='Pick one' className="select select-bordered uppercase"  {...register("best", { required: true })}>
-                                    <option disabled >Pick one</option>
-                                    <option value="true">True</option>
-                                    <option value="false">False</option>
-                                </select>
-
-                            </div>
-                        </div>
-
-                        <div className='mt-2'>
-
-                        </div>
-                        {/* details */}
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Description</span>
-
-                            </label>
-                            <textarea className="textarea textarea-bordered h-24" placeholder="Description"
-                                {...register("description", { required: true })}></textarea>
-
-                        </div>
-                        {/* fill upload  */}
-                        <div className="form-control w-full">
-                            <label className="label">
-                                <span className="label-text">Item image</span>
-
-                            </label>
-                            <input type="file" className="file-input file-input-bordered w-full "
-                                {...register("image", { required: true })} />
-
-                        </div>
-                        <input className=" bg-black w-full text-white mt-4 py-3 rounded hover:scale-105 duration-300 uppercase cursor-pointer hover:text-green-600" type="submit" value="Add Item" />
-                    </form>
+                            <input className=" bg-black w-full text-white mt-4 py-3 rounded hover:scale-105 duration-300 uppercase cursor-pointer hover:text-green-600" type="submit" value="Add Item" />
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

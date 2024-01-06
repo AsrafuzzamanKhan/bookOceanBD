@@ -46,10 +46,10 @@ const Books = () => {
                         <FadeIn delay={0.4} direction='down' >
                             {/* title  */}
 
-                            <div className="my-4 text-center capitalize text-xl lg:text-left dark:text-white font-semibold">
+                            <h1 className="my-4 text-center capitalize text-xl lg:text-left dark:text-white font-semibold">
 
-                                <div><span className="text-blue-400 me-2"> {category}{author}</span>Book</div>
-                            </div>
+                                <div><span className="text-blue-400 me-2"> {category}{author}'s</span>Book</div>
+                            </h1>
                             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4  gap-[6px] md:gap-[30px] w-full">
                                 {filteredProducts.map((book, i) => {
                                     return <BookCard key={i} book={book}>

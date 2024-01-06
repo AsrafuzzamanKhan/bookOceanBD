@@ -1,11 +1,54 @@
 import { IoClose } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import Qty from "../Qty/Qty";
+import useCart from "../../hooks/useCart";
+import Swal from "sweetalert2";
+import { FaPlus, FaMinus } from "react-icons/fa";
+import { useState } from "react";
+
+const CartItem = ({ item }) => {
+    const [cart, refetch] = useCart();
+    // const { price, quantity } = item;
+    // const [productQuantity, setProductQuantity] = useState(quantity)
 
 
 
-const CartItem = ({ item, handleCartRemove }) => {
+    // remover from cart 
+    const handleCartRemove = item => {
+        fetch(`https://book-ocean-bd-server.vercel.app/carts/${item._id}`, {
+            method: "DELETE"
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.deletedCount > 0) {
 
+                    refetch()
+                    Swal.fire({
+                        title: "Removed!",
+                        text: "Book has been removed from cart.",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500
 
+                    });
+                }
+
+            })
+
+    }
+
+    // const handleIncrement = () => {
+    //     setProductQuantity(productQuantity + 1)
+    //     console.log('increment')
+    // }
+    // const handleDecrement = () => {
+    //     if (productQuantity > 1) {
+    //         setProductQuantity(productQuantity - 1)
+    //     }
+
+    //     console.log('decrement')
+    // }
+    // const totalPrice = price * productQuantity;
     return (
         <div className="flex gap-x-8">
             <Link
@@ -37,20 +80,37 @@ const CartItem = ({ item, handleCartRemove }) => {
                 </div>
                 <div className=" flex items-center gap-x-12">
                     {/* amount  */}
-                    {/* <div className="flex gap-x-4 mb-2 items-center">
+                    <div className="flex gap-x-4 mb-2 items-center">
 
-                        <Qty item={item}></Qty>
+                        <div className="flex gap-x-6 items-center  text-primary ">
 
-                        <div className="text-blue-400 text-xl"> $ {price} </div>
-                    </div> */}
+                            {/* price  */}
+                            <div>
+                                <span className="text-blue-400">
+                                    {item.price} <span>&#x09F3;</span>
+                                </span>
+                            </div>
+                            {/* <div className="bg-gray-200">
+                                <div className="flex gap-4 p-2">
+
+
+                                    <button onClick={handleIncrement}><FaPlus />
+                                    </button>
+                                    <p>{productQuantity}</p>
+                                    <button onClick={handleDecrement}><FaMinus />
+                                    </button>
+                                </div>
+
+                            </div> */}
+                            {/* <span className="text-blue-400">
+                                {totalPrice} <span>&#x09F3;</span>
+                            </span> */}
+
+                        </div>
+                    </div>
 
                 </div>
-                {/* price  */}
-                <div>
-                    <span className="text-blue-400">
-                        {item.price} <span>&#x09F3;</span>
-                    </span>
-                </div>
+
 
 
             </div>
