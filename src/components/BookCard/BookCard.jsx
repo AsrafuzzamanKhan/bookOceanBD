@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
+// import FadeIn from "../../Animation/FadeIn";
+// import { motion, useAnimate, useAnimation, useScroll } from "framer-motion"
+// import { useInView } from "react-intersection-observer";
 import { Link } from "react-router-dom";
-import FadeIn from "../../Animation/FadeIn";
-import { motion, useAnimate, useAnimation, useScroll } from "framer-motion"
-import { useInView } from "react-intersection-observer";
+import PropTypes from 'prop-types';
 
 const BookCard = ({ book }) => {
-    const { _id, name, author, price, image, description, available, newBook, category, cover } = book;
+    const { _id, name, author, price, image, available, newBook, category, cover } = book;
 
     // console.log('book', book)
 
@@ -34,7 +35,7 @@ const BookCard = ({ book }) => {
 
     return (
 
-        <Link to={`/book/${_id}`}>
+        <Link to={`/book/${name}/${_id}`}>
             <div className=" dark:border-0 dark:bg-gray-800  dark:text-white  border shadow-xl w-full h-[400px]  rounded-[8px] overflow-hidden relative group">
                 {/* badge  */}
                 {newBook === 'true' && <div className="absolute bg-blue-400 text-primary text-[12px] font-extrabold uppercase top-4 right-4 rounded-full px-2 z-10">
@@ -72,5 +73,7 @@ const BookCard = ({ book }) => {
 
     );
 };
-
+BookCard.propTypes = {
+    book: PropTypes.object
+}
 export default BookCard;

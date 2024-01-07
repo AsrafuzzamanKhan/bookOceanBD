@@ -50,7 +50,7 @@ const ManageBanner = () => {
                 </div>
                 <div className="px-6 pb-12">
                     <div className="overflow-x-auto  border">
-                        <table className="table  lg:text-[16px] lg:table-lg table-xs">
+                        <table className="table  lg:text-[16px] lg:table-lg table-xs table-pin-rows table-pin-cols">
                             {/* head */}
                             <thead>
                                 <tr>

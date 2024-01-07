@@ -7,10 +7,11 @@ import { Helmet } from "react-helmet-async";
 
 
 const Books = () => {
-    const { category } = useParams()
-
-    console.log('category', category)
     const [booksData] = useBookData()
+
+    const { category } = useParams()
+    console.log('category', category)
+
     // Define the category you want to filter by
     const selectedCategory = category;
     // Use the filter method to get products of the selected category
@@ -20,7 +21,7 @@ const Books = () => {
     const { author } = useParams()
     console.log('author', author)
     const uniqueAuthor = [...new Set(booksData.map(item => item.author))];
-    console.log(uniqueAuthor.length)
+    console.log('total author:', uniqueAuthor.length)
 
     // Define the category you want to filter by
     const selectedAuthor = author;

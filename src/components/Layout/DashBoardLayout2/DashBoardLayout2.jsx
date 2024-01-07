@@ -35,7 +35,7 @@ const DashBoardLayout2 = () => {
                 {/* Page content here */}
                 <Outlet></Outlet>
             </div>
-            <div className="drawer-side pt-20">
+            <div className="drawer-side pt-[70px]">
                 <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay"></label>
                 <ul className="menu p-4 w-80 min-h-full bg-black">
                     {/* Sidebar content here */}

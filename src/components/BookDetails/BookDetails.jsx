@@ -28,8 +28,6 @@ const BookDetails = () => {
     const [, refetch] = useCart()
     const { setIsOpen, isOpen } = useContext(CartContext)
 
-
-
     const { ref, inView } = useInView({
         threshold: 0.1
     });
@@ -133,7 +131,7 @@ const BookDetails = () => {
                         animate={animation}
                         className="  w-full flex-1 lg:py-10 py-4 px-8  flex flex-col justify-center dark:bg-base-200 dark:text-white text-black  rounded-[4px]  dark:border-none shadow-md ">
                         {/* category  */}
-                        <Link to={`/books/${productDetails.category}`}>
+                        <Link to={`/books/${productDetails?.category}`}>
                             <h4 className="uppercase text-blue-400 text-lg font-medium mb-2 hover:text-green-600 duration-300">
                                 {productDetails?.category}
                             </h4>
@@ -144,8 +142,8 @@ const BookDetails = () => {
                         </h1>
                         <div className="mb-6">
                             by <Link
-                                to={`/authorbooks/${productDetails.author}`}
-                                author={productDetails.author}>
+                                to={`/authorbooks/${productDetails?.author}`}
+                                author={productDetails?.author}>
                                 <span
                                     className="text-blue-400 hover:text-blue-900 hover:underline duration-300 ">
                                     {productDetails?.author}
@@ -164,18 +162,18 @@ const BookDetails = () => {
                                 <div className="border rounded-[8px] shadow-md flex flex-col text-center h-auto p-2">
                                     <div >
                                         {
-                                            productDetails.cover === 'hardcover' && <span className="text-[15px] "> Hardcover </span>
+                                            productDetails?.cover === 'hardcover' && <span className="text-[15px] "> Hardcover </span>
                                         }
                                         {
-                                            productDetails.cover == 'paperback' && <span className="text-[15px] "> Paperback </span>
+                                            productDetails?.cover == 'paperback' && <span className="text-[15px] "> Paperback </span>
                                         }
                                         {
-                                            productDetails.cover == 'leather bound' && <span className="text-[15px] "> Leather Bound </span>
+                                            productDetails?.cover == 'leather bound' && <span className="text-[15px] "> Leather Bound </span>
                                         }
                                     </div>
 
                                     {
-                                        productDetails.available === 'false' ? <div className=" text-red-600">---</div> : <div className="text-xl font-semibold text-blue-400"><span>&#x09F3;</span> {productDetails.price}</div>
+                                        productDetails?.available === 'false' ? <div className=" text-red-600">---</div> : <div className="text-xl font-semibold text-blue-400"><span>&#x09F3;</span> {productDetails?.price}</div>
 
                                     }
 
@@ -185,7 +183,7 @@ const BookDetails = () => {
                                 {/* add to cart button  */}
 
                                 {
-                                    productDetails.available === 'false' ? <div className="text-xl text-red-600">Stock Out</div> : <div className="">
+                                    productDetails?.available === 'false' ? <div className="text-xl text-red-600">Stock Out</div> : <div className="">
                                         <button
                                             onClick={() => handleAddToCart(productDetails)}
                                             className="btn bg-blue-400 text-black hover:text-white hover:bg-black transition-all text-[12px] lg:text-[16px]  ">Add to cart
@@ -262,13 +260,13 @@ const BookDetails = () => {
                         <h3 className="text-xl my-2 font-semibold">Description</h3>
                         <hr className="mb-4" />
 
-                        <p className="mb-5">{productDetails.description}</p>
+                        <p className="mb-5">{productDetails?.description}</p>
                     </div>
                 </FadeIn>
                 {/* relatged  product  */}
                 <FadeIn delay={0.4} direction='up' >
                     <RelatedBooks
-                        categoryTitle={productDetails.category}
+                        categoryTitle={productDetails?.category}
                     ></RelatedBooks>
                 </FadeIn>
             </div>

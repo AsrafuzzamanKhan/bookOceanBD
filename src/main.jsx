@@ -6,27 +6,25 @@ import './index.css'
 import {
   createBrowserRouter,
   RouterProvider,
-  ScrollRestoration,
 } from "react-router-dom";
-import Roots from './Roots/Roots';
-import Home from './components/Home/Home/Home';
-
-
-import BookDetails from './components/BookDetails/BookDetails';
-import Books from './components/Books/Books';
-import SearchBook from './components/SearchBook/SearchBook';
-import AuthProvider from './providers/AuthProvider/AuthProvider';
-import Login from './components/Login/Login';
-import SignUp from './components/SignUp/signUp';
-import Checkout from './components/Dashboard/Checkout/Checkout';
-import DashboardLayout from './components/Layout/DashboardLayout/DashboardLayout';
-import AddBooks from './components/Dashboard/AddBook/AddBooks';
-import ManageBooks from './components/Dashboard/ManageBooks/ManageBooks';
-import PrivateRoutes from './components/Routes/PrivateRoutes';
 import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'// Create a client
+
+const LazyRoots = React.lazy(() => import('./Roots/Roots'));
+const LazyBookDetails = React.lazy(() => import('./components/BookDetails/BookDetails'));
+const LazySearchBook = React.lazy(() => import('./components/SearchBook/SearchBook'));
+const LazyBooks = React.lazy(() => import('./components/Books/Books'));
+const LazyManageBooks = React.lazy(() => import('./components/Dashboard/ManageBooks/ManageBooks'));
+import Home from './components/Home/Home/Home';
+import AuthProvider from './providers/AuthProvider/AuthProvider';
+import Login from './components/Login/Login';
+import SignUp from './components/SignUp/signUp';
+import Checkout from './components/Dashboard/Checkout/Checkout';
+import AddBooks from './components/Dashboard/AddBook/AddBooks';
+import ManageBooks from './components/Dashboard/ManageBooks/ManageBooks';
+import PrivateRoutes from './components/Routes/PrivateRoutes';
 import AllUsers from './components/Dashboard/AllUsers/AllUsers';
 import OrderHistory from './components/Dashboard/OrderHistory/OrderHistory';
 import AdminRoute from './components/Routes/AdminRoute';
@@ -38,12 +36,38 @@ import AddBanner from './components/Dashboard/AddBanner/AddBanner';
 import ManageBanner from './components/Dashboard/ManageBanner/ManageBanner';
 import UpdateBook from './components/Dashboard/UpdateBook/UpdateBook';
 import DashBoardLayout2 from './components/Layout/DashBoardLayout2/DashBoardLayout2';
+// import Roots from './Roots/Roots';
+// import Home from './components/Home/Home/Home';
+// import BookDetails from './components/BookDetails/BookDetails';
+// import Books from './components/Books/Books';
+// import SearchBook from './components/SearchBook/SearchBook';
+// import AuthProvider from './providers/AuthProvider/AuthProvider';
+// import Login from './components/Login/Login';
+// import SignUp from './components/SignUp/signUp';
+// import Checkout from './components/Dashboard/Checkout/Checkout';
+// import AddBooks from './components/Dashboard/AddBook/AddBooks';
+// import ManageBooks from './components/Dashboard/ManageBooks/ManageBooks';
+// import PrivateRoutes from './components/Routes/PrivateRoutes';
+// import AllUsers from './components/Dashboard/AllUsers/AllUsers';
+// import OrderHistory from './components/Dashboard/OrderHistory/OrderHistory';
+// import AdminRoute from './components/Routes/AdminRoute';
+// import CartProvider from './providers/CartProvider/CartProvider';
+// import AllOrders from './components/Dashboard/AllOrders/AllOrders';
+// import AdminHome from './components/Dashboard/AdminHome/AdminHome';
+// import UserHome from './components/Dashboard/UserHome/UserHome';
+// import AddBanner from './components/Dashboard/AddBanner/AddBanner';
+// import ManageBanner from './components/Dashboard/ManageBanner/ManageBanner';
+// import UpdateBook from './components/Dashboard/UpdateBook/UpdateBook';
+// import DashBoardLayout2 from './components/Layout/DashBoardLayout2/DashBoardLayout2';
+
+
+
 const queryClient = new QueryClient()
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Roots></Roots>,
+    element: <React.Suspense fallback="Loading..."><LazyRoots></LazyRoots></React.Suspense>,
     children: [
       {
         path: '/',
@@ -51,20 +75,20 @@ const router = createBrowserRouter([
       },
       {
         path: '/books/:category',
-        element: <Books></Books>
+        element: <React.Suspense fallback="Loading..."> <LazyBooks /></React.Suspense>
       },
       {
         path: '/authorbooks/:author',
-        element: <Books></Books>
+        element: <React.Suspense fallback="Loading..."> <LazyBooks /></React.Suspense>
       },
       {
-        path: '/book/:id',
-        element: <BookDetails></BookDetails>
+        path: '/book/:name/:id',
+        element: <React.Suspense fallback="Loading..."><LazyBookDetails></LazyBookDetails></React.Suspense>
       }
       ,
       {
         path: '/search',
-        element: <SearchBook></SearchBook>
+        element: <React.Suspense fallback="Loading..."><LazySearchBook></LazySearchBook></React.Suspense>
       }
       ,
       {
@@ -106,7 +130,8 @@ const router = createBrowserRouter([
       },
       {
         path: 'manageBooks',
-        element: <AdminRoute><ManageBooks></ManageBooks></AdminRoute>
+
+        element: <React.Suspense fallback="Loading..."> <AdminRoute><LazyManageBooks></LazyManageBooks></AdminRoute></React.Suspense>
       },
       {
         path: 'updateBook/:id',
