@@ -50,8 +50,8 @@ const ManageBooks = () => {
                     <p className=' bg-slate-800 text-white px-8 py-3 rounded'>Manage Books: {booksData.length}</p>
                 </div>
                 <div className="px-6 pb-12">
-                    <div className="overflow-x-auto border">
-                        <table className="table lg:text-[16px] lg:table-lg table-xs table-pin-rows table-pin-cols">
+                    <div className="overflow-x-auto overflow-y-auto border">
+                        <table className="table lg:text-[16px] lg:table-lg table-xs overflow-x-auto">
                             {/* head */}
                             <thead>
                                 <tr>

@@ -84,19 +84,21 @@ const Header = () => {
                             </label>
                             <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 dark:bg-white">
                                 <li className="bg-black p-2 rounded">Hello, {user?.displayName}</li>
-                                {
-                                    user?.email && <li className="mt-4">
+                                <li className="mt-1 mx-auto">
+                                    {
+                                        user?.email &&
                                         <NavLink to={isAdmin ? '/dashboard/adminhome' : "/dashboard/orderHistory"
-                                        } className='text-black text-lg dark:hover:text-gray-300'>Dashbord</NavLink></li>
-                                }
-                                <li className="mt-2">
+                                        } className='text-black text-[14px] dark:hover:text-gray-300'>Dashbord</NavLink>
+                                    }
+                                </li>
+                                <li className="mt-1 mx-auto">
                                     <div className=" text-black hover:scale-95 hover:bg-slate-400 dark:hover:bg-blue-400
                                     dark:hover:text-white
                                     ">
                                         {user?.email ?
-                                            <button onClick={handleLogOut} className="text-xl ">Logout</button>
+                                            <button onClick={handleLogOut} className="text-[16px]">Logout</button>
                                             :
-                                            <Link className="text-xl" to='/login'> Login</Link>
+                                            <Link className="text-[16px] " to='/login'> Login</Link>
                                         }
                                     </div>
                                 </li>
