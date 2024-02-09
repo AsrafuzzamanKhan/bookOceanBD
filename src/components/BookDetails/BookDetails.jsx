@@ -4,7 +4,7 @@ import RelatedBooks from "../RelatedBooks/RelatedBooks";
 import Swal from "sweetalert2";
 import useAuth from "../../hooks/useAuth";
 import useCart from "../../hooks/useCart";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { CartContext } from "../../providers/CartProvider/CartProvider";
 import FadeIn from "../../Animation/FadeIn";
 import { motion, useAnimation } from "framer-motion"
@@ -110,7 +110,7 @@ const BookDetails = () => {
     }
     return (
         <div className="mb-16 pt-32 lg:pt-[30px] xl:pt-24">
-            <div className="container mx-auto px-1 lg:px-0">
+            <div className="container mx-auto">
                 <Helmet>
                     <title>Book Ocean BD || Book Details</title>
                 </Helmet>

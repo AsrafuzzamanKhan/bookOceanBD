@@ -2,6 +2,7 @@ import { useLocation } from 'react-router-dom';
 import useBookData from '../../hooks/useBookData';
 import BookCard from '../BookCard/BookCard';
 import CategoryNav from '../CategoryNav/CategoryNav';
+// import Loading from '../../Loading/Loading';
 
 const SearchBook = () => {
     const [booksData] = useBookData()
@@ -24,11 +25,14 @@ const SearchBook = () => {
 
     return (
         <div className="mb-[30px] pt-28 md:pt-28 lg:pt-0 xl:pt-24 min-h-screen">
-            <div className="container mx-auto px-1 lg:px-0">
+            <div className=" container mx-auto">
                 <div className="flex gap-x-[30px] ">
+
                     {/* category nav  */}
                     <CategoryNav></CategoryNav>
+
                     <div className='flex flex-col w-full '>
+
                         <div>
                             {/* title  */}
                             <div className="my-4 capitalize text-center font-semibold lg:text-left text-xl dark:text-white">

@@ -13,7 +13,7 @@ const RelatedBooks = ({ categoryTitle }) => {
 
     return (
         <div className="my-16">
-            <div className="container mx-auto">
+            <div className="px-2">
                 <h2 className="h2 mb-6 text-center lg:text-start dark:text-white">Related Books</h2>
                 <BookSlider data={sliceData}></BookSlider>
             </div>

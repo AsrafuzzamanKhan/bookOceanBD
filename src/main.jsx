@@ -36,6 +36,7 @@ import AddBanner from './components/Dashboard/AddBanner/AddBanner';
 import ManageBanner from './components/Dashboard/ManageBanner/ManageBanner';
 import UpdateBook from './components/Dashboard/UpdateBook/UpdateBook';
 import DashBoardLayout2 from './components/Layout/DashBoardLayout2/DashBoardLayout2';
+import Loading from './Loading/Loading';
 // import Roots from './Roots/Roots';
 // import Home from './components/Home/Home/Home';
 // import BookDetails from './components/BookDetails/BookDetails';
@@ -67,7 +68,7 @@ const queryClient = new QueryClient()
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <React.Suspense fallback="Loading..."><LazyRoots></LazyRoots></React.Suspense>,
+    element: <React.Suspense fallback={<Loading />}><LazyRoots></LazyRoots></React.Suspense>,
     children: [
       {
         path: '/',
@@ -75,20 +76,20 @@ const router = createBrowserRouter([
       },
       {
         path: '/books/:category',
-        element: <React.Suspense fallback="Loading..."> <LazyBooks /></React.Suspense>
+        element: <React.Suspense fallback={<Loading />}> <LazyBooks /></React.Suspense>
       },
       {
         path: '/authorbooks/:author',
-        element: <React.Suspense fallback="Loading..."> <LazyBooks /></React.Suspense>
+        element: <React.Suspense fallback={<Loading />}> <LazyBooks /></React.Suspense>
       },
       {
         path: '/book/:name/:id',
-        element: <React.Suspense fallback="Loading..."><LazyBookDetails></LazyBookDetails></React.Suspense>
+        element: <React.Suspense fallback={<Loading />}><LazyBookDetails></LazyBookDetails></React.Suspense>
       }
       ,
       {
         path: '/search',
-        element: <React.Suspense fallback="Loading..."><LazySearchBook></LazySearchBook></React.Suspense>
+        element: <React.Suspense fallback={<Loading />}><LazySearchBook></LazySearchBook></React.Suspense>
       }
       ,
       {

@@ -46,7 +46,7 @@ const BookCard = ({ book }) => {
 
                     <img
                         className=" w-32 group-hover:scale-90 transition-all"
-                        src={image} alt={image} />
+                        src={image} alt={image} loading="lazy" />
                 </div>
                 {/* text  */}
                 <div className="flex flex-col px-2 lg:px-6 text-[14px]">

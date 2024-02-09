@@ -1,6 +1,5 @@
 .background-image {
-    background-image: url('../../../assets//service/category.webp');
-    background-size: cover;
-    backdrop-filter: blur(5px)
-   
+  background-image: url("../../../assets//service/category.jpg");
+  background-size: cover;
+  backdrop-filter: blur(5px);
 }

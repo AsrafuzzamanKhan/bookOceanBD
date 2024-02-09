@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
 import SearchForm from "../../SearchForm/SearchForm";
-
 import { FiMenu, FiShoppingBag } from 'react-icons/fi'
 import { FaRegUserCircle } from "react-icons/fa";
 import CategoryNavMobile from "../../CategoryNavMobile/CategoryNavMobile";
@@ -15,8 +14,6 @@ import logoSvg from '../../../assets/logo/book.gif'
 
 
 const Header = () => {
-
-
     const { user, logOut } = useContext(AuthContext)
     const [catNavMobile, setCatNavMobile] = useState(false);
     const { isOpen, setIsOpen } = useContext(CartContext);
@@ -39,8 +36,8 @@ const Header = () => {
     }
     return (
         <header className="bg-black text-white py-2 lg:py-4 px-2 fixed  xl:fixed w-full top-0 z-40 lg:relative lg:mb-[30px] ">
-            <div className="container mx-auto  ">
-                <div className="flex flex-row gap-4 items-center justify-between  mb-2   xl:mb-0">
+            <div className="container mx-auto">
+                <div className="flex flex-row gap-4 items-center justify-between  mb-2 xl:mb-0">
                     {/* menu  */}
                     <div
                         onClick={() => setCatNavMobile(true)}

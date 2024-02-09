@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import './services.css'
 
-import serviceImg from '../../../assets/service/category.webp'
+import serviceImg from '../../../assets/service/category.jpg'
 import FadeIn from "../../../Animation/FadeIn";
 const Services = () => {
     const [services, setServices] = useState([])
@@ -22,7 +22,7 @@ const Services = () => {
 
             }}
         >
-            <div className="container mx-auto px-1 lg:px-0 ">
+            <div className=" container mx-auto ">
 
                 <div className=" grid md:grid-cols-3 xl:grid-cols-5 grid-cols-2 gap-4 lg:my-6 my-2 w-full">
                     {services.map(service =>

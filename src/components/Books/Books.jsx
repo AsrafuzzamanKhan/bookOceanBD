@@ -37,7 +37,7 @@ const Books = () => {
                 <title>Book Ocean BD || Books</title>
             </Helmet>
 
-            <div className="container mx-auto px-1 lg:px-0">
+            <div className="container mx-auto">
                 <div className="flex gap-x-[30px]">
                     {/* category nav  */}
                     <CategoryNav />
