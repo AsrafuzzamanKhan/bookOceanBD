@@ -17,6 +17,7 @@
     "firebase": "^10.5.2",
     "framer-motion": "^10.16.5",
     "localforage": "^1.10.0",
+    "locomotive-scroll": "^5.0.0-beta.11",
     "match-sorter": "^6.3.1",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",

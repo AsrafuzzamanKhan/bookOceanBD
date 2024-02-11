@@ -37,6 +37,10 @@ import ManageBanner from './components/Dashboard/ManageBanner/ManageBanner';
 import UpdateBook from './components/Dashboard/UpdateBook/UpdateBook';
 import DashBoardLayout2 from './components/Layout/DashBoardLayout2/DashBoardLayout2';
 import Loading from './Loading/Loading';
+
+import LocomotiveScroll from 'locomotive-scroll';
+
+
 // import Roots from './Roots/Roots';
 // import Home from './components/Home/Home/Home';
 // import BookDetails from './components/BookDetails/BookDetails';
@@ -64,6 +68,7 @@ import Loading from './Loading/Loading';
 
 
 const queryClient = new QueryClient()
+const locomotiveScroll = new LocomotiveScroll();
 
 const router = createBrowserRouter([
   {
