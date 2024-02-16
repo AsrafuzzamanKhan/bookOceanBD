@@ -17,13 +17,14 @@ const LazyBookDetails = React.lazy(() => import('./components/BookDetails/BookDe
 const LazySearchBook = React.lazy(() => import('./components/SearchBook/SearchBook'));
 const LazyBooks = React.lazy(() => import('./components/Books/Books'));
 const LazyManageBooks = React.lazy(() => import('./components/Dashboard/ManageBooks/ManageBooks'));
+const LazyDashBoardLayout2 = React.lazy(() => import('./components/Layout/DashBoardLayout2/DashBoardLayout2'));
 import Home from './components/Home/Home/Home';
 import AuthProvider from './providers/AuthProvider/AuthProvider';
 import Login from './components/Login/Login';
 import SignUp from './components/SignUp/signUp';
 import Checkout from './components/Dashboard/Checkout/Checkout';
 import AddBooks from './components/Dashboard/AddBook/AddBooks';
-import ManageBooks from './components/Dashboard/ManageBooks/ManageBooks';
+// import ManageBooks from './components/Dashboard/ManageBooks/ManageBooks';
 import PrivateRoutes from './components/Routes/PrivateRoutes';
 import AllUsers from './components/Dashboard/AllUsers/AllUsers';
 import OrderHistory from './components/Dashboard/OrderHistory/OrderHistory';
@@ -35,10 +36,10 @@ import UserHome from './components/Dashboard/UserHome/UserHome';
 import AddBanner from './components/Dashboard/AddBanner/AddBanner';
 import ManageBanner from './components/Dashboard/ManageBanner/ManageBanner';
 import UpdateBook from './components/Dashboard/UpdateBook/UpdateBook';
-import DashBoardLayout2 from './components/Layout/DashBoardLayout2/DashBoardLayout2';
+// import DashBoardLayout2 from './components/Layout/DashBoardLayout2/DashBoardLayout2';
 import Loading from './Loading/Loading';
 
-import LocomotiveScroll from 'locomotive-scroll';
+// import LocomotiveScroll from 'locomotive-scroll';
 
 
 // import Roots from './Roots/Roots';
@@ -68,7 +69,7 @@ import LocomotiveScroll from 'locomotive-scroll';
 
 
 const queryClient = new QueryClient()
-const locomotiveScroll = new LocomotiveScroll();
+// const locomotiveScroll = new LocomotiveScroll();
 
 const router = createBrowserRouter([
   {
@@ -115,7 +116,8 @@ const router = createBrowserRouter([
   },
   {
     path: 'dashboard',
-    element: <PrivateRoutes> <DashBoardLayout2></DashBoardLayout2></PrivateRoutes>,
+
+    element: <React.Suspense fallback={<Loading />}> <PrivateRoutes> <LazyDashBoardLayout2></LazyDashBoardLayout2></PrivateRoutes></React.Suspense>,
     // element: <PrivateRoutes> <DashboardLayout></DashboardLayout></PrivateRoutes>,
     children: [
       {

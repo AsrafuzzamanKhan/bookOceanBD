@@ -21,6 +21,7 @@ import useAdmin from "../../hooks/useAdmin";
 
 const BookDetails = () => {
     const { id } = useParams()
+    // const idInt = parseInt(id) 
     const { user } = useAuth()
     const [isAdmin] = useAdmin()
     const [booksData] = useBookData()
@@ -50,12 +51,13 @@ const BookDetails = () => {
     }, [animation, inView])
 
 
-    const productDetails = booksData?.find(pd => pd._id == id)
+    const productDetails = booksData?.find(pd => pd._id === id)
 
-    // console.log('product details', productDetails)
+    // console.log('product details', typeof (productDetails._id))
+    // console.log('Id', typeof (idInt))
 
     if (!productDetails) {
-        return (<div className="container mx-auto text-center">loading...</div>)
+        return <div className="container mx-auto text-center">loading...</div>
     }
 
     const handleAddToCart = (item) => {
@@ -194,13 +196,13 @@ const BookDetails = () => {
                                 }
 
                                 {
-                                    isAdmin ? <div>
-                                        <Link to={`/dashboard/updateBook/${productDetails._id}`}>
+                                    isAdmin && <div>
+                                        <Link to={`/dashboard/updateBook/${productDetails?._id}`}>
 
                                             <div className="flex justify-center items-center gap-1 btn"><MdEdit></MdEdit><span>Edit</span></div>
                                         </Link>
 
-                                    </div> : ''
+                                    </div>
                                 }
 
                             </div>

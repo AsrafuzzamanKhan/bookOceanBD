@@ -39,6 +39,8 @@ const ManageBooks = () => {
             }
         })
     }
+
+
     return (
         <div className="container mx-auto">
             <Helmet>
@@ -48,6 +50,7 @@ const ManageBooks = () => {
             <div className="mb-[30px] pt-28 md:pt-28 lg:pt-0 xl:pt-24 min-h-screen">
                 <div className='items-center  mb-8 flex flex-col'>
                     <p className=' bg-slate-800 text-white px-8 py-3 rounded'>Manage Books: {booksData.length}</p>
+
                 </div>
                 <div className="px-6 pb-12">
                     <div className="overflow-x-auto overflow-y-auto border">

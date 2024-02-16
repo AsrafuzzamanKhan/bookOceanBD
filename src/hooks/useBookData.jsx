@@ -1,12 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 
 
+
 const useBookData = () => {
+
   const { data: booksData = [], isLoading: loading, refetch } = useQuery({
     queryKey: ['booksData'],
     queryFn: async () => {
       const res = await fetch("https://book-ocean-bd-server.vercel.app/books")
       return res.json()
+
     }
   })
 
