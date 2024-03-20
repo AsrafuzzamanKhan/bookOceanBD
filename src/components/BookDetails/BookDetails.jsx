@@ -175,7 +175,7 @@ const BookDetails = () => {
                                     </div>
 
                                     {
-                                        productDetails?.available === 'false' ? <div className=" text-red-600">---</div> : <div className="text-xl font-semibold text-blue-400"><span>&#x09F3;</span> {productDetails?.price}</div>
+                                        productDetails?.available === 'false' ? <div className=" text-red-600"> --- </div> : <div className="text-xl font-semibold text-blue-400"><span>&#x09F3;</span> {productDetails?.price}</div>
 
                                     }
 
