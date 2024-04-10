@@ -1,4 +1,3 @@
-
 import { Swiper, SwiperSlide } from 'swiper/react';
 // import '../../../style/slider.css'
 // Import Swiper styles
@@ -12,7 +11,7 @@ const BookSlider = ({ data }) => {
     return (
         <Swiper
             autoplay={{
-                delay: 3000,
+                delay: 6000,
 
             }}
             pagination={{
@@ -41,12 +40,12 @@ const BookSlider = ({ data }) => {
                 },
 
             }}
-            className='productSlider  w-full mx-auto '
+            className='productSlider  w-full mx-auto'
         // className='productSlider  w-full mx-auto max-w-[360px] md:max-w-lg xl:max-w-[1410px]'
         >
             <>
                 {data?.map(book => {
-                    return <SwiperSlide key={book._id}>
+                    return <SwiperSlide className='mb-12' key={book._id}>
                         <BookCard book={book}></BookCard>
                     </SwiperSlide>
                 })}

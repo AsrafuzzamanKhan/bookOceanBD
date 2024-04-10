@@ -21,7 +21,9 @@ import useAdmin from "../../hooks/useAdmin";
 
 const BookDetails = () => {
     const { id } = useParams()
-    // const idInt = parseInt(id) 
+    // const idInt = parseInt(id)
+    // console.log('type', typeof idInt);
+    // console.log(id);
     const { user } = useAuth()
     const [isAdmin] = useAdmin()
     const [booksData] = useBookData()
@@ -54,7 +56,8 @@ const BookDetails = () => {
     const productDetails = booksData?.find(pd => pd._id === id)
 
     // console.log('product details', typeof (productDetails._id))
-    // console.log('Id', typeof (idInt))
+    // console.log('Id', typeof productDetails._id)
+    console.log(productDetails)
 
     if (!productDetails) {
         return <div className="container mx-auto text-center">loading...</div>

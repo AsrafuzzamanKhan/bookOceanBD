@@ -15,7 +15,7 @@ const Hero = () => {
                     </div>
                     {/* hero slider  */}
                     <div className="flex flex-col lg:flex-row gap-3 w-full ">
-                        <div className=' w-full lg:w-[780px] mx-auto shadow-xl glass rounded-[4px] dark:text-white'>
+                        <div className=' w-full lg:w-[550px] xl:w-[850px]  mx-auto shadow-xl glass rounded-[4px] dark:text-white'>
                             <MainSlider></MainSlider>
                         </div>
 
@@ -24,17 +24,17 @@ const Hero = () => {
 
                             {
                                 promo.map((item, i) =>
-                                    <div key={i} className='flex h-[240px] w-full rounded-[4px]  p-6 lg:p-2 bg-slate-400 justify-between glass text-black overflow-hidden items-center'>
+                                    <div key={i} className='flex h-[240px] w-full rounded-[4px]  p-6 lg:p-2 bg-slate-400 justify-between glass text-black overflow-hidden'>
                                         {/* text  */}
-                                        <div className='flex-1 flex flex-col h-full justify-center'>
-                                            <div className='text-[16px] uppercase font-medium leading-snug mb-2'>Amazon Pre Order   </div>
-                                            <div className='text-[16px] uppercase font-medium leading-snug mb-2'>Save {item.discount}%  </div>
-                                            <div className='text-[20px] uppercase font-medium leading-snug mb-2'>{item.name} </div>
+                                        <div className='flex-1 flex flex-col  justify-center '>
+                                            <div className='text-[16px] uppercase font-medium leading-snug mb-2'>Amazon Pre Order</div>
+                                            <div className='text-[16px] uppercase font-medium leading-snug mb-2 text-slate-500'>Save {item.discount}%  </div>
+                                            <div className='text-[20px] lg:text-[18px]  uppercase font-medium leading-snug mb-2'>{item.name} </div>
                                             {/* <a href="#" className='uppercase text-blue-400'>Shop now</a> */}
                                         </div>
 
-                                        <div className=' flex-1 w-full flex justify-center items-center'>
-                                            <img className=' w-36' src={item.image} alt="" />
+                                        <div className=' flex-1 w-full flex justify-center items-center '>
+                                            <img className='w-[140px] p-2 object-cover' src={item.image} alt="" />
                                         </div>
 
                                     </div>

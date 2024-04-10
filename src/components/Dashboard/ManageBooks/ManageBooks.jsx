@@ -52,9 +52,9 @@ const ManageBooks = () => {
                     <p className=' bg-slate-800 text-white px-8 py-3 rounded'>Manage Books: {booksData.length}</p>
 
                 </div>
-                <div className="px-6 pb-12">
-                    <div className="overflow-x-auto overflow-y-auto border">
-                        <table className="table lg:text-[16px] lg:table-lg table-xs overflow-x-auto">
+                <div className="px-6 pb-12 ">
+                    <div className="overflow-x-auto border">
+                        <table className="table table-xs lg:text-[16px] lg:table-lg"  >
                             {/* head */}
                             <thead>
                                 <tr>
@@ -62,6 +62,7 @@ const ManageBooks = () => {
                                     <th>Image</th>
                                     <th>Name</th>
                                     <th>Category</th>
+                                    <th>Available</th>
                                     <th>Price</th>
                                     <th>Edit</th>
                                     <th>Action</th>
@@ -92,6 +93,7 @@ const ManageBooks = () => {
                                             <span className="badge badge-ghost ">{book?.author}</span>
                                         </td>
                                         <td>{book?.category}</td>
+                                        <td>{book?.available}</td>
                                         <td>{book?.price}</td>
                                         <td>
                                             <Link to={`/dashboard/updateBook/${book._id}`}>
