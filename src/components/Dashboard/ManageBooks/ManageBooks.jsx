@@ -4,11 +4,23 @@ import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import BookDetails from "../../BookDetails/BookDetails";
+import { useState } from "react";
+// import { useQueryClient } from '@tanstack/react-query';
+// import BookDetails from "../../BookDetails/BookDetails";
 
 const ManageBooks = () => {
     const [booksData, , refetch] = useBookData()
+    const [filter, setFilter] = useState(booksData)
     const [axiosSecure] = useAxiosSecure()
+
+
+
+    const filterBook = e => {
+        e.preventDefault();
+        setFilter(booksData?.filter(f => f.name.toLowerCase().includes(e.target.value) || f.author.toLowerCase().includes(e.target.value) || f.category.toLowerCase().includes(e.target.value)))
+    }
+
+
     // console.log(booksData)
     const handleDeleteBook = book => {
         console.log('selected book', book)
@@ -47,12 +59,18 @@ const ManageBooks = () => {
                 <title>Book Ocean BD || Manage Books</title>
             </Helmet>
 
-            <div className="mb-[30px] pt-28 md:pt-28 lg:pt-0 xl:pt-24 min-h-screen">
-                <div className='items-center  mb-8 flex flex-col'>
+            <div className="mb-[30px] pt-24 md:pt-28 lg:pt-0 xl:pt-24 min-h-screen">
+                <div className='flex flex-col items-center  mb-8 '>
                     <p className=' bg-slate-800 text-white px-8 py-3 rounded'>Manage Books: {booksData.length}</p>
 
                 </div>
-                <div className="px-6 pb-12 ">
+                {/* filter  */}
+                <div className="flex items-center justify-center bg-slate-300 py-4 rounded gap-4 ">
+                    <label htmlFor="" className="text-md font-semibold">Filter: </label>
+                    <input type="text" className="p-2  rounded-xl border dark:bg-white w-1/2 " onChange={filterBook} placeholder="Name / Author name/ Category" name="" id="" /></div>
+                <div className=" grid lg:grid-cols-4 md:grid-cols-2 gap-6">
+                </div>
+                <div className="">
                     <div className="overflow-x-auto border">
                         <table className="table table-xs lg:text-[16px] lg:table-lg"  >
                             {/* head */}
@@ -71,7 +89,7 @@ const ManageBooks = () => {
                             <tbody>
 
                                 {
-                                    booksData?.map((book, i) => <tr key={i}>
+                                    filter.map((book, i) => <tr key={i}>
                                         <th>
                                             <label>
                                                 {i + 1}
@@ -102,8 +120,10 @@ const ManageBooks = () => {
                                             </Link>
                                         </td>
                                         <th>
-                                            <button onClick={() => handleDeleteBook(book)} className="btn bg-red-600 text-white"> <AiFillDelete className='text-2xl' /></button>
-                                            <BookDetails handleDeleteBook={handleDeleteBook}></BookDetails>
+                                            <button onClick={() => handleDeleteBook(book)} className="btn bg-red-600 text-white"> <AiFillDelete className='text-xl' /></button>
+
+
+                                            {/* <BookDetails handleDeleteBook={handleDeleteBook}></BookDetails> */}
                                         </th>
                                     </tr>)}
 

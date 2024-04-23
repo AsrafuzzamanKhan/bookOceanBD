@@ -42,14 +42,14 @@ const AllUsers = () => {
                 <title>Book Ocean BD || All Users</title>
             </Helmet>
 
-            <div className="mb-[30px] pt-28 md:pt-28 lg:pt-0 xl:pt-24 min-h-screen">
-                <div className=' items-center  mb-8 flex flex-col'>
+            <div className="mb-[30px] pt-24 md:pt-28 lg:pt-0 xl:pt-24 min-h-screen">
+                <div className=' flex flex-col items-center  mb-8 '>
                     <h1 className=' bg-slate-800 text-white px-8 py-3 rounded'>Total User:  {users?.length}</h1>
                 </div>
-
-                <div className="px-6 pb-12">
-                    <div className="overflow-x-auto">
-                        <table className="table table-zebra">
+                {/* table  */}
+                <div className=" pb-12 px-[2vw]">
+                    <div className="overflow-x-auto border ">
+                        <table className="table  lg:text-[16px] lg:table-lg table-xs overflow-x-auto">
                             {/* head */}
                             <thead>
                                 <tr>
@@ -65,10 +65,10 @@ const AllUsers = () => {
                                     users?.map((user, i) => <tr key={i}>
                                         <th>{i + 1}</th>
                                         <td>{user.name}</td>
-                                        <td>{user.email}</td>
-                                        <td>{user.role === 'admin' ? 'admin' : <button onClick={() => handleMakeAdmin(user)} className="btn bg-orange-600 text-white"><FaUserShield className="text-2xl"></FaUserShield></button>}</td>
+                                        <td className="w-28 ">{user.email}</td>
+                                        <td>{user.role === 'admin' ? 'admin' : <button onClick={() => handleMakeAdmin(user)} className="btn bg-orange-600 text-white"><FaUserShield className="text-2xl" size={15}></FaUserShield></button>}</td>
                                         <th>
-                                            <button onClick={() => handleDelete(user)} className="btn bg-red-600 text-white"> <AiFillDelete className='text-2xl' /></button>
+                                            <button onClick={() => handleDelete(user)} className="btn bg-red-600 text-white"> <AiFillDelete size={15} /></button>
                                         </th>
                                     </tr>)
                                 }
@@ -78,6 +78,7 @@ const AllUsers = () => {
                         </table>
                     </div>
                 </div>
+
             </div>
         </div>
     );

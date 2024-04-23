@@ -3,7 +3,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet-async";
 
-import { AiFillDelete } from "react-icons/ai";
+// import { AiFillDelete } from "react-icons/ai";
 import { IoMdPricetags } from "react-icons/io";
 import { IoCalendar } from "react-icons/io5";
 import { FaMapMarkerAlt, FaPhone, FaUser } from "react-icons/fa";
@@ -18,6 +18,8 @@ const AllOrders = () => {
 
         }
     });
+    // show data in reverse 
+    const reversedOrderData = orders.slice().reverse();
     // approve 
     const handleApproved = order => {
         console.log(order._id)
@@ -90,7 +92,7 @@ const AllOrders = () => {
                 {/* mobile responsive  */}
                 <div className="px-1 lg:px-0 dark:text-white pb-12 ">
                     {
-                        orders.map((order, i) =>
+                        reversedOrderData?.map((order, i) =>
                             <div key={i} className=" border dark:border-none dark:bg-gray-800  rounded-[8px] my-4 hover:bg-gray-100 dark:hover:bg-slate-700 duration-300">
 
                                 <div className="card-body">
@@ -125,10 +127,12 @@ const AllOrders = () => {
                                             </ul>
                                         </div>
 
-                                        <div className="flex font-semibold">
+                                        <div className="flex font-semibold bg-gray-100  rounded px-4 py-2 ">
                                             <span>&#x09F3; </span>
+
                                             <p className="mx-1"> {order.totalAmount}</p>
                                         </div>
+
                                     </div>
 
                                     {/* <div>

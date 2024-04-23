@@ -42,7 +42,6 @@ const Books = () => {
                     {/* category nav  */}
                     <CategoryNav />
 
-
                     <main className="w-full px-1 lg:px-0">
                         <FadeIn delay={0.4} direction='down' >
                             {/* title  */}
@@ -51,7 +50,7 @@ const Books = () => {
 
                                 <div><span className="text-blue-400 me-2"> {category}{author}'s</span>Book</div>
                             </h1>
-                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4  gap-[6px] md:gap-[30px] w-full">
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4  gap-[8px] md:gap-[20px] w-full px-[2vw] md:px-0">
                                 {filteredProducts.map((book, i) => {
                                     return <BookCard key={i} book={book}>
                                     </BookCard>

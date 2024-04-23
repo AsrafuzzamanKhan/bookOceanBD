@@ -134,7 +134,7 @@ const BookDetails = () => {
                     </motion.div>
                     <motion.div
                         animate={animation}
-                        className="  w-full flex-1 lg:py-10 py-4 px-8  flex flex-col justify-center dark:bg-base-200 dark:text-white text-black  rounded-[4px]  dark:border-none shadow-md ">
+                        className="  w-full flex-1 lg:py-10 py-4 px-8  flex flex-col justify-center dark:bg-base-200 dark:text-white text-black  rounded-[4px]  dark:border-none shadow-md border ">
                         {/* category  */}
                         <Link to={`/books/${productDetails?.category}`}>
                             <h4 className="uppercase text-blue-400 text-lg font-medium mb-2 hover:text-green-600 duration-300">

@@ -38,7 +38,7 @@ const SearchForm = () => {
     return (
         <form
             onSubmit={handleSubmit}
-            className={`${isAnimating ? 'animate-shake' : 'animate-none'} w-full relative`} >
+            className={`${isAnimating ? 'animate-shake' : 'animate-none'} w-full relative `} >
             <input
                 onChange={handleSeachInput}
                 className="input dark:bg-white" type="text" placeholder="Type book name or author name ..." />
