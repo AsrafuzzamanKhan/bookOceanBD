@@ -6,7 +6,7 @@ const Hero = () => {
     const [bannerData] = useBanner();
     const promo = bannerData.filter(item => item.promo === 'promo');
     return (
-        <section className="mb-[30px] pt-28 md:pt-28 lg:pt-0 xl:pt-24 ">
+        <section className="mb-[30px] pt-28 md:pt-28 lg:pt-24  ">
             <div className="container mx-auto">
                 <div className="flex flex-col gap-y-[20px] lg:flex-row lg:gap-x-[15px] px-1 lg:px-0">
                     {/* sidebar  */}

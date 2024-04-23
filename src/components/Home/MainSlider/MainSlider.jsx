@@ -35,10 +35,10 @@ const MainSlider = () => {
 
                                 <div className='flex-1 '>
                                     {/* text  */}
-                                    <div className='uppercase mb-1 text-center lg:text-left text-black dark:text-gray-100'> Amazon Pre Order</div>
-                                    <div className='text-3xl md:text-[34px] font-semibold  leading-none text-center lg:text-left mb-8 xl:mb-20 text-black dark:text-gray-100'>
-                                        <div className='mb-4 uppercase'>  {slide.discount}% Discount</div>
-                                        <div className='mb-4 capitalize'> {slide.name}</div>
+                                    <div className='uppercase mb-3 text-center lg:text-left text-black dark:text-gray-100 '> Amazon Pre Order</div>
+                                    <div className='flex flex-col gap-y-2 text-2xl md:text-[30px] font-semibold  leading-none text-center lg:text-left text-black dark:text-gray-100'>
+                                        <div className=' uppercase'>  {slide.discount}% Discount</div>
+                                        <div className=' capitalize'> {slide.name}</div>
                                         <div className='text-xl'>
                                             by {slide.author}</div>
 

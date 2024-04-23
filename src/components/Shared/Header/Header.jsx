@@ -35,7 +35,7 @@ const Header = () => {
             });
     }
     return (
-        <header className="bg-black text-white py-2 lg:py-4 px-2 fixed  xl:fixed w-full top-0 z-40 lg:relative lg:mb-[30px] ">
+        <header className="bg-black text-white py-2 lg:py-4 px-[2vw] fixed  w-full top-0 z-40  ">
             <div className="container mx-auto">
                 <div className="flex flex-row gap-4 items-center justify-between  mb-2 xl:mb-0">
                     {/* menu  */}

@@ -29,13 +29,18 @@ const Books = () => {
     const filteredAuthor = booksData.filter(item => item.author === selectedAuthor);
 
     return (
-        <div className="mb-[30px] pt-28 md:pt-28 lg:pt-0 xl:pt-24 min-h-screen">
-            {/* <div className="mb-[30px] pt-36 md:pt-36 lg:pt-0 xl:pt-28 min-h-screen"> */}
-            {/* <div className="mb-16 pt-40 md:pt-28 lg:pt-28 "> */}
-            {/* xl:pt-28   md:pt-40 */}
-            <Helmet>
-                <title>Book Ocean BD || Books</title>
-            </Helmet>
+        <div className="mb-[30px] pt-28 md:pt-28 lg:pt-24 min-h-screen">
+
+            {
+                selectedAuthor && <Helmet>
+                    <title>Author - {selectedAuthor}'s books</title>
+                </Helmet>
+            }
+            {
+                selectedCategory && <Helmet>
+                    <title>Category - {selectedCategory} books</title>
+                </Helmet>
+            }
 
             <div className="container mx-auto">
                 <div className="flex gap-x-[30px]">

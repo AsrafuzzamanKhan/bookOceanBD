@@ -15,7 +15,7 @@ import {
 const LazyRoots = React.lazy(() => import('./Roots/Roots'));
 const LazyBookDetails = React.lazy(() => import('./components/BookDetails/BookDetails'));
 const LazySearchBook = React.lazy(() => import('./components/SearchBook/SearchBook'));
-const LazyBooks = React.lazy(() => import('./components/Books/Books'));
+const LazyBooks = React.lazy(() => import('./components/Book/Book'));
 const LazyManageBooks = React.lazy(() => import('./components/Dashboard/ManageBooks/ManageBooks'));
 const LazyDashBoardLayout2 = React.lazy(() => import('./components/Layout/DashBoardLayout2/DashBoardLayout2'));
 import Home from './components/Home/Home/Home';

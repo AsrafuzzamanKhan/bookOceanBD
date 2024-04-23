@@ -17,7 +17,7 @@ const ManageBooks = () => {
 
     const filterBook = e => {
         e.preventDefault();
-        setFilter(booksData?.filter(f => f.name.toLowerCase().includes(e.target.value) || f.author.toLowerCase().includes(e.target.value) || f.category.toLowerCase().includes(e.target.value)))
+        setFilter(booksData?.filter(item => item.name.toLowerCase().includes((e.target.value).toLowerCase()) || item.author.toLowerCase().includes((e.target.value).toLowerCase()) || item.category.toLowerCase().includes((e.target.value).toLowerCase())))
     }
 
 
