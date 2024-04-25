@@ -124,6 +124,15 @@ const BookDetails = () => {
                     <title>Buy {productDetails?.name}</title>
                     <meta name="description" content={productDetails?.description} />
                     <meta name="image" content={productDetails?.image} />
+                    <meta name="og:image" content={productDetails?.image} />
+                    <meta
+                        name="og:title"
+                        content={productDetails?.name}
+                    />
+                    <meta
+                        name="og:description"
+                        content={productDetails?.description}
+                    />
                 </Helmet>
                 {/* TABS  */}
                 {/* /book/:name/:id */}

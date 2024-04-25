@@ -16,6 +16,8 @@ const SearchBook = () => {
     const filteredResults = booksData.filter((item) =>
         item.name.toLowerCase().includes(searchTerm.toLowerCase()) || item.author.toLowerCase().includes(searchTerm.toLowerCase()) || item.category.toLowerCase().includes(searchTerm.toLowerCase()));
 
+    const availableBooks = filteredResults.filter(item => item.available === "true")
+    const unavailableBooks = filteredResults.filter(item => item.available === "false")
 
 
     // const filteredResults = booksData.filter((item) =>
@@ -44,12 +46,26 @@ const SearchBook = () => {
                             {/* products grid */}
                             <div className=" grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-[8px] md:grid-[30px] w-full px-[2vw] md:px-0">
                                 {
-                                    filteredResults.map((book, i) => {
+                                    availableBooks.map((book, i) => {
                                         return <BookCard key={i}
                                             book={book}
                                         ></BookCard>
                                     })
                                 }
+                                {
+                                    unavailableBooks.map((book, i) => {
+                                        return <BookCard key={i}
+                                            book={book}
+                                        ></BookCard>
+                                    })
+                                }
+                                {/* {
+                                    filteredResults.map((book, i) => {
+                                        return <BookCard key={i}
+                                            book={book}
+                                        ></BookCard>
+                                    })
+                                } */}
                             </div>
                         </div>
 

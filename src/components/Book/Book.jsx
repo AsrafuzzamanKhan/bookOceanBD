@@ -16,6 +16,9 @@ const Books = () => {
     const selectedCategory = category;
     // Use the filter method to get products of the selected category
     const filteredProducts = booksData.filter(item => item.category === selectedCategory);
+    const availableBooks = filteredProducts.filter(item => item.available === "true")
+    const unavailableBooks = filteredProducts.filter(item => item.available === "false")
+
 
 
     const { author } = useParams()
@@ -52,11 +55,22 @@ const Books = () => {
                             {/* title  */}
 
                             <h1 className="my-4 text-center capitalize text-xl lg:text-left dark:text-white font-semibold">
-
                                 <div><span className="text-blue-400 me-2"> {category}{author}'s</span>Book</div>
                             </h1>
+
+                            {/* get books by category  */}
                             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4  gap-[8px] md:gap-[20px] w-full px-[2vw] md:px-0">
-                                {filteredProducts.map((book, i) => {
+                                {/* {filteredProducts.map((book, i) => {
+                                    return <BookCard key={i} book={book}>
+                                    </BookCard>
+
+                                })} */}
+                                {availableBooks.map((book, i) => {
+                                    return <BookCard key={i} book={book}>
+                                    </BookCard>
+
+                                })}
+                                {unavailableBooks.map((book, i) => {
                                     return <BookCard key={i} book={book}>
                                     </BookCard>
 
