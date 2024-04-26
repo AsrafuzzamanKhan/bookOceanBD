@@ -6,7 +6,8 @@ import BookSlider from "../../BookSlider/BookSlider";
 const Trending = () => {
     const [booksData] = useBookData();
     const newProduct = booksData.filter(item => item.best === "true")
-    const sliceData = newProduct.slice(0, 10);
+    const availableBooks = newProduct.filter(item => item.available === "true")
+    const sliceData = availableBooks.slice(0, 10);
     // console.log('slice', sliceItem);
     return (
         <div className='my-16'>

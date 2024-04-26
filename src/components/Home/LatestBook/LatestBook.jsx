@@ -7,7 +7,8 @@ const LatestBook = () => {
     const [booksData] = useBookData();
     // console.log(booksData);
     const newProduct = booksData.filter(item => item.newBook === 'true')
-    const sliceData = newProduct.slice(0, 10)
+    const availableBooks = newProduct.filter(item => item.available === "true")
+    const sliceData = availableBooks.slice(0, 10)
     // console.log(sliceData.length)
     return (
         <div className='my-16'>

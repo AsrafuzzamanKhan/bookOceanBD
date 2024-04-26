@@ -118,7 +118,7 @@ const Footer = () => {
             <div className='py-10 border-t border-t-black'>
                 <div className='container mx-auto'>
                     <div className='text-center text-sm'>
-                        Copyright &copy; Book Ocean BD 2018. All rights reserved
+                        Copyright &copy; Book Ocean BD 2024. All rights reserved
                     </div>
                 </div>
             </div>
