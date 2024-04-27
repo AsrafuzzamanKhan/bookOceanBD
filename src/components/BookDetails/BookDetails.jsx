@@ -118,7 +118,7 @@ const BookDetails = () => {
         }
     }
     return (
-        <div className="mb-16 pt-32 md:pt-32 lg:pt-[30px] xl:pt-24">
+        <div className="mb-16 pt-32 md:pt-32 lg:pt-24 ">
             <div className="container mx-auto">
                 <Helmet>
                     <title>Buy {productDetails?.name}</title>
@@ -136,10 +136,10 @@ const BookDetails = () => {
                 </Helmet>
                 {/* TABS  */}
                 {/* /book/:name/:id */}
-                <div className="flex flex-wrap items-center justify-start gap-x-2 py-4 px-[2vw] md:px-0 mb-2">
+                <div className="flex flex-wrap items-center justify-start gap-x-2 px-[2vw] py-2 md:px-0 mb-2">
 
 
-                    <Link to='/'><IoMdHome size={20} /></Link>
+                    <Link to='/' className=" hover:text-blue-900  duration-300"><IoMdHome size={20} /></Link>
                     /
                     <Link to={`/books/${productDetails?.category}`}>
                         <span className="text-blue-400 hover:text-blue-900 hover:underline duration-300">
@@ -304,11 +304,11 @@ const BookDetails = () => {
                 </div>
                 {/* Description  */}
                 <FadeIn delay={0.4} direction='up' >
-                    <div className="px-4 lg:px-0 dark:text-gray-300">
+                    <div className="px-[2vw] lg:px-0 dark:text-gray-300 my-12">
                         <h3 className="text-xl my-2 font-semibold">Description</h3>
                         <hr className="mb-4" />
 
-                        <p className="mb-5">{productDetails?.description}</p>
+                        <p className="mb-5 text-lg">{productDetails?.description}</p>
                     </div>
                 </FadeIn>
                 {/* relatged  product  */}

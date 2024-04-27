@@ -14,7 +14,7 @@ const Services = () => {
             })
     }, [])
     return (
-        <div className="bg-gray-200 py-10 my-10 background-image "
+        <div className="bg-gray-200 py-10 my-10 background-image hidden md:block"
             style={{
                 backgroundImage: `${serviceImg}`,
                 backgroundRepeat: 'no-repeat',
@@ -29,8 +29,8 @@ const Services = () => {
                         <FadeIn delay={0.4} direction='down' key={service.id} >
                             <div className="h-36 shadow-xl bg-white rounded-[8px] flex justify-center lg:py-4 py-2  text-black outline-none overflow-y-auto" >
                                 <div className="flex flex-col px-2">
-                                    <h2 className="lg:text-xl lg:font-bold font-semibold text-center text-lg mb-2">{service.heading}</h2>
-                                    <p className="lg:text-lg text-[16px] ">{service.subHeading}</p>
+                                    <h2 className="text-lg lg:text-xl lg:font-bold font-semibold text-center  mb-2 leading-none">{service.heading}</h2>
+                                    <p className="lg:text-lg text-[16px] leading-snug ">{service.subHeading}</p>
 
                                 </div>
 

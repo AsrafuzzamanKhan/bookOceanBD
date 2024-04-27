@@ -11,7 +11,7 @@ const LatestBook = () => {
     const sliceData = availableBooks.slice(0, 10)
     // console.log(sliceData.length)
     return (
-        <div className='my-16'>
+        <div className=''>
             <div className='container mx-auto px-4 lg:px-0'>
                 <FadeIn delay={0.4} direction='up'  >
                     <div className="w-full">
