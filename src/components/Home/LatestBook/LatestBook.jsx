@@ -11,17 +11,17 @@ const LatestBook = () => {
     const sliceData = availableBooks.slice(0, 10)
     // console.log(sliceData.length)
     return (
-        <div className=''>
+        <section className=''>
             <div className='container mx-auto px-4 lg:px-0'>
                 <FadeIn delay={0.4} direction='up'  >
                     <div className="w-full">
-                        <h2 className='text-2xl text-center xl:text-left mb-5 font-semibold dark:text-white'>Latest Books</h2>
+                        <h1 className='text-2xl text-center xl:text-left mb-5 font-semibold dark:text-white'>Latest Books</h1>
 
                         <BookSlider data={sliceData}></BookSlider>
                     </div>
                 </FadeIn>
             </div>
-        </div>
+        </section>
     );
 };
 

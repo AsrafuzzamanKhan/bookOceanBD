@@ -32,7 +32,7 @@ const Books = () => {
     const filteredAuthor = booksData.filter(item => item.author === selectedAuthor);
 
     return (
-        <div className="mb-[30px] pt-28 md:pt-28 lg:pt-24 min-h-screen">
+        <section className="mb-[30px] pt-28 md:pt-28 lg:pt-24 min-h-screen">
 
             {
                 selectedAuthor && <Helmet>
@@ -54,9 +54,9 @@ const Books = () => {
                         <FadeIn delay={0.4} direction='down' >
                             {/* title  */}
 
-                            <h1 className="my-4 text-center capitalize text-xl lg:text-left dark:text-white font-semibold">
-                                <div><span className="text-blue-400 me-2"> {category}{author}'s</span>Book</div>
-                            </h1>
+                            <div className="my-4 text-center capitalize text-xl lg:text-left dark:text-white font-semibold">
+                                <h1><span className="text-blue-400 me-2"> {category}{author}'s</span>Book</h1>
+                            </div>
 
                             {/* get books by category  */}
                             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4  gap-[8px] md:gap-[20px] w-full px-[2vw] md:px-0">
@@ -95,7 +95,7 @@ const Books = () => {
 
                 </div>
             </div>
-        </div>
+        </section>
     );
 };
 

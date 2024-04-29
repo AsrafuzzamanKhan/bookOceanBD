@@ -166,15 +166,11 @@ const BookDetails = () => {
                 {/* text  */}
                 <div ref={ref} >
                     <motion.div animate={animation} className="flex flex-col lg:flex-row lg:gap-[20px] gap-0 mb-[30px] items-center w-full bg-white dark:bg-[#1D232A] ">
-                        <div
-
-
-                            className="flex-1 w-full h-full rounded-[4px] flex justify-center items-center  " >
-
+                        <div className="flex-1 w-full h-full rounded-[4px] flex justify-center items-center  " >
 
                             <img src={productDetails?.image}
                                 className=" lg:max-w-[65%] max-h-96  h-full lg:p-0 p-4 "
-                                alt={productDetails?.image} />
+                                alt={productDetails?.name} />
                             {/* </div> */}
                         </div>
                         <div
@@ -190,13 +186,13 @@ const BookDetails = () => {
                             <h1 className="text-xl lg:text-2xl mb-2">
                                 {productDetails?.name}
                             </h1>
-                            <div className="mb-6 ">
+                            <h2 className="mb-6">
                                 by <span
                                     className="text-blue-400">
                                     {productDetails?.author}
                                 </span>
 
-                            </div>
+                            </h2>
 
 
                             {/* price and btn   */}
@@ -230,7 +226,7 @@ const BookDetails = () => {
                                     {/* add to cart button  */}
 
                                     {
-                                        productDetails?.available === 'false' ? <div className="text-xl text-red-600">Stock Out</div> : <div className="">
+                                        productDetails?.available === 'false' ? <h2 className="text-xl text-red-600">Stock Out</h2> : <div className="">
                                             <button
                                                 onClick={() => handleAddToCart(productDetails)}
                                                 className="btn bg-blue-400 text-black hover:text-white hover:bg-black transition-all text-[12px] lg:text-[16px]  ">Add to cart
@@ -303,20 +299,24 @@ const BookDetails = () => {
                     </motion.div>
                 </div>
                 {/* Description  */}
-                <FadeIn delay={0.4} direction='up' >
-                    <div className="px-[2vw] lg:px-0 dark:text-gray-300 my-12">
-                        <h3 className="text-xl my-2 font-semibold">Description</h3>
-                        <hr className="mb-4" />
+                <section>
+                    <FadeIn delay={0.4} direction='up' >
+                        <div className="px-[2vw] lg:px-0 dark:text-gray-300 my-12">
+                            <h3 className="text-xl my-2 font-semibold">Description</h3>
+                            <hr className="mb-4" />
 
-                        <p className="mb-5 text-lg">{productDetails?.description}</p>
-                    </div>
-                </FadeIn>
+                            <p className="mb-5 text-lg">{productDetails?.description}</p>
+                        </div>
+                    </FadeIn>
+                </section>
                 {/* relatged  product  */}
-                <FadeIn delay={0.4} direction='up' >
-                    <RelatedBooks
-                        categoryTitle={productDetails?.category}
-                    ></RelatedBooks>
-                </FadeIn>
+                <section>
+                    <FadeIn delay={0.4} direction='up' >
+                        <RelatedBooks
+                            categoryTitle={productDetails?.category}
+                        ></RelatedBooks>
+                    </FadeIn>
+                </section>
             </div>
         </div>
     );

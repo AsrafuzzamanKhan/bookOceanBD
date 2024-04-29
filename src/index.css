@@ -12,6 +12,7 @@ html,
 body {
   /* overflow: hidden; */
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 .active {
   color: #0b9fd4;
