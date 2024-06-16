@@ -127,10 +127,10 @@ const AllOrders = () => {
                                             </ul>
                                         </div>
 
-                                        <div className="flex font-semibold bg-gray-100  rounded px-4 py-2 ">
+                                        <div className="flex font-semibold bg-gray-100 dark:bg-slate-950  rounded px-4 py-2 ">
                                             <span>&#x09F3; </span>
 
-                                            <p className="mx-1"> {order.totalAmount}</p>
+                                            <p className="mx-1 "> {order.totalAmount}</p>
                                         </div>
 
                                     </div>

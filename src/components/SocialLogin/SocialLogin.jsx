@@ -40,10 +40,13 @@ const SocialLogin = () => {
                 onClick={handleGoogleSigIn}
                 className="bg-white border p-2 w-full rounded-xl mt-5 flex justify-center items-center text-sm hover:scale-105 duration-300">
 
-                {googleLoading ? <><span className="loading loading-ball loading-xs"></span>
-                    < span className="loading loading-ball loading-sm"></span>
-                    <span className="loading loading-ball loading-md"></span>
-                    <span className="loading loading-ball loading-lg"></span></> : <><FcGoogle className="text-3xl mr-3" />Login with Google</>
+                {
+                    googleLoading ? <>
+                        <span className="loading loading-ball loading-xs"></span>
+                        <span className="loading loading-ball loading-sm"></span>
+                        <span className="loading loading-ball loading-md"></span>
+                        <span className="loading loading-ball loading-lg"></span></>
+                        : <><FcGoogle className="text-3xl mr-3" />Login with Google</>
                 }
             </button>
         </div>

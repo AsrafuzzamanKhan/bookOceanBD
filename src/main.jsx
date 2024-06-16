@@ -89,6 +89,7 @@ const router = createBrowserRouter([
         element: <React.Suspense fallback={<Loading />}> <LazyBooks /></React.Suspense>
       },
       {
+        // path: '/book/:name',
         path: '/book/:name/:id',
         element: <React.Suspense fallback={<Loading />}><LazyBookDetails></LazyBookDetails></React.Suspense>
       }

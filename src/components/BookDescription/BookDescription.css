@@ -1,0 +1,10 @@
+.descriptionTable {
+  border-collapse: collapse;
+}
+.descriptionTable td {
+  padding: 8px;
+}
+
+.descriptionTable td:nth-child(1) {
+  font-weight: 500;
+}

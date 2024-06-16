@@ -7,13 +7,15 @@ const img_hosting_token = import.meta.env.VITE_image_Upload_token;
 
 const AddBooks = () => {
     const [axiosSecure] = useAxiosSecure()
-    const { register, reset, handleSubmit, formState: { errors } } = useForm();
+    const { register, reset, handleSubmit } = useForm();
+
     const img_hosting_url = `https://api.imgbb.com/1/upload?key=${img_hosting_token}`
+
     console.log(img_hosting_url);
 
-
     const onSubmit = data => {
-        console.log('add book data', data)
+        console.log('add book data', data);
+
         const formData = new FormData();
         formData.append('image', data.image[0]);
 
@@ -25,8 +27,8 @@ const AddBooks = () => {
             .then(imgResponse => {
                 if (imgResponse.success) {
                     const imaURL = imgResponse.data.display_url;
-                    const { name, price, category, description, author, available, best, cover, new: newBook } = data;
-                    const newBookItem = { name, price: parseFloat(price), category, description, image: imaURL, author, available, best, cover, newBook }
+                    const { name, price, category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, author, available, best, cover, new: newBook } = data;
+                    const newBookItem = { name, price: parseFloat(price), category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, image: imaURL, author, available, best, cover, newBook }
                     console.log(newBookItem)
                     axiosSecure.post('/books', newBookItem)
                         .then(data => {
@@ -83,27 +85,27 @@ const AddBooks = () => {
                                         <span className="label-text font-semibold">Category*</span>
 
                                     </label>
-                                    <select defaultValue='Pick one' className="select select-bordered uppercase"  {...register("category", { required: true })}>
+                                    <select defaultValue='Pick one' className="select select-bordered "  {...register("category", { required: true })}>
                                         <option disabled >Pick one</option>
-                                        <option>Barnes & Noble</option>
-                                        <option>Biography</option>
-                                        <option>Children's</option>
-                                        <option>Classic</option>
-                                        <option>Comics</option>
-                                        <option>Crime</option>
-                                        <option>Deluxe Edition</option>
-                                        <option>Fantasy</option>
-                                        <option>Fiction</option>
-                                        <option>Horror</option>
-                                        <option>History</option>
-                                        <option>Islamic</option>
-                                        <option>Manga</option>
-                                        <option>Mythology</option>
-                                        <option>Non-Fiction</option>
-                                        <option>Poetry</option>
-                                        <option>Romance</option>
-                                        <option>Science Fiction</option>
-                                        <option>Thriller</option>
+                                        <option>barnes & noble</option>
+                                        <option>biography</option>
+                                        <option>children</option>
+                                        <option>classic</option>
+                                        <option>comics</option>
+                                        <option>crime</option>
+                                        <option>deluxe edition</option>
+                                        <option>fantasy</option>
+                                        <option>fiction</option>
+                                        <option>horror</option>
+                                        <option>history</option>
+                                        <option>islamic</option>
+                                        <option>manga</option>
+                                        <option>mythology</option>
+                                        <option>non-Fiction</option>
+                                        <option>poetry</option>
+                                        <option>romance</option>
+                                        <option>science fiction</option>
+                                        <option>thriller</option>
                                     </select>
 
                                 </div>
@@ -178,16 +180,83 @@ const AddBooks = () => {
                             <div className='mt-2'>
 
                             </div>
-                            {/* details */}
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text">Description</span>
 
-                                </label>
-                                <textarea className="textarea textarea-bordered h-24" placeholder="Description"
-                                    {...register("description", { required: true })}></textarea>
+                            {/* details  */}
+                            <div className='grid grid-cols-2 gap-4'>
+                                {/* Description */}
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">Description</span>
 
+                                    </label>
+                                    <textarea className="textarea textarea-bordered h-24" placeholder="Description"
+                                        {...register("description", { required: true })}></textarea>
+
+                                </div>
+                                {/* Publisher  */}
+                                <div className="form-control w-full">
+                                    <label className="label">
+                                        <span className="label-text font-semibold ">Publisher*</span>
+                                    </label>
+                                    <input type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                        {...register("publisher", { required: true })} />
+                                </div>
+                                {/* Language  */}
+                                <div className="form-control w-full ">
+                                    <label className="label">
+                                        <span className="label-text font-semibold">Language*</span>
+
+                                    </label>
+                                    <select defaultValue='Pick one' className="select select-bordered uppercase"  {...register("language", { required: true })}>
+                                        <option disabled >Pick one</option>
+                                        <option>english</option>
+                                        <option>bangla</option>
+                                    </select>
+
+                                </div>
+                                {/* page  */}
+                                <div className="form-control w-full">
+                                    <label className="label">
+                                        <span className="label-text font-semibold ">Page*</span>
+                                    </label>
+                                    <input type="number" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                        {...register("page", { required: true })} />
+                                </div>
+                                {/* ISBN-10  */}
+                                <div className="form-control w-full">
+                                    <label className="label">
+                                        <span className="label-text font-semibold ">ISBN-10*</span>
+                                    </label>
+                                    <input type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                        {...register("isbn10", { required: true })} />
+                                </div>
+                                {/* isbn-13  */}
+                                <div className="form-control w-full">
+                                    <label className="label">
+                                        <span className="label-text font-semibold ">ISBN-13*</span>
+                                    </label>
+                                    <input type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                        {...register("isbn13", { required: true })} />
+                                </div>
+                                {/* Item Weight  */}
+                                <div className="form-control w-full">
+                                    <label className="label">
+                                        <span className="label-text font-semibold ">Item Weight*</span>
+                                    </label>
+                                    <input type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                        {...register("itemWeight", { required: true })} />
+                                </div>
+                                {/* Dimensions   */}
+                                <div className="form-control w-full">
+                                    <label className="label">
+                                        <span className="label-text font-semibold ">Dimensions*</span>
+                                    </label>
+                                    <input type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                        {...register("dimensions", { required: true })} />
+                                </div>
                             </div>
+
+
                             {/* fill upload  */}
                             <div className="form-control w-full">
                                 <label className="label">
@@ -198,6 +267,7 @@ const AddBooks = () => {
                                     {...register("image", { required: true })} />
 
                             </div>
+                            {/* submit button  */}
                             <input className=" bg-black w-full text-white mt-4 py-3 rounded hover:scale-105 duration-300 uppercase cursor-pointer hover:text-green-600" type="submit" value="Add Item" />
                         </form>
                     </div>

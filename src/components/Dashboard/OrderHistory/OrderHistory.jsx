@@ -103,7 +103,7 @@ const OrderHistory = () => {
                                         <div className="flex justify-between items-center">
                                             <div className="border p-2 rounded-lg bg-gray-200 dark:bg-gray-800 uppercase font-semibold">{order.status}</div>
 
-                                            <div className="flex font-semibold">
+                                            <div className="flex font-semibold border px-4 py-2 rounded">
                                                 <span>&#x09F3; </span>
                                                 <p className="mx-1"> {order.totalAmount}</p>
                                             </div>

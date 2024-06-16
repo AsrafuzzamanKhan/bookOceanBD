@@ -89,7 +89,7 @@ const ManageBooks = () => {
                             <tbody>
 
                                 {
-                                    filter.map((book, i) => <tr key={i}>
+                                    filter?.map((book, i) => <tr key={i}>
                                         <th>
                                             <label>
                                                 {i + 1}

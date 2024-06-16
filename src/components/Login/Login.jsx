@@ -3,7 +3,7 @@ import { AuthContext } from "../../providers/AuthProvider/AuthProvider";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import loginImg from '../../assets/log.jpg'
-import { AiOutlineEye } from 'react-icons/ai';
+// import { AiOutlineEye } from 'react-icons/ai';
 import SocialLogin from "../SocialLogin/SocialLogin";
 import Swal from "sweetalert2";
 import FadeIn from "../../Animation/FadeIn";
@@ -86,9 +86,9 @@ const Login = () => {
                                 <div>
                                     <SocialLogin></SocialLogin>
                                 </div>
-                                <p className="mt-5 text-xs border-b py-4">
+                                {/* <p className="mt-5 text-xs border-b py-4">
                                     Forgot Your Password?
-                                </p>
+                                </p> */}
                                 <div className="text-xm flex justify-between items-center mt-3">
                                     <p>
                                         Don't have an account

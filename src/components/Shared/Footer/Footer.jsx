@@ -1,5 +1,5 @@
 
-import { FaYoutube, FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa'
+// import { FaYoutube, FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa'
 import facebook from '../../../assets/social/facebook.png'
 import instagram from '../../../assets/social/instagram.png'
 const Footer = () => {
@@ -16,7 +16,7 @@ const Footer = () => {
                     <button className="btn bg-blue-400 hover:bg-black min-w-[150px] text-white outline-none border-0">Join</button>
                 </form>
                 {/* link  */}
-                <div className='text-base flex lg:flex-row flex-col gap-x-6 gap-y-4 max-w-max mx-auto mb-5 '>
+                <div className='text-base flex lg:flex-row flex-col gap-x-6 gap-y-4 max-w-max mx-auto mb-5  justify-between'>
 
                     <div className='lg:w-1/4 w-full'>
 
@@ -24,20 +24,22 @@ const Footer = () => {
 
                         <div className='mt-6'>
                             <div className='font-semibold mb-2'>
-                                Why choose Book Ocean BD?
+                                <h1> Why choose Book Ocean BD?</h1>
                             </div>
-                            We take pride in delivering the literary treasures you love, right to your doorstep, anywhere in Bangladesh. Our commitment to quality ensures that every book you order is an authentic, high-quality print edition, promising you an unparalleled reading experience.
+                            <p>We take pride in delivering the literary treasures you love, right to your doorstep, anywhere in Bangladesh. Our commitment to quality ensures that every book you order is an authentic, high-quality print edition, promising you an unparalleled reading experience.</p>
                         </div>
 
                     </div>
-                    <div className='lg:w-2/5 w-full'>
+                    <div className='lg:w-2/5 w-full hidden lg:block'>
 
                         <div>
-                            Experience the convenience of pre-ordering your desired books with us. Stay ahead of the literary curve by securing your copy in advance, and we'll make sure it reaches you promptly. No more waiting in anticipation – we prioritize your love for reading by making pre-orders a seamless and efficient process.
+                            <p>
+                                Experience the convenience of pre-ordering your desired books with us. Stay ahead of the literary curve by securing your copy in advance, and we'll make sure it reaches you promptly. No more waiting in anticipation – we prioritize your love for reading by making pre-orders a seamless and efficient process.
+                            </p>
                         </div>
 
                         <div className='font-semibold mt-2'>
-                            Here's what sets us apart:
+                            <h1>Here's what sets us apart:</h1>
                         </div>
                         <div className='my-2'>
                             <div>

@@ -46,9 +46,12 @@ const Books = () => {
             }
 
             <div className="container mx-auto">
-                <div className="flex gap-x-[30px]">
+                <div className="flex gap-x-[30px] ">
+
                     {/* category nav  */}
                     <CategoryNav />
+
+
 
                     <main className="w-full px-1 lg:px-0">
                         <FadeIn delay={0.4} direction='down' >

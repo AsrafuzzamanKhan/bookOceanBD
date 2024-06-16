@@ -19,12 +19,10 @@ import { MdOutlineGppGood } from "react-icons/md";
 import { IoMdHome } from "react-icons/io";
 
 import useAdmin from "../../hooks/useAdmin";
+import BookDescription from "../BookDescription/BookDescription";
 
 const BookDetails = () => {
     const { id } = useParams()
-    // const idInt = parseInt(id)
-    // console.log('type', typeof idInt);
-    // console.log(id);
     const { user } = useAuth()
     const [isAdmin] = useAdmin()
     const [booksData] = useBookData()
@@ -34,7 +32,6 @@ const BookDetails = () => {
 
 
     // animation 
-
     const { ref, inView } = useInView({
         threshold: 0.1
     });
@@ -136,7 +133,7 @@ const BookDetails = () => {
                 </Helmet>
                 {/* TABS  */}
                 {/* /book/:name/:id */}
-                <div className="flex flex-wrap items-center justify-start gap-x-2 px-[2vw] py-2 md:px-0 mb-2">
+                <div className="flex flex-wrap items-center justify-start gap-x-2 px-[2vw] py-0 md:py-2 md:px-0 mb-2">
 
 
                     <Link to='/' className=" hover:text-blue-900  duration-300"><IoMdHome size={20} /></Link>
@@ -173,9 +170,8 @@ const BookDetails = () => {
                                 alt={productDetails?.name} />
                             {/* </div> */}
                         </div>
-                        <div
 
-                            className="  w-full flex-1 lg:py-10 py-4 px-8  flex flex-col justify-center dark:bg-base-200 dark:text-white text-black  rounded-[4px]  dark:border-none shadow-md border ">
+                        <div className="w-full flex-1 lg:py-10 py-4 md:px-8 px-[2vw]  flex flex-col justify-center dark:bg-base-200 dark:text-white text-black  rounded-[4px]  dark:border-none shadow-md border ">
                             {/* category  */}
 
                             <h4 className="uppercase text-blue-400 text-lg font-medium mb-2 ">
@@ -200,7 +196,7 @@ const BookDetails = () => {
                                 {/* price  */}
 
 
-                                <div className=" flex justify-center items-center gap-4 ">
+                                <div className=" flex justify-center items-center gap-2 ">
 
                                     <div className="border rounded-[8px] shadow-md flex flex-col text-center h-auto p-2">
                                         <div >
@@ -225,16 +221,18 @@ const BookDetails = () => {
 
                                     {/* add to cart button  */}
 
-                                    {
-                                        productDetails?.available === 'false' ? <h2 className="text-xl text-red-600">Stock Out</h2> : <div className="">
-                                            <button
-                                                onClick={() => handleAddToCart(productDetails)}
-                                                className="btn bg-blue-400 text-black hover:text-white hover:bg-black transition-all text-[12px] lg:text-[16px]  ">Add to cart
-                                            </button>
+                                    <div className="">
+                                        {
+                                            productDetails?.available === 'false' ? <h2 className="text-xl text-red-600">Stock Out</h2> : <div className="">
+                                                <button
+                                                    onClick={() => handleAddToCart(productDetails)}
+                                                    className="btn h-auto bg-blue-400 text-black hover:text-white hover:bg-black transition-all text-[12px] lg:text-[16px]">Add to cart
+                                                </button>
 
-                                        </div>
+                                            </div>
 
-                                    }
+                                        }
+                                    </div>
 
                                     {
                                         isAdmin && <div>
@@ -245,24 +243,22 @@ const BookDetails = () => {
 
                                         </div>
                                     }
-
                                 </div>
-
-
                             </div>
                             {/* original  */}
                             <div className="flex flex-col gap-y-2 mb-4">
                                 <div className="flex gap-2 items-center">
                                     <TbTruckDelivery size={25} />
-                                    <p>Fast Shipping</p>
+                                    <p className="text-[14px] md:text-[16px]">Fast Shipping</p>
                                 </div>
                                 <div className="flex gap-2 items-center">
                                     <MdOutlineGppGood size={25} />
-                                    <p> Get Premium Quality Original Books</p>
+                                    <p className="text-[14px] md:text-[16px]">Get Premium Quality Original Books</p>
                                 </div>
                                 <div className="flex gap-2 items-center">
                                     <MdPayment size={25} />
-                                    <p>Cash On Delivery Service is Available</p></div>
+                                    <p className="text-[14px] md:text-[16px]">Cash On Delivery Service is Available</p>
+                                </div>
                             </div>
                             <hr />
                             {/* social  */}
@@ -281,32 +277,16 @@ const BookDetails = () => {
                                     </a>
                                 </div>
                             </div>
-                            {/* description  */}
-                            {/* <div tabIndex={0} className="collapse collapse-arrow border border-base-300  ">
-                            <div className="collapse-title text-xl font-medium">
-                                Description
-                            </div>
-                            <div className="collapse-content">
-                                <p>{productDetails.description}</p>
-                            </div>
-                        </div> */}
-                            {/* 
-                        <p className="mb-5">{productDetails.description}</p> */}
+
 
                         </div>
-
 
                     </motion.div>
                 </div>
                 {/* Description  */}
                 <section>
                     <FadeIn delay={0.4} direction='up' >
-                        <div className="px-[2vw] lg:px-0 dark:text-gray-300 my-12">
-                            <h3 className="text-xl my-2 font-semibold">Description</h3>
-                            <hr className="mb-4" />
-
-                            <p className="mb-5 text-lg">{productDetails?.description}</p>
-                        </div>
+                        <BookDescription />
                     </FadeIn>
                 </section>
                 {/* relatged  product  */}
@@ -317,8 +297,8 @@ const BookDetails = () => {
                         ></RelatedBooks>
                     </FadeIn>
                 </section>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

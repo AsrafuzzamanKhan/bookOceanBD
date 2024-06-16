@@ -37,7 +37,7 @@ const Header = () => {
     return (
         <header className="bg-black text-white py-2 lg:py-4 px-[2vw] fixed  w-full top-0 z-40  ">
             <div className="container mx-auto">
-                <div className="flex flex-row gap-4 items-center justify-between  mb-2 xl:mb-0">
+                <div className="flex flex-row gap-4 items-center justify-between  mb-2 lg:mb-0">
                     {/* menu  */}
                     <div
                         onClick={() => setCatNavMobile(true)}
@@ -53,7 +53,7 @@ const Header = () => {
                     </div>
 
                     {/* logo  */}
-                    <Link to={'/'} className="w-64 hover:scale-95 duration-300" >
+                    <Link to={'/'} className="w-[250px] hover:scale-95 duration-300" >
                         <img src={logoSvg} alt="" />
                     </Link>
 
@@ -72,7 +72,7 @@ const Header = () => {
                         <div className="dropdown dropdown-hover dropdown-bottom dropdown-end ">
                             <label tabIndex={0} >
                                 <div className="avatar online placeholder">
-                                    <div className="bg-neutral text-neutral-content rounded-full  w-10">
+                                    <div className="bg-neutral text-neutral-content rounded-full w-7 md:w-10">
                                         {user ? <img src={user?.photoURL} alt={user?.displayName} /> : <><FaRegUserCircle /></>}
 
                                     </div>

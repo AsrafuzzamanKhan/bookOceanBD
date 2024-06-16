@@ -3,30 +3,82 @@ import useBookData from "../../../hooks/useBookData";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-
+import { useState } from "react";
+const img_hosting_token = import.meta.env.VITE_image_Upload_token;
 
 const UpdateBook = () => {
+    const [updateLoading, setupdateLoadin] = useState(false)
     const { id } = useParams()
     const [booksData] = useBookData()
     const [axiosSecure] = useAxiosSecure()
-    const productDetails = booksData.find(pd => pd._id == id)
-    const { register, reset, handleSubmit, formState: { errors } } = useForm();
+    const productDetails = booksData.find(pd => pd._id == id);
+
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const navigate = useNavigate()
+    const img_hosting_url = `https://api.imgbb.com/1/upload?key=${img_hosting_token}`
+    console.log(img_hosting_url);
+
+    // const onSubmit = data => {
+    //     const formData = new FormData();
+    //     formData.append('image', data.image[0]);
+    //     fetch(img_hosting_url, {
+    //         method: "POST",
+    //         body: formData
+    //     })
+    //     console.log(data)
+
+    //     axiosSecure.put(`/books/${productDetails._id}`, data)
+
+    //         .then(res => {
+    //             if (res.data.modifiedCount > 0) {
+    //                 alert('Book updated ')
+    //                 console.log(res.data)
+    //                 navigate('/dashboard/manageBooks')
+
+    //             }
+    //         }
+    //         )
+    // }
+
+
+
+
+
 
     const onSubmit = data => {
+        console.log('update book data', data);
+        setupdateLoadin(true)
+        const formData = new FormData();
+        formData.append('image', data.image[0]);
 
-        console.log(data)
-        axiosSecure.put(`/books/${productDetails._id}`, data)
-            .then(res => {
-                if (res.data.modifiedCount > 0) {
-                    alert('Book updated ')
-                    console.log(res.data)
-                    navigate('/dashboard/manageBooks')
+        fetch(img_hosting_url, {
+            method: "POST",
+            body: formData
+        })
+            .then(res => res.json())
+            .then(imgResponse => {
+                if (imgResponse.success) {
+                    const imaURL = imgResponse.data.display_url;
+                    const { name, price, category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, author, available, best, cover, new: newBook } = data;
+                    const updateBookItem = { name, price: parseFloat(price), category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, image: imaURL, author, available, best, cover, newBook }
+                    console.log(updateBookItem);
 
+                    // axiosSecure.put(`/books/${productDetails._id}`, data)
+                    axiosSecure.put(`/books/${productDetails._id}`, updateBookItem)
+
+                        .then(res => {
+                            if (res.data.modifiedCount > 0) {
+                                alert('Book updated ')
+                                console.log(res.data)
+                                navigate('/dashboard/manageBooks')
+
+                            }
+                        }
+                        )
                 }
-            }
-            )
-    }
+            })
+
+    };
     return (
         <div className=" container mx-auto ">
             <Helmet>
@@ -61,27 +113,27 @@ const UpdateBook = () => {
                                     <span className="label-text font-semibold">Category*</span>
 
                                 </label>
-                                <select defaultValue={productDetails?.category} className="select select-bordered uppercase bg-white"  {...register("category", { required: true })}>
+                                <select defaultValue={productDetails?.category} className="select select-bordered uppercase  bg-white"  {...register("category", { required: true })}>
                                     <option disabled >Pick one</option>
-                                    <option>Barnes & Noble</option>
-                                    <option>Biography</option>
-                                    <option>Children's</option>
-                                    <option>Classic</option>
-                                    <option>Comics</option>
-                                    <option>Crime</option>
-                                    <option>Deluxe Edition</option>
-                                    <option>Fantasy</option>
-                                    <option>Fiction</option>
-                                    <option>Horror</option>
-                                    <option>History</option>
-                                    <option>Islamic</option>
-                                    <option>Manga</option>
-                                    <option>Mythology</option>
-                                    <option>Non-Fiction</option>
-                                    <option>Poetry</option>
-                                    <option>Romance</option>
-                                    <option>Science Fiction</option>
-                                    <option>Thriller</option>
+                                    <option value='barnes & noble'>barnes & noble</option>
+                                    <option value='biography'>biography</option>
+                                    <option value='children'>children</option>
+                                    <option value='classic'>classic</option>
+                                    <option value='comics'>comics</option>
+                                    <option value='crime'>crime</option>
+                                    <option value='deluxe edition'>deluxe edition</option>
+                                    <option value='fantasy'>fantasy</option>
+                                    <option value='fiction'>fiction</option>
+                                    <option value='horror'>horror</option>
+                                    <option value='history'>history</option>
+                                    <option value='islamic'>islamic</option>
+                                    <option value='manga'>manga</option>
+                                    <option value='mythology'>mythology</option>
+                                    <option value='non-Fiction'>non-Fiction</option>
+                                    <option value='poetry'>poetry</option>
+                                    <option value='romance'>romance</option>
+                                    <option value='science fiction'>science fiction</option>
+                                    <option value='thriller'>thriller</option>
                                 </select>
 
                             </div>
@@ -156,7 +208,94 @@ const UpdateBook = () => {
                         <div className='mt-2'>
 
                         </div>
-                        {/* details */}
+                        {/* details  */}
+                        <div className='grid grid-cols-2 gap-4'>
+                            {/* Description */}
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Description</span>
+
+                                </label>
+                                <textarea defaultValue={productDetails?.description} className="textarea textarea-bordered h-24" placeholder="Description"
+                                    {...register("description", { required: true })}></textarea>
+
+                            </div>
+                            {/* Publisher  */}
+                            <div className="form-control w-full">
+                                <label className="label">
+                                    <span className="label-text font-semibold ">Publisher*</span>
+                                </label>
+                                <input defaultValue={productDetails?.publisher} type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                    {...register("publisher", { required: true })} />
+                            </div>
+                            {/* Language  */}
+                            <div className="form-control w-full ">
+                                <label className="label">
+                                    <span className="label-text font-semibold">Language*</span>
+
+                                </label>
+                                <select defaultValue={productDetails?.language} className="select select-bordered uppercase"  {...register("language", { required: true })}>
+                                    <option disabled >Pick one</option>
+                                    <option>english</option>
+                                    <option>bangla</option>
+                                </select>
+
+                            </div>
+                            {/* page  */}
+                            <div className="form-control w-full">
+                                <label className="label">
+                                    <span className="label-text font-semibold ">Page*</span>
+                                </label>
+                                <input defaultValue={productDetails?.page} type="number" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                    {...register("page", { required: true })} />
+                            </div>
+                            {/* ISBN-10  */}
+                            <div className="form-control w-full">
+                                <label className="label">
+                                    <span className="label-text font-semibold ">ISBN-10*</span>
+                                </label>
+                                <input defaultValue={productDetails?.isbn10} type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                    {...register("isbn10", { required: true })} />
+                            </div>
+                            {/* isbn-13  */}
+                            <div className="form-control w-full">
+                                <label className="label">
+                                    <span className="label-text font-semibold ">ISBN-13*</span>
+                                </label>
+                                <input defaultValue={productDetails?.isbn13} type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                    {...register("isbn13", { required: true })} />
+                            </div>
+                            {/* Item Weight  */}
+                            <div className="form-control w-full">
+                                <label className="label">
+                                    <span className="label-text font-semibold ">Item Weight*</span>
+                                </label>
+                                <input defaultValue={productDetails?.itemWeight} type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                    {...register("itemWeight", { required: true })} />
+                            </div>
+                            {/* Dimensions   */}
+                            <div className="form-control w-full">
+                                <label className="label">
+                                    <span className="label-text font-semibold ">Dimensions*</span>
+                                </label>
+                                <input defaultValue={productDetails?.dimensions} type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                    {...register("dimensions", { required: true })} />
+                            </div>
+                        </div>
+
+                        {/* fill upload  */}
+                        <div className="form-control w-full">
+                            <label className="label">
+                                <span className="label-text">Item image</span>
+
+                            </label>
+                            <input type="file" className="file-input file-input-bordered w-full "
+                                {...register("image", { required: true })} />
+
+
+                        </div>
+
+                        {/* details
                         <div className="form-control">
                             <label className="label">
                                 <span className="label-text">Description</span>
@@ -165,7 +304,7 @@ const UpdateBook = () => {
                             <textarea className="textarea textarea-bordered h-24 bg-white" defaultValue={productDetails?.description} placeholder="Description"
                                 {...register("description", { required: true })}></textarea>
 
-                        </div>
+                        </div> */}
                         {/* fill upload  */}
                         {/* <div className="form-control w-full">
                             <label className="label">
@@ -176,7 +315,20 @@ const UpdateBook = () => {
                                 {...register("image", { required: true })} />
 
                         </div> */}
-                        <input className=" bg-black w-full text-white mt-4 py-3 rounded hover:scale-105 duration-300 uppercase cursor-pointer hover:text-green-600" type="submit" value="Update Book" />
+
+
+
+                        <div>
+                            {
+                                updateLoading ? <div className="text-center">
+                                    <span className="loading loading-ball loading-xs"></span>
+                                    <span className="loading loading-ball loading-sm"></span>
+                                    <span className="loading loading-ball loading-md"></span>
+                                    <span className="loading loading-ball loading-lg"></span></div>
+                                    : <> <input className=" bg-black w-full text-white mt-4 py-3 rounded hover:scale-105 duration-300 uppercase cursor-pointer hover:text-green-600" type="submit" value="Update Book" /></>
+                            }
+                        </div>
+
                     </form>
                 </div>
             </div>
