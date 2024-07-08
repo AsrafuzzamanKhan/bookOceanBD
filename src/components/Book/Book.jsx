@@ -54,42 +54,42 @@ const Books = () => {
 
 
                     <main className="w-full px-1 lg:px-0">
-                        <FadeIn delay={0.4} direction='down' >
-                            {/* title  */}
+                        {/* <FadeIn delay={0.4} direction='down' > */}
+                        {/* title  */}
 
-                            <div className="my-4 text-center capitalize text-xl lg:text-left dark:text-white font-semibold">
-                                <h1><span className="text-blue-400 me-2"> {category}{author}'s</span>Book</h1>
-                            </div>
+                        <div className="my-4 text-center capitalize text-xl lg:text-left dark:text-white font-semibold">
+                            <h1><span className="text-blue-400 me-2"> {category}{author}'s</span>Book</h1>
+                        </div>
 
-                            {/* get books by category  */}
-                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4  gap-[8px] md:gap-[20px] w-full px-[2vw] md:px-0">
-                                {/* {filteredProducts.map((book, i) => {
+                        {/* get books by category  */}
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4  gap-[8px] md:gap-[20px] w-full px-[2vw] md:px-0">
+                            {/* {filteredProducts.map((book, i) => {
                                     return <BookCard key={i} book={book}>
                                     </BookCard>
 
                                 })} */}
-                                {availableBooks.map((book, i) => {
-                                    return <BookCard key={i} book={book}>
-                                    </BookCard>
+                            {availableBooks.map((book, i) => {
+                                return <BookCard key={i} book={book}>
+                                </BookCard>
 
-                                })}
-                                {unavailableBooks.map((book, i) => {
-                                    return <BookCard key={i} book={book}>
-                                    </BookCard>
+                            })}
+                            {unavailableBooks.map((book, i) => {
+                                return <BookCard key={i} book={book}>
+                                </BookCard>
 
-                                })}
+                            })}
 
-                                {/* get author books  */}
-                                {filteredAuthor.map((book, i) => {
-                                    return <BookCard key={i} book={book}>
-                                    </BookCard>
+                            {/* get author books  */}
+                            {filteredAuthor.map((book, i) => {
+                                return <BookCard key={i} book={book}>
+                                </BookCard>
 
-                                })}
+                            })}
 
-                            </div>
-                            {/* product grid   */}
+                        </div>
+                        {/* product grid   */}
 
-                        </FadeIn>
+                        {/* </FadeIn> */}
                     </main>
 
                     {/* author  */}

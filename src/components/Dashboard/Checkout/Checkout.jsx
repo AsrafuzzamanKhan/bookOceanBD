@@ -23,6 +23,7 @@ const Checkout = ({ item }) => {
         // save payment insformation to database 
         const currentDate = new Date();
         const date = format(currentDate, 'yyyy-MM-dd HH:mm:ss');
+
         const order = {
             cart, orderQuantity: cart.length, total, deliveryCharge, totalAmount, data, date, email: user?.email,
             cartItems: cart.map(item => item?._id),
@@ -96,6 +97,21 @@ const Checkout = ({ item }) => {
                                     <textarea className="input input-bordered w-full h-24 dark:bg-white" placeholder="Enter full address" {...register("address", { required: true })} />
                                 </div>
                                 {errors?.address && <span className="text-red-600 font-semibold">Address is required*</span>}
+
+                                {/* Zone  */}
+                                {/* <div className="form-control w-full">
+                                    <label className="label">
+                                        <span className="label-text font-semibold ">Area*</span>
+                                    </label>
+
+                                    <select className="select select-bordered uppercase bg-white"  {...register("area", { required: true })}>
+                                        <option disabled >Pick one</option>
+                                        <option value="dhaka">Dhaka</option>
+                                        <option value="outside_dhaka">Outside Dhaka</option>
+
+                                    </select>
+                                </div>
+                                {errors?.address && <span className="text-red-600 font-semibold">Address is required*</span>} */}
                                 {/* order summery  */}
                                 <div className="my-6">
                                     <div className="  border dark:border-0 dark:bg-gray-900 rounded-md shadow-2xl p-5 uppercase font-semibold  ">
@@ -156,22 +172,24 @@ const Checkout = ({ item }) => {
 
 
 
-                                            <tr key={i} >
+                                            <tr key={i} className="hover:bg-gray-200 duration-300 transition-all" >
                                                 <th className="!p-4">
-                                                    <label>
-                                                        {i + 1}
-                                                    </label>
+                                                    {i + 1}
                                                 </th>
                                                 <td className="!p-1">
-                                                    <div className="w-12  object-cover overflow-hidden ">
-                                                        <img className="w-full " src={book.image} alt={book.image} />
+                                                    <div className="w-12 object-cover overflow-hidden ">
+                                                        <Link
+                                                            to={`/book/${book.name.replace(/\s/g, "_")}/${book.bookId}`}
+                                                        >
+                                                            <img className="w-full " src={book.image} alt={book.image} />
+                                                        </Link>
                                                     </div>
                                                 </td>
                                                 <td className="!px-1">
                                                     <Link
-                                                        to={`/book/${book.bookId}`}
+                                                        to={`/book/${book.name.replace(/\s/g, "_")}/${book.bookId}`}
                                                     >
-                                                        <div className="flex flex-col gap-y-1 hover:scale-95 duration-300">
+                                                        <div className="flex flex-col gap-y-1 ">
                                                             <h2>
                                                                 {book.name}
                                                             </h2>

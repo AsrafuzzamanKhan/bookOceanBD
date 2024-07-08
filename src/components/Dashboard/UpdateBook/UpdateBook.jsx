@@ -113,7 +113,7 @@ const UpdateBook = () => {
                                     <span className="label-text font-semibold">Category*</span>
 
                                 </label>
-                                <select defaultValue={productDetails?.category} className="select select-bordered uppercase  bg-white"  {...register("category", { required: true })}>
+                                <select defaultValue={productDetails?.category} className="select select-bordered capitalize  bg-white"  {...register("category", { required: true })}>
                                     <option disabled >Pick one</option>
                                     <option value='barnes & noble'>barnes & noble</option>
                                     <option value='biography'>biography</option>
@@ -153,7 +153,7 @@ const UpdateBook = () => {
                                     <span className="label-text font-semibold">cover*</span>
 
                                 </label>
-                                <select defaultValue={productDetails?.cover} className="select select-bordered uppercase bg-white"  {...register("cover", { required: true })}>
+                                <select defaultValue={productDetails?.cover} className="select select-bordered capitalize bg-white"  {...register("cover", { required: true })}>
                                     <option disabled >Pick one</option>
                                     <option value="hardcover">Hardcover</option>
                                     <option value="paperback">Paperback</option>

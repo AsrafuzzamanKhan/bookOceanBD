@@ -2,6 +2,7 @@ import { useLocation } from 'react-router-dom';
 import useBookData from '../../hooks/useBookData';
 import BookCard from '../BookCard/BookCard';
 import CategoryNav from '../CategoryNav/CategoryNav';
+import { FaAmazon } from 'react-icons/fa';
 
 // import Loading from '../../Loading/Loading';
 
@@ -39,8 +40,16 @@ const SearchBook = () => {
 
                         <div>
                             {/* title  */}
-                            <div className="my-4 capitalize text-center font-semibold lg:text-left text-xl dark:text-white">
-                                {filteredResults?.length > 0 ? `${filteredResults.length} results for ${searchTerm}` : `no result found for ${searchTerm} `}
+                            <div className="flex flex-col my-4 gap-y-8 text-center font-semibold lg:text-left text-xl dark:text-white">
+                                <div className='capitalize px-[2vw] md:px-0'>
+                                    {filteredResults?.length > 0 ? `${filteredResults.length} results for ${searchTerm}` : `no result found for " ${searchTerm} "`}
+                                </div>
+                                <div className='flex'>
+                                    <div className="flex flex-col mx-auto items-center justify-center gap-2  border  dark:text-white p-8 text-[18px] rounded font-semibold shadow-lg hover:scale-105 hover:duration-300 transition-all">
+                                        <FaAmazon size={50} />
+                                        <a href="https://m.me/bookoceanbd" target="_blank" rel="noreferrer" className="  text-[#FF9900] hover:text-[#946b2d] duration-500 flex items-center gap-2">Pre-order any book from amazon through us.</a>
+                                    </div>
+                                </div>
 
                             </div>
                             {/* products grid */}

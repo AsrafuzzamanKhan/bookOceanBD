@@ -85,7 +85,7 @@ const AddBooks = () => {
                                         <span className="label-text font-semibold">Category*</span>
 
                                     </label>
-                                    <select defaultValue='Pick one' className="select select-bordered "  {...register("category", { required: true })}>
+                                    <select defaultValue='Pick one' className="select select-bordered capitalize "  {...register("category", { required: true })}>
                                         <option disabled >Pick one</option>
                                         <option>barnes & noble</option>
                                         <option>biography</option>
@@ -125,7 +125,7 @@ const AddBooks = () => {
                                         <span className="label-text font-semibold">cover*</span>
 
                                     </label>
-                                    <select defaultValue='Pick one' className="select select-bordered uppercase"  {...register("cover", { required: true })}>
+                                    <select defaultValue='Pick one' className="select select-bordered capitalize"  {...register("cover", { required: true })}>
                                         <option disabled >Pick one</option>
                                         <option value="hardcover">Hardcover</option>
                                         <option value="paperback">Paperback</option>

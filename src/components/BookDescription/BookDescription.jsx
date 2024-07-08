@@ -13,7 +13,7 @@ const BookDescription = () => {
                 <h3 className="text-xl font-medium my-2">Description</h3>
                 <hr className="mb-4" />
 
-                <p className="mb-5 text-[16px]">{bookDescription?.description}</p>
+                <p className="mb-5 text-[16px] tracking-wide">{bookDescription?.description}</p>
             </div>
 
             {/* details  */}

@@ -17,6 +17,7 @@ import { TbTruckDelivery } from "react-icons/tb";
 import { MdPayment } from "react-icons/md";
 import { MdOutlineGppGood } from "react-icons/md";
 import { IoMdHome } from "react-icons/io";
+import { FaAmazon } from "react-icons/fa";
 
 import useAdmin from "../../hooks/useAdmin";
 import BookDescription from "../BookDescription/BookDescription";
@@ -116,7 +117,7 @@ const BookDetails = () => {
     }
     return (
         <div className="mb-16 pt-32 md:pt-32 lg:pt-24 ">
-            <div className="container mx-auto">
+            <div className="container mx-auto min-h-screen">
                 <Helmet>
                     <title>Buy {productDetails?.name}</title>
                     <meta name="description" content={productDetails?.description} />
@@ -134,8 +135,6 @@ const BookDetails = () => {
                 {/* TABS  */}
                 {/* /book/:name/:id */}
                 <div className="flex flex-wrap items-center justify-start gap-x-2 px-[2vw] py-0 md:py-2 md:px-0 mb-2">
-
-
                     <Link to='/' className=" hover:text-blue-900  duration-300"><IoMdHome size={20} /></Link>
                     /
                     <Link to={`/books/${productDetails?.category}`}>
@@ -164,7 +163,6 @@ const BookDetails = () => {
                 <div ref={ref} >
                     <motion.div animate={animation} className="flex flex-col lg:flex-row lg:gap-[20px] gap-0 mb-[30px] items-center w-full bg-white dark:bg-[#1D232A] ">
                         <div className="flex-1 w-full h-full rounded-[4px] flex justify-center items-center  " >
-
                             <img src={productDetails?.image}
                                 className=" lg:max-w-[65%] max-h-96  h-full lg:p-0 p-4 "
                                 alt={productDetails?.name} />
@@ -172,27 +170,30 @@ const BookDetails = () => {
                         </div>
 
                         <div className="w-full flex-1 lg:py-10 py-4 md:px-8 px-[2vw]  flex flex-col justify-center dark:bg-base-200 dark:text-white text-black  rounded-[4px]  dark:border-none shadow-md border ">
-                            {/* category  */}
+                            {/* book details  */}
+                            <div className="flex flex-col gap-y-2">
+                                <h4 className="capitalize tracking-wide text-blue-400 text-lg font-medium ">
+                                    {productDetails?.category}
+                                </h4>
 
-                            <h4 className="uppercase text-blue-400 text-lg font-medium mb-2 ">
-                                {productDetails?.category}
-                            </h4>
+                                {/* title  */}
+                                <h1 className="text-xl lg:text-2xl">
+                                    {productDetails?.name}
+                                </h1>
+                                <h2 className="">
+                                    by <span
+                                        className="text-blue-400">
+                                        {productDetails?.author}
+                                    </span>
 
-                            {/* title  */}
-                            <h1 className="text-xl lg:text-2xl mb-2">
-                                {productDetails?.name}
-                            </h1>
-                            <h2 className="mb-6">
-                                by <span
-                                    className="text-blue-400">
-                                    {productDetails?.author}
-                                </span>
+                                </h2>
 
-                            </h2>
+                            </div>
+
 
 
                             {/* price and btn   */}
-                            <div className="flex items-center gap-x-8 mb-10">
+                            <div className="flex items-center gap-x-8 my-2 lg:my-4">
                                 {/* price  */}
 
 
@@ -201,13 +202,13 @@ const BookDetails = () => {
                                     <div className="border rounded-[8px] shadow-md flex flex-col text-center h-auto p-2">
                                         <div >
                                             {
-                                                productDetails?.cover === 'hardcover' && <span className="text-[15px] "> Hardcover </span>
+                                                productDetails?.cover === 'hardcover' && <span className="text-[15px] font-semibold tracking-wide"> Hardcover </span>
                                             }
                                             {
-                                                productDetails?.cover == 'paperback' && <span className="text-[15px] "> Paperback </span>
+                                                productDetails?.cover == 'paperback' && <span className="text-[15px] font-semibold tracking-wide "> Paperback </span>
                                             }
                                             {
-                                                productDetails?.cover == 'leather bound' && <span className="text-[15px] "> Leather Bound </span>
+                                                productDetails?.cover == 'leather bound' && <span className="text-[15px] font-semibold tracking-wide "> Leather Bound </span>
                                             }
                                         </div>
 
@@ -216,7 +217,9 @@ const BookDetails = () => {
 
                                         }
 
+
                                     </div>
+
 
 
                                     {/* add to cart button  */}
@@ -226,7 +229,7 @@ const BookDetails = () => {
                                             productDetails?.available === 'false' ? <h2 className="text-xl text-red-600">Stock Out</h2> : <div className="">
                                                 <button
                                                     onClick={() => handleAddToCart(productDetails)}
-                                                    className="btn h-auto bg-blue-400 text-black hover:text-white hover:bg-black transition-all text-[12px] lg:text-[16px]">Add to cart
+                                                    className="btn h-auto bg-blue-400 text-black hover:text-white hover:bg-black hover:duration-300 transition-all text-[12px] lg:text-[16px]">Add to cart
                                                 </button>
 
                                             </div>
@@ -245,19 +248,36 @@ const BookDetails = () => {
                                     }
                                 </div>
                             </div>
+                            {/* pre order  */}
+
+                            <div className="flex">
+                                {
+                                    productDetails?.available === 'false' &&
+                                    <div className="flex items-center justify-center gap-2 mt-1 border  dark:text-white p-4 text-[18px] rounded font-semibold shadow-lg hover:scale-90 hover:duration-300 transition-all">
+                                        <FaAmazon />
+                                        <a href="https://m.me/bookoceanbd" target="_blank" rel="noreferrer" className="  text-[#FF9900]">Pre-order Now</a>
+
+                                    </div>
+
+                                }
+                            </div>
+
+
+
+
                             {/* original  */}
-                            <div className="flex flex-col gap-y-2 mb-4">
+                            <div className="flex flex-col gap-y-2 my-4">
                                 <div className="flex gap-2 items-center">
                                     <TbTruckDelivery size={25} />
-                                    <p className="text-[14px] md:text-[16px]">Fast Shipping</p>
+                                    <p className="text-[14px] md:text-[16px] tracking-wide">Fast Shipping</p>
                                 </div>
                                 <div className="flex gap-2 items-center">
                                     <MdOutlineGppGood size={25} />
-                                    <p className="text-[14px] md:text-[16px]">Get Premium Quality Original Books</p>
+                                    <p className="text-[14px] md:text-[16px] tracking-wide">Get Premium Quality Original Books</p>
                                 </div>
                                 <div className="flex gap-2 items-center">
                                     <MdPayment size={25} />
-                                    <p className="text-[14px] md:text-[16px]">Cash On Delivery Service is Available</p>
+                                    <p className="text-[14px] md:text-[16px] tracking-wide">Cash On Delivery Service is Available</p>
                                 </div>
                             </div>
                             <hr />
