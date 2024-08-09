@@ -1,17 +1,14 @@
 import { IoClose } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import Qty from "../Qty/Qty";
+
 import useCart from "../../hooks/useCart";
 import Swal from "sweetalert2";
-import { FaPlus, FaMinus } from "react-icons/fa";
-import { useState } from "react";
+
 
 const CartItem = ({ item }) => {
-    const [cart, refetch] = useCart();
+    const [, refetch] = useCart();
     // const { price, quantity } = item;
     // const [productQuantity, setProductQuantity] = useState(quantity)
-
-
 
     // remover from cart 
     const handleCartRemove = item => {
@@ -21,8 +18,8 @@ const CartItem = ({ item }) => {
             .then(res => res.json())
             .then(data => {
                 if (data.deletedCount > 0) {
+                    refetch();
 
-                    refetch()
                     Swal.fire({
                         title: "Removed!",
                         text: "Book has been removed from cart.",

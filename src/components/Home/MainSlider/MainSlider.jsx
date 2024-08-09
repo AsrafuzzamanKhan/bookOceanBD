@@ -16,7 +16,7 @@ const MainSlider = () => {
     return (
         <Swiper
             autoplay={{
-                delay: 3000,
+                delay: 5000,
                 disableOnInteraction: false,
             }}
             modules={[Autoplay, Pagination]}
@@ -24,7 +24,7 @@ const MainSlider = () => {
             pagination={{
                 clickable: true,
             }}
-            className=' h-full border dark:border-0 rounded-[4px] overflow-hidden drop-shadow-2xl '
+            className=' h-full border dark:border-0 rounded-[4px] overflow-hidden drop-shadow-xl '
         >
             <>
                 {
@@ -36,18 +36,17 @@ const MainSlider = () => {
                                 <div className='flex-1 '>
                                     {/* text  */}
                                     <div className='uppercase mb-3 text-center lg:text-left text-black dark:text-gray-100 '> Amazon Pre Order</div>
-                                    <div className='flex flex-col gap-y-2 text-2xl md:text-[30px] font-semibold  leading-none text-center lg:text-left text-black dark:text-gray-100'>
-                                        <div className=' uppercase'>  {slide.discount}% Discount</div>
+                                    <div className='flex flex-col gap-y-2 text-xl lg:text-2xl  font-semibold  leading-none text-center lg:text-left text-black dark:text-gray-100'>
+                                        <div className='uppercase'>  {slide.discount}% Discount</div>
                                         <div className=' capitalize'> {slide.name}</div>
-                                        <div className='text-xl'>
-                                            by {slide.author}</div>
+                                        <div className='text-md lg:text-2xl'>
+                                            by <span className=''>{slide.author}</span></div>
 
                                     </div>
 
                                 </div>
                                 <div className='flex-1 mx-auto'>
-                                    <img className='w-96' src={slide.image} alt="" />
-
+                                    <img className='w-48 lg:w-96' src={slide.image} alt="" />
                                 </div>
                             </div>
                         </SwiperSlide>

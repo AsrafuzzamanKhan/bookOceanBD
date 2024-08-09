@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import useBookData from "../../hooks/useBookData";
 import BookCard from "../BookCard/BookCard";
 import CategoryNav from "../CategoryNav/CategoryNav";
-import FadeIn from "../../Animation/FadeIn";
+// import FadeIn from "../../Animation/FadeIn";
 import { Helmet } from "react-helmet-async";
 
 
@@ -19,8 +19,6 @@ const Books = () => {
     const availableBooks = filteredProducts.filter(item => item.available === "true")
     const unavailableBooks = filteredProducts.filter(item => item.available === "false")
 
-
-
     const { author } = useParams()
     console.log('author', author)
     const uniqueAuthor = [...new Set(booksData.map(item => item.author))];
@@ -36,7 +34,7 @@ const Books = () => {
 
             {
                 selectedAuthor && <Helmet>
-                    <title>Author - {selectedAuthor}'s books</title>
+                    <title>Author -{` ${selectedAuthor}'s`} books</title>
                 </Helmet>
             }
             {
@@ -57,8 +55,8 @@ const Books = () => {
                         {/* <FadeIn delay={0.4} direction='down' > */}
                         {/* title  */}
 
-                        <div className="my-4 text-center capitalize text-xl lg:text-left dark:text-white font-semibold">
-                            <h1><span className="text-blue-400 me-2"> {category}{author}'s</span>Book</h1>
+                        <div className="my-4 lg:my-0 pb-0 lg:pb-4 text-center capitalize text-xl lg:text-left dark:text-white font-semibold">
+                            <h1><span className="text-blue-400 me-2"> {category}{author}</span>Book</h1>
                         </div>
 
                         {/* get books by category  */}

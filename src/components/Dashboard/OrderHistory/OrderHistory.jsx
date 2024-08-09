@@ -8,6 +8,7 @@ import { IoMdPricetags } from "react-icons/io";
 import { FaPhone } from "react-icons/fa6";
 
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
 const OrderHistory = () => {
     // const [orders, refetch] = useUserOrder()
@@ -53,16 +54,14 @@ const OrderHistory = () => {
 
 
     return (
-        <div className=" ">
+        <div className=" min-h-screen ">
             <Helmet>
                 <title>Book Ocean BD || Order History</title>
             </Helmet>
-
             <div className="container mx-auto">
-
                 <div className="mb-[30px] pt-28 md:pt-28 lg:pt-0 xl:pt-24 min-h-screen">
                     <div className=' items-center  mb-8 flex flex-col'>
-                        <p className=' bg-slate-800 text-white px-8 py-3 rounded'> {user.displayName}'s Order history</p>
+                        <h1 className=' bg-slate-800 text-white px-8 py-3 rounded'>{`${user.displayName}'s`} Order history</h1>
                     </div>
 
                     {/* order stats 
@@ -141,7 +140,7 @@ const OrderHistory = () => {
                                             <div className="flex-1 mt-4 lg:mt-0">
                                                 {order.cart.map((book, i) => <>
 
-                                                    <div className="flex mb-4">
+                                                    <Link to={`/book/${book.name.replace(/\s/g, "_")}/${book.bookId}`} className="flex mb-4 hover:scale-95 duration-500">
                                                         <div className="w-1/4">
                                                             <img className="w-12" src={book.image} alt="Avatar Tailwind CSS Component" />
                                                         </div>
@@ -149,7 +148,7 @@ const OrderHistory = () => {
                                                             <span className="text-blue-600">  {i + 1} </span> - {book.name} - by <span className="text-blue-400">{book.author}</span>
                                                             <div className="flex items-center"> <IoMdPricetags className="me-2" /><span className="me-1">&#x09F3; </span> {book.price}  </div>
                                                         </div>
-                                                    </div>
+                                                    </Link>
                                                 </>)}
 
                                             </div>

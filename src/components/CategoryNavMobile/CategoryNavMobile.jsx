@@ -1,6 +1,6 @@
 import { FiX } from "react-icons/fi";
 import useBookData from "../../hooks/useBookData";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useEffect, useRef } from "react";
 
 
@@ -11,6 +11,7 @@ const CategoryNavMobile = ({ setCatNavMobile }) => {
 
 
     const sidebarRef = useRef(null);
+
     useEffect(() => {
         // Function to handle click outside of the sidebar
         const handleClickOutside = (event) => {
@@ -26,7 +27,7 @@ const CategoryNavMobile = ({ setCatNavMobile }) => {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, []);
+    }, [setCatNavMobile]);
 
     return (
         <nav className="w-full h-full bg-primary p-8 " ref={sidebarRef} >
@@ -35,13 +36,13 @@ const CategoryNavMobile = ({ setCatNavMobile }) => {
                 className=" flex justify-end mb-6 cursor-pointer">
                 <FiX className="text-3xl" />
             </div>
-            <div className="flex flex-col gap-y-4  pb-12 overflow-x-hidden h-[80vh] " >
+            <div className="flex flex-col gap-y-4 pb-12 overflow-x-hidden h-[80vh] " >
                 {
                     uniqueCategories?.map((category, i) => {
-                        return <Link key={i} to={`/books/${category}`} className='capitalize font-semibold hover:text-green-600 duration-300 '
+                        return <NavLink key={i} to={`/books/${category}`} className='capitalize font-semibold hover:text-green-600 duration-300 px-2 rounded tracking-wide'
                             onClick={() => setCatNavMobile(false)}
                         >  {category} Books
-                        </Link>
+                        </NavLink>
 
                     })
                 }

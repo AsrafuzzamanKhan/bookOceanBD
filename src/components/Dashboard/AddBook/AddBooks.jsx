@@ -90,7 +90,7 @@ const AddBooks = () => {
                                         <option>barnes & noble</option>
                                         <option>biography</option>
                                         <option>children</option>
-                                        <option>classic</option>
+                                        <option>classics</option>
                                         <option>comics</option>
                                         <option>crime</option>
                                         <option>deluxe edition</option>
@@ -101,7 +101,7 @@ const AddBooks = () => {
                                         <option>islamic</option>
                                         <option>manga</option>
                                         <option>mythology</option>
-                                        <option>non-Fiction</option>
+                                        <option>non-fiction</option>
                                         <option>poetry</option>
                                         <option>romance</option>
                                         <option>science fiction</option>

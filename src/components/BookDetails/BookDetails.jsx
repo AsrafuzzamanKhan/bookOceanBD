@@ -7,7 +7,7 @@ import useCart from "../../hooks/useCart";
 import { useContext, useEffect } from "react";
 import { CartContext } from "../../providers/CartProvider/CartProvider";
 import FadeIn from "../../Animation/FadeIn";
-import { motion, useAnimation } from "framer-motion"
+import { useAnimation } from "framer-motion"
 import { useInView } from "react-intersection-observer";
 import { Helmet } from "react-helmet-async";
 import { MdEdit } from "react-icons/md";
@@ -111,12 +111,10 @@ const BookDetails = () => {
 
                 }
             });
-
-
         }
     }
     return (
-        <div className="mb-16 pt-32 md:pt-32 lg:pt-24 ">
+        <div className="mb-4 pt-32 md:pt-32 lg:pt-24 ">
             <div className="container mx-auto min-h-screen">
                 <Helmet>
                     <title>Buy {productDetails?.name}</title>
@@ -138,7 +136,7 @@ const BookDetails = () => {
                     <Link to='/' className=" hover:text-blue-900  duration-300"><IoMdHome size={20} /></Link>
                     /
                     <Link to={`/books/${productDetails?.category}`}>
-                        <span className="text-blue-400 hover:text-blue-900 hover:underline duration-300">
+                        <span className="text-blue-400 hover:text-blue-900 hover:underline duration-300 capitalize">
                             {productDetails?.category}
                         </span>
                     </Link>
@@ -161,15 +159,16 @@ const BookDetails = () => {
 
                 {/* text  */}
                 <div ref={ref} >
-                    <motion.div animate={animation} className="flex flex-col lg:flex-row lg:gap-[20px] gap-0 mb-[30px] items-center w-full bg-white dark:bg-[#1D232A] ">
+                    {/* <motion.div animate={animation} className="flex flex-col lg:flex-row lg:gap-[20px] gap-0 mb-[30px] items-center w-full bg-white dark:bg-[#1D232A] "> */}
+                    <div className="flex flex-col lg:flex-row lg:gap-[20px] gap-0 mb-[30px] items-center w-full bg-white dark:bg-[#1D232A] ">
                         <div className="flex-1 w-full h-full rounded-[4px] flex justify-center items-center  " >
                             <img src={productDetails?.image}
-                                className=" lg:max-w-[65%] max-h-96  h-full lg:p-0 p-4 "
+                                className=" lg:max-w-[65%] max-h-96  h-full lg:p-0 p-4" loading="lazy"
                                 alt={productDetails?.name} />
                             {/* </div> */}
                         </div>
 
-                        <div className="w-full flex-1 lg:py-10 py-4 md:px-8 px-[2vw]  flex flex-col justify-center dark:bg-base-200 dark:text-white text-black  rounded-[4px]  dark:border-none shadow-md border ">
+                        <div className="w-full flex-1 lg:py-10 py-4 md:px-8 px-[2vw]  flex flex-col justify-center dark:bg-base-200 dark:text-white text-black  rounded-[4px]  dark:border-none shadow-sm border ">
                             {/* book details  */}
                             <div className="flex flex-col gap-y-2">
                                 <h4 className="capitalize tracking-wide text-blue-400 text-lg font-medium ">
@@ -199,7 +198,7 @@ const BookDetails = () => {
 
                                 <div className=" flex justify-center items-center gap-2 ">
 
-                                    <div className="border rounded-[8px] shadow-md flex flex-col text-center h-auto p-2">
+                                    <div className="border rounded-[4px] shadow-sm flex flex-col text-center h-auto p-2">
                                         <div >
                                             {
                                                 productDetails?.cover === 'hardcover' && <span className="text-[15px] font-semibold tracking-wide"> Hardcover </span>
@@ -229,7 +228,7 @@ const BookDetails = () => {
                                             productDetails?.available === 'false' ? <h2 className="text-xl text-red-600">Stock Out</h2> : <div className="">
                                                 <button
                                                     onClick={() => handleAddToCart(productDetails)}
-                                                    className="btn h-auto bg-blue-400 text-black hover:text-white hover:bg-black hover:duration-300 transition-all text-[12px] lg:text-[16px]">Add to cart
+                                                    className="btn h-auto bg-blue-400 text-black hover:text-white hover:bg-black hover:duration-300 transition-all text-[12px] lg:text-[14px] border-0 rounded-[4px]">Add to cart
                                                 </button>
 
                                             </div>
@@ -300,14 +299,15 @@ const BookDetails = () => {
 
 
                         </div>
+                    </div>
 
-                    </motion.div>
+                    {/* </motion.div> */}
                 </div>
                 {/* Description  */}
                 <section>
-                    <FadeIn delay={0.4} direction='up' >
-                        <BookDescription />
-                    </FadeIn>
+                    {/* <FadeIn delay={0.4} direction='up' > */}
+                    <BookDescription />
+                    {/* </FadeIn> */}
                 </section>
                 {/* relatged  product  */}
                 <section>

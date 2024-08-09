@@ -35,6 +35,25 @@ const AllUsers = () => {
 
     const handleDelete = user => {
         console.log(user)
+        fetch(`https://book-ocean-bd-server.vercel.app/users/${user._id}`, {
+            method: "DELETE"
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.deletedCount > 0) {
+
+                    refetch()
+                    Swal.fire({
+                        title: "Removed!",
+                        text: "User has removed",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500
+
+                    });
+                }
+
+            })
     }
     return (
         <div className="container mx-auto">

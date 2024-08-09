@@ -36,20 +36,30 @@ const SearchBook = () => {
                     <CategoryNav></CategoryNav>
 
                     <div className='flex flex-col w-full '>
-
-
                         <div>
                             {/* title  */}
-                            <div className="flex flex-col my-4 gap-y-8 text-center font-semibold lg:text-left text-xl dark:text-white">
-                                <div className='capitalize px-[2vw] md:px-0'>
-                                    {filteredResults?.length > 0 ? `${filteredResults.length} results for ${searchTerm}` : `no result found for " ${searchTerm} "`}
+                            <div className="flex flex-col my-4 lg:my-0 lg:mb-4 gap-y-8 text-center font-semibold lg:text-left text-[16px] dark:text-white px-[2vw] lg:px-0">
+                                <div className='capitalize bg-gray-200 dark:text-black  md:px-2 rounded py-2'>
+                                    {
+                                        filteredResults?.length > 0
+                                            ?
+                                            `${filteredResults.length} results for "${searchTerm}"`
+                                            :
+                                            `no result found for " ${searchTerm} "`
+                                    }
                                 </div>
-                                <div className='flex'>
-                                    <div className="flex flex-col mx-auto items-center justify-center gap-2  border  dark:text-white p-8 text-[18px] rounded font-semibold shadow-lg hover:scale-105 hover:duration-300 transition-all">
-                                        <FaAmazon size={50} />
-                                        <a href="https://m.me/bookoceanbd" target="_blank" rel="noreferrer" className="  text-[#FF9900] hover:text-[#946b2d] duration-500 flex items-center gap-2">Pre-order any book from amazon through us.</a>
+                                {/* pre order  */}
+                                {
+                                    filteredResults?.length > 0 ? `` : <div className='flex'>
+                                        <div className="flex flex-col mx-auto items-center justify-center gap-2  border  dark:text-white p-8 text-[18px] rounded font-semibold shadow-lg hover:scale-105 hover:duration-300 transition-all">
+                                            <FaAmazon size={50} />
+                                            <a href="https://m.me/bookoceanbd" target="_blank" rel="noreferrer" className="  text-[#FF9900] hover:text-[#946b2d] duration-500 flex items-center gap-2">
+                                                <span className='text-black dark:text-white'>Inbox us.</span>
+                                                Pre-order any book from amazon through us.
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
+                                }
 
                             </div>
                             {/* products grid */}

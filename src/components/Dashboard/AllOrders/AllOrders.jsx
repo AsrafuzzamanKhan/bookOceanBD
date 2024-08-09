@@ -7,6 +7,7 @@ import { Helmet } from "react-helmet-async";
 import { IoMdPricetags } from "react-icons/io";
 import { IoCalendar } from "react-icons/io5";
 import { FaMapMarkerAlt, FaPhone, FaUser } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const AllOrders = () => {
     const [axiosSecure] = useAxiosSecure();
@@ -169,7 +170,7 @@ const AllOrders = () => {
                                         <div className="flex-1 mt-4 lg:mt-0">
                                             {order.cart.map((book, i) => <div key={i} >
 
-                                                <div className="flex mb-4">
+                                                <Link to={`/book/${book.name.replace(/\s/g, "_")}/${book.bookId}`} className="flex mb-4 hover:scale-95 duration-500">
                                                     <div className="w-1/4">
                                                         <img className="w-12" src={book.image} alt={book.image} />
                                                     </div>
@@ -177,7 +178,7 @@ const AllOrders = () => {
                                                         <span className="text-blue-600">  {i + 1} </span> - {book.name} - by <span className="text-blue-400">{book.author}</span>
                                                         <div className="flex items-center"> <IoMdPricetags className="me-2" /><span className="me-1">&#x09F3; </span> {book.price}  </div>
                                                     </div>
-                                                </div>
+                                                </Link>
                                             </div>)}
 
                                         </div>
@@ -187,78 +188,7 @@ const AllOrders = () => {
                         )
                     }
                 </div>
-                {/* <div className="overflow-x-auto px-8">
-                <table className="table table-zebra ">
 
-                    <thead>
-                        <tr>
-                            <th>S/N</th>
-                            <th>Name</th>
-                            <th>qtn</th>
-                            <th>Books</th>
-                            <th>Total</th>
-                            <th>Approve</th>
-                            <th>Cancel</th>
-                            <th>Delivered</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            orders?.map((order, i) => <tr key={i}>
-                                <th>{i + 1}</th>
-                                <td>
-                                    <div>
-                                        {order.data.name}
-                                    </div>
-                                    <div>
-                                        {order.email}
-                                    </div>
-                                    <div className="  "> <span className="font-semibold leading-loose">Address:</span> {order.data.address}
-
-                                    </div>
-
-                                    <div>
-                                        <span className="font-semibold">Phone:</span> {order.data.phone}
-                                    </div>
-                                </td>
-
-                                <td>{order.orderQuantity}</td>
-
-
-                                <td className="">
-                                    <div>
-                                        <span className="font-semibold leading-loose">Date: </span>
-                                        {order.date}
-                                    </div>
-                                    {order.cart.map((book, i) => <>
-
-                                        <div className="flex mb-4">
-                                            <div className="w-1/4">
-                                                <img className="w-12" src={book.image} alt="Avatar Tailwind CSS Component" />
-                                            </div>
-                                            <div className="w-3/4">
-                                                <span className="text-blue-600">  {i + 1} </span> - {book.name} - by <span className="text-blue-400">{book.author}</span>
-                                            </div>
-                                        </div>
-                                    </>)}
-                                </td>
-
-
-                                <td>{order.totalAmount}</td>
-                                <td>{order.status === 'approve' ? 'Approved' : <button onClick={() => handleApproved(order)} className="btn bg-green-600 text-white">{order.status}</button>}</td>
-
-                                <td>{order.status === 'canceled' ? 'Canceled' : <button onClick={() => handleCanceled(order)} className="btn bg-orange-600 text-white">{order.status}</button>}</td>
-
-
-                                <td>{order.status === 'delivered' ? 'Delivered' : <button onClick={() => handleDelivery(order)} className="btn bg-orange-600 text-white">{order.status}</button>}</td>
-
-                            </tr>)
-                        }
-
-
-                    </tbody>
-                </table>
-            </div> */}
             </div>
         </div>
     );

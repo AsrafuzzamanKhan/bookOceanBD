@@ -9,31 +9,28 @@ import PropTypes from 'prop-types';
 const BookCard = ({ book }) => {
     const { _id, name, author, price, image, available, newBook, category, cover } = book;
 
-
     return (
-
         <div>
-
             {/* <Link to={`/book/${name.replace(/\s/g, "-")}`}> */}
             <Link to={`/book/${name.replace(/\s/g, "_")}/${_id}`}>
-                <div className=" dark:border-0 dark:bg-gray-800  dark:text-white  border shadow-md w-full md:h-[400px] h-full  rounded-[8px] relative group overflow-hidden">
+                <div className=" dark:border-0 dark:bg-gray-800  dark:text-white  border shadow-sm w-full md:h-[400px] h-full rounded-[4px] relative group overflow-hidden">
                     {/* badge  */}
                     {newBook === 'true' && <div className="absolute bg-blue-400 text-primary text-[12px] font-extrabold uppercase top-4 right-4 rounded-full px-2 z-10">
                         new
                     </div>}
                     {/* image  */}
                     <div className="w-full h-[230px] flex items-center justify-center relative">
-
                         <img
                             className="w-32  group-hover:scale-90 transition-all  px-[1vw] md:p-0"
                             src={image} alt={name} loading="lazy" />
                     </div>
+
                     {/* text  */}
-                    <div className="flex  flex-col px-[2vw] lg:px-6 my-4  ">
+                    <div className="flex  flex-col px-[2vw] lg:px-6 my-4">
 
                         <div className="grow">
                             {/* category  */}
-                            <h4 className="text-sm text-blue-400">{category}</h4>
+                            <h4 className="text-sm text-blue-400 capitalize">{category}</h4>
                             {/* title  */}
                             <h1 className="text-[14px] tooltip text-start" data-tip={name}>{name.substring(0, 35)}... </h1>
                             <h3 className="capitalize text-[14px] ">({cover})</h3>

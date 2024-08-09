@@ -12,10 +12,10 @@ const UserHome = () => {
     return (
         <div className="flex flex-col">
             <Helmet>
-                <title>Book Ocean BD ||  Order Summary</title>
+                <title>Book Ocean BD || Order Summary</title>
             </Helmet>
             <div className='pt-24 mx-auto mb-8'>
-                <div className=' bg-slate-800 text-white px-8 py-3 rounded'>   Order Summary</div>
+                <div className=' bg-slate-800 text-white px-8 py-3 rounded'>Order Summary</div>
             </div>
 
             <div className="px-12">

@@ -6,11 +6,11 @@ import CategoryNavMobile from "../../CategoryNavMobile/CategoryNavMobile";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import Cart from "../../Cart/Cart";
 import { AuthContext } from "../../../providers/AuthProvider/AuthProvider";
-
 import useCart from "../../../hooks/useCart";
 import { CartContext } from "../../../providers/CartProvider/CartProvider";
 import useAdmin from "../../../hooks/useAdmin";
-import logoSvg from '../../../assets/logo/book.gif'
+import logoSvg from '../../../assets/logo/navlogo.png'
+import Swal from "sweetalert2";
 
 
 const Header = () => {
@@ -26,6 +26,13 @@ const Header = () => {
     const handleLogOut = () => {
         logOut()
             .then(() => {
+                Swal.fire({
+                    // position: "top-end",
+                    icon: "success",
+                    title: "You have successfully logged out",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
                 // Sign-out successful.
                 navigate('/')
                 // console.log(navigate)
@@ -53,8 +60,8 @@ const Header = () => {
                     </div>
 
                     {/* logo  */}
-                    <Link to={'/'} className="w-[250px] hover:scale-95 duration-300" >
-                        <img src={logoSvg} alt="" />
+                    <Link to={'/'} className="w-[200px] md:[250px]" >
+                        <img className="" src={logoSvg} alt="" />
                     </Link>
 
                     {/* search in dextop  */}
@@ -69,7 +76,7 @@ const Header = () => {
                     <div className="flex items-center justify-center gap-x-[10px] ">
 
                         {/* drop down  */}
-                        <div className="dropdown dropdown-hover dropdown-bottom dropdown-end ">
+                        <div className="dropdown dropdown-hover dropdown-bottom dropdown-end cursor-pointer ">
                             <label tabIndex={0} >
                                 <div className="avatar online placeholder">
                                     <div className="bg-neutral text-neutral-content rounded-full w-7 md:w-10">
@@ -105,14 +112,11 @@ const Header = () => {
 
                         {/* cart icon  */}
                         <div onClick={() => setIsOpen(!isOpen)} className="relative cursor-pointer">
-                            <FiShoppingBag size={30}></FiShoppingBag>
+                            <FiShoppingBag className="text-2xl md:text-3xl"></FiShoppingBag>
 
                             {/* amount  */}
                             {/* cart total  */}
-                            <div className="bg-blue-400 absolute w-[18px] h-[18px] rounded-full top-3 -right-1 text-[14px] flex justify-center items-center font-bold tracking-[0.1em]">
-                                {/* {itemsAmount} */}
-                                {cart?.length || 0}
-                            </div>
+                            <div className="flex justify-center items-center bg-blue-400 absolute w-[18px] h-[18px] rounded-full top-3 -right-1 text-[14px] font-semibold ">{cart?.length || 0}</div>
                         </div>
 
                         {/* cart  */}
@@ -123,7 +127,7 @@ const Header = () => {
                     </div>
                 </div>
                 {/* search for mobile only  */}
-                <div className=" lg:hidden">
+                <div className="lg:hidden">
                     <SearchForm></SearchForm>
                 </div>
             </div >

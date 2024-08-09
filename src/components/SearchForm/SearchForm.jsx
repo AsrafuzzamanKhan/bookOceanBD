@@ -19,14 +19,14 @@ const SearchForm = () => {
         setSearchTerm(e.target.value)
     }
     const handleSubmit = e => {
+
         e.preventDefault()
         // console.log(searchTerm)
 
         if (searchTerm.length > 0) {
-            setSearchTerm('')
+            setSearchTerm('');
             navigate(`/search?query=${searchTerm}`)
             document.querySelector('input').value = '';
-
 
         } else {
             // if input is empty set animation to true

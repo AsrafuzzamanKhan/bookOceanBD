@@ -34,12 +34,12 @@ const Footer = () => {
 
                         <div>
                             <p>
-                                Experience the convenience of pre-ordering your desired books with us. Stay ahead of the literary curve by securing your copy in advance, and we'll make sure it reaches you promptly. No more waiting in anticipation – we prioritize your love for reading by making pre-orders a seamless and efficient process.
+                                Experience the convenience of pre-ordering your desired books with us. Stay ahead of the literary curve by securing your copy in advance, and {"we'll"} make sure it reaches you promptly. No more waiting in anticipation – we prioritize your love for reading by making pre-orders a seamless and efficient process.
                             </p>
                         </div>
 
                         <div className='font-semibold mt-2'>
-                            <h1>Here's what sets us apart:</h1>
+                            <h1>{"Here's"} what sets us apart:</h1>
                         </div>
                         <div className='my-2'>
                             <div>
@@ -49,7 +49,7 @@ const Footer = () => {
 
                             <div>
                                 <span className='font-semibold me-2'>Nationwide Delivery:</span>
-                                No matter where you are in Bangladesh, we'll bring the world of literature to your doorstep. Our reliable delivery service ensures a smooth and secure transit for your books.
+                                No matter where you are in Bangladesh, {"we'll"} bring the world of literature to your doorstep. Our reliable delivery service ensures a smooth and secure transit for your books.
                             </div>
 
                             <div>
@@ -119,7 +119,7 @@ const Footer = () => {
             {/* copy rigte  */}
             <div className='py-10 border-t border-t-black'>
                 <div className='container mx-auto'>
-                    <div className='text-center text-sm'>
+                    <div className='text-center text-sm px-[2vw]'>
                         Copyright &copy; Book Ocean BD 2024. All rights reserved
                     </div>
                 </div>

@@ -13,7 +13,7 @@ const UpdateBook = () => {
     const [axiosSecure] = useAxiosSecure()
     const productDetails = booksData.find(pd => pd._id == id);
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit } = useForm();
     const navigate = useNavigate()
     const img_hosting_url = `https://api.imgbb.com/1/upload?key=${img_hosting_token}`
     console.log(img_hosting_url);
@@ -41,42 +41,57 @@ const UpdateBook = () => {
     // }
 
 
-
-
-
-
     const onSubmit = data => {
         console.log('update book data', data);
         setupdateLoadin(true)
-        const formData = new FormData();
-        formData.append('image', data.image[0]);
 
-        fetch(img_hosting_url, {
-            method: "POST",
-            body: formData
-        })
-            .then(res => res.json())
-            .then(imgResponse => {
-                if (imgResponse.success) {
-                    const imaURL = imgResponse.data.display_url;
-                    const { name, price, category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, author, available, best, cover, new: newBook } = data;
-                    const updateBookItem = { name, price: parseFloat(price), category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, image: imaURL, author, available, best, cover, newBook }
-                    console.log(updateBookItem);
 
-                    // axiosSecure.put(`/books/${productDetails._id}`, data)
-                    axiosSecure.put(`/books/${productDetails._id}`, updateBookItem)
+        const { name, price, category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, author, available, best, cover, new: newBook } = data;
+        const updateBookItem = { name, price: parseFloat(price), category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, author, available, best, cover, newBook }
+        console.log(updateBookItem);
 
-                        .then(res => {
-                            if (res.data.modifiedCount > 0) {
-                                alert('Book updated ')
-                                console.log(res.data)
-                                navigate('/dashboard/manageBooks')
+        // axiosSecure.put(`/books/${productDetails._id}`, data)
+        axiosSecure.put(`/books/${productDetails._id}`, updateBookItem)
 
-                            }
-                        }
-                        )
+            .then(res => {
+                if (res.data.modifiedCount > 0) {
+                    alert('Book updated ')
+                    console.log(res.data)
+                    navigate('/dashboard/manageBooks')
+
                 }
-            })
+            }
+            )
+
+
+        // const formData = new FormData();
+        // formData.append('image', data.image[0]);
+        // fetch(img_hosting_url, {
+        //     method: "POST",
+        //     body: formData
+        // })
+        //     .then(res => res.json())
+        //     .then(imgResponse => {
+        //         if (imgResponse.success) {
+        //             const imaURL = imgResponse.data.display_url;
+        //             const { name, price, category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, author, available, best, cover, new: newBook } = data;
+        //             const updateBookItem = { name, price: parseFloat(price), category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, image: imaURL, author, available, best, cover, newBook }
+        //             console.log(updateBookItem);
+
+        //             // axiosSecure.put(`/books/${productDetails._id}`, data)
+        //             axiosSecure.put(`/books/${productDetails._id}`, updateBookItem)
+
+        //                 .then(res => {
+        //                     if (res.data.modifiedCount > 0) {
+        //                         alert('Book updated ')
+        //                         console.log(res.data)
+        //                         navigate('/dashboard/manageBooks')
+
+        //                     }
+        //                 }
+        //                 )
+        //         }
+        //     })
 
     };
     return (
@@ -111,14 +126,15 @@ const UpdateBook = () => {
                             <div className="form-control w-full ">
                                 <label className="label">
                                     <span className="label-text font-semibold">Category*</span>
-
                                 </label>
-                                <select defaultValue={productDetails?.category} className="select select-bordered capitalize  bg-white"  {...register("category", { required: true })}>
+                                <select
+                                    defaultValue={productDetails?.category}
+                                    className="select select-bordered capitalize  bg-white"  {...register("category", { required: true })}>
                                     <option disabled >Pick one</option>
                                     <option value='barnes & noble'>barnes & noble</option>
                                     <option value='biography'>biography</option>
                                     <option value='children'>children</option>
-                                    <option value='classic'>classic</option>
+                                    <option value='classic'>classics</option>
                                     <option value='comics'>comics</option>
                                     <option value='crime'>crime</option>
                                     <option value='deluxe edition'>deluxe edition</option>
@@ -129,7 +145,7 @@ const UpdateBook = () => {
                                     <option value='islamic'>islamic</option>
                                     <option value='manga'>manga</option>
                                     <option value='mythology'>mythology</option>
-                                    <option value='non-Fiction'>non-Fiction</option>
+                                    <option value='non-fiction'>non-fiction</option>
                                     <option value='poetry'>poetry</option>
                                     <option value='romance'>romance</option>
                                     <option value='science fiction'>science fiction</option>
@@ -205,9 +221,7 @@ const UpdateBook = () => {
                             </div>
                         </div>
 
-                        <div className='mt-2'>
 
-                        </div>
                         {/* details  */}
                         <div className='grid grid-cols-2 gap-4'>
                             {/* Description */}
@@ -284,7 +298,7 @@ const UpdateBook = () => {
                         </div>
 
                         {/* fill upload  */}
-                        <div className="form-control w-full">
+                        {/* <div className="form-control w-full">
                             <label className="label">
                                 <span className="label-text">Item image</span>
 
@@ -293,7 +307,7 @@ const UpdateBook = () => {
                                 {...register("image", { required: true })} />
 
 
-                        </div>
+                        </div> */}
 
                         {/* details
                         <div className="form-control">

@@ -1,5 +1,6 @@
 import useBookData from "../../hooks/useBookData";
 import BookSlider from "../BookSlider/BookSlider";
+import GoogleAds from "../GoogleAds/GoogleAds";
 
 
 const RelatedBooks = ({ categoryTitle }) => {
@@ -12,12 +13,16 @@ const RelatedBooks = ({ categoryTitle }) => {
     const sliceData = filteredProducts.slice(0, 20)
 
     return (
-        <div className="my-16">
-            <div className="px-2">
-                <h2 className="h2 mb-6 text-center lg:text-start dark:text-white">Related Books</h2>
+        <section className="">
+            <div className="px-[2vw] lg:px-0 py-8">
+                <h2 className=" text-xl md:text-2xl mb-6 text-center lg:text-start dark:text-white font-semibold">Related Books</h2>
                 <BookSlider data={sliceData}></BookSlider>
             </div>
-        </div>
+            <div className="flex flex-col lg:flex-row gap-8 px-[2vw] lg:px-0">
+                <GoogleAds dataAdSlot='5919723972' />
+                <GoogleAds dataAdSlot='3004054082' />
+            </div>
+        </section>
     );
 };
 

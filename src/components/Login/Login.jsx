@@ -12,7 +12,7 @@ import FadeIn from "../../Animation/FadeIn";
 const Login = () => {
     const [loginLoading, SetLoginLoading] = useState(false)
     const [loginError, setLoginError] = useState('')
-    const { signIn, loading } = useContext(AuthContext)
+    const { signIn } = useContext(AuthContext)
     // navigate user 
     const navigate = useNavigate();
     const location = useLocation()
@@ -91,16 +91,17 @@ const Login = () => {
                                 </p> */}
                                 <div className="text-xm flex justify-between items-center mt-3">
                                     <p>
-                                        Don't have an account
+                                        {"Don't"} have an account
                                     </p>
                                     <Link to='/signup'>
-                                        <button className="py-2 bg-white px-2 border rounded-xl hover:scale-110 duration-300">Register</button></Link>
+                                        <button className="py-2 bg-white px-2 border rounded-xl hover:scale-110 duration-300">Register</button>
+                                    </Link>
                                 </div>
                             </div>
 
                             {/* image  */}
                             <div className="md:block hidden w-1/2 ">
-                                <img className=" rounded-2xl" src={loginImg} alt="" />
+                                <img className=" rounded-2xl" src={loginImg} loading="lazy" alt="" />
                             </div>
                         </div>
                     </FadeIn>

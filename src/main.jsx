@@ -78,11 +78,12 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Home></Home>
+        element: <Home />
       },
       {
         path: '/books/:category',
-        element: <React.Suspense fallback={<Loading />}> <LazyBooks /></React.Suspense>
+        element: <React.Suspense fallback={<Loading />}> <LazyBooks />
+        </React.Suspense>
       },
       {
         path: '/authorbooks/:author',

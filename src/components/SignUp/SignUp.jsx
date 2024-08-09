@@ -1,8 +1,6 @@
 import { useForm } from 'react-hook-form';
 import loginImg from '../../assets/log.jpg'
 import { Link, useNavigate } from 'react-router-dom';
-import { AiOutlineEye } from 'react-icons/ai';
-import { FcGoogle } from 'react-icons/fc';
 import { useContext } from 'react';
 import { AuthContext } from '../../providers/AuthProvider/AuthProvider';
 import Swal from 'sweetalert2';
@@ -43,7 +41,7 @@ const SignUp = () => {
                                     Swal.fire({
                                         position: 'top-end',
                                         icon: 'success',
-                                        title: 'User Created Successfully',
+                                        title: 'Account Created Successfully',
                                         showConfirmButton: false,
                                         timer: 1500
                                     })
