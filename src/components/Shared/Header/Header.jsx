@@ -60,7 +60,7 @@ const Header = () => {
                     </div>
 
                     {/* logo  */}
-                    <Link to={'/'} className="w-[200px] md:[250px]" >
+                    <Link to={'/'} className="w-[200px] md:w-[250px]" >
                         <img className="" src={logoSvg} alt="" />
                     </Link>
 

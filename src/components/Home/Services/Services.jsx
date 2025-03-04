@@ -9,12 +9,12 @@ const Services = () => {
         fetch('services.json')
             .then(res => res.json())
             .then(data => {
-
-                setServices(data)
+                setServices(data);
             })
     }, [])
+
     return (
-        <div className="bg-gray-200 py-10 my-10 background-image hidden md:block"
+        <div className="bg-gray-200 py-10 my-10 background-image hidden lg:block"
             style={{
                 backgroundImage: `${serviceImg}`,
                 backgroundRepeat: 'no-repeat',
@@ -22,19 +22,24 @@ const Services = () => {
 
             }}
         >
-            <div className=" container mx-auto px-[2vw] lg:px-0">
+            <div className="container mx-auto px-[2vw] lg:px-0">
 
-                <div className=" grid md:grid-cols-3 xl:grid-cols-5 grid-cols-2 gap-4 lg:my-6 my-2 w-full">
+                <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-4">
                     {services.map(service =>
                         <FadeIn delay={0.4} direction='down' key={service.id} >
-                            <div className="h-36 shadow-md bg-white rounded-[4px] flex justify-center lg:py-4 py-2 border-0 text-black outline-none overflow-y-auto" >
-                                <div className="flex flex-col px-2">
-                                    <h2 className="text-lg lg:text-xl lg:font-bold font-semibold text-center  mb-2 leading-none">{service.heading}</h2>
-                                    <p className="lg:text-lg text-[16px] leading-snug ">{service.subHeading}</p>
 
+                            <div className="w-full flex gap-4 bg-white items-center h-[9rem] px-2 rounded">
+                                <div className="w-16 ">
+                                    <img className="w-full object-cover" src={service.image} alt="image" />
+                                </div>
+                                <div className=" text-black">
+                                    <h2 className="text-md xl:text-lg font-semibold">{service.heading}</h2>
+                                    <p className="xl:text-md lg:text-sm leading-5">{service.subHeading}</p>
                                 </div>
 
                             </div>
+
+
                         </FadeIn>
                     )}
                 </div>

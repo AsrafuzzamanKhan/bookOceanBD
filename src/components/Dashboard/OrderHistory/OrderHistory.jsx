@@ -146,7 +146,7 @@ const OrderHistory = () => {
                                                         </div>
                                                         <div className="w-3/4">
                                                             <span className="text-blue-600">  {i + 1} </span> - {book.name} - by <span className="text-blue-400">{book.author}</span>
-                                                            <div className="flex items-center"> <IoMdPricetags className="me-2" /><span className="me-1">&#x09F3; </span> {book.price}  </div>
+                                                            <div className="flex items-center"> <IoMdPricetags className="me-2" /><span className="me-1">&#x09F3; </span> {book.discountPrice}  </div>
                                                         </div>
                                                     </Link>
                                                 </>)}

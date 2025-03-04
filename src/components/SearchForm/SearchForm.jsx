@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+// import useBookData from "../../hooks/useBookData";
+
 const SearchForm = () => {
+    // const [booksData] = useBookData()
     const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState('');
     const [isAnimating, setIsAnimating] = useState(false);
@@ -14,12 +17,19 @@ const SearchForm = () => {
         return () => clearTimeout(timeout)
     }, [])
 
-    const handleSeachInput = e => {
+
+
+
+    const handleSearchInput = e => {
         // console.log(e.target.value)
         setSearchTerm(e.target.value)
+        // console.log('search:', searchTerm);
+        // const filteredResults = booksData.filter((item) =>
+        //     item.name.toLowerCase().includes(searchTerm.toLowerCase()) || item.author.toLowerCase().includes(searchTerm.toLowerCase()) || item.category.toLowerCase().includes(searchTerm.toLowerCase()));
+        // console.log(filteredResults);
     }
-    const handleSubmit = e => {
 
+    const handleSubmit = e => {
         e.preventDefault()
         // console.log(searchTerm)
 
@@ -40,7 +50,7 @@ const SearchForm = () => {
             onSubmit={handleSubmit}
             className={`${isAnimating ? 'animate-shake' : 'animate-none'} w-full relative `} >
             <input
-                onChange={handleSeachInput}
+                onChange={handleSearchInput}
                 className="input dark:bg-white" type="text" placeholder="Type book name or author name ..." />
             <button className="btn bg-blue-400 absolute top-0 right-0 rounded-tl-none rounded-bl-none border-0">
                 <FiSearch className="text-xl  dark:text-white"></FiSearch>

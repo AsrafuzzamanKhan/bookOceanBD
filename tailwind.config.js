@@ -3,10 +3,6 @@ export default {
   darkMode: "media",
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    fontFamily: {
-      primary: '"Exo 2"',
-    },
-
     extend: {
       colors: {
         body: "#1D1F23",
@@ -26,9 +22,15 @@ export default {
           "30%, 50%, 70%": { transform: "translate3d(-4px, 0,0 )" },
           "40%, 60%": { transform: "translate3d(4px, 0,0 )" },
         },
+
+        spin: {
+          "0%, 100%": { transform: "rotate(-3deg)" },
+          "50%": { transform: "rotate(3deg)" },
+        },
       },
       animation: {
         shake: "shake 1s ease-in-out",
+        spin: "spin 3s linear infinite",
       },
     },
   },

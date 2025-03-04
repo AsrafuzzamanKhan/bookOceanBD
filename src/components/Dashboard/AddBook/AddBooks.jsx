@@ -3,10 +3,12 @@ import { useForm } from 'react-hook-form';
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { Helmet } from 'react-helmet-async';
+import { useState } from 'react';
 const img_hosting_token = import.meta.env.VITE_image_Upload_token;
 
 const AddBooks = () => {
     const [axiosSecure] = useAxiosSecure()
+    const [addLoading, setAddLoading] = useState(false)
     const { register, reset, handleSubmit } = useForm();
 
     const img_hosting_url = `https://api.imgbb.com/1/upload?key=${img_hosting_token}`
@@ -15,7 +17,7 @@ const AddBooks = () => {
 
     const onSubmit = data => {
         console.log('add book data', data);
-
+        setAddLoading(true)
         const formData = new FormData();
         formData.append('image', data.image[0]);
 
@@ -35,6 +37,7 @@ const AddBooks = () => {
                             console.log('Post in database', data);
                             if (data.data.insertedId) {
                                 reset()
+                                setAddLoading(false)
                                 Swal.fire({
                                     position: 'top-end',
                                     icon: 'success',
@@ -56,10 +59,10 @@ const AddBooks = () => {
                 <title>Book Ocean BD || Add book</title>
             </Helmet>
             <div className="mb-[30px] pt-28 md:pt-28 lg:pt-0 xl:pt-24 min-h-screen">
-                <div className=' items-center  mb-8 flex flex-col'>
+                <div className='mb-4 flex flex-col items-center '>
                     <h1 className=' bg-slate-800 text-white px-8 py-3 rounded'>Add Book</h1>
                 </div>
-                <div className='w-full flex items-center justify-center'>
+                <div className='w-full flex items-center justify-center dark:text-white text-black'>
                     <div className=" w-full lg:w-1/2 border p-4 shadow-2xl rounded-[8px] dark:text-white dark:border-0">
                         <form onSubmit={handleSubmit(onSubmit)} >
                             {/* name  */}
@@ -89,7 +92,7 @@ const AddBooks = () => {
                                         <option disabled >Pick one</option>
                                         <option>barnes & noble</option>
                                         <option>biography</option>
-                                        <option>children</option>
+                                        <option>children's</option>
                                         <option>classics</option>
                                         <option>comics</option>
                                         <option>crime</option>
@@ -268,7 +271,18 @@ const AddBooks = () => {
 
                             </div>
                             {/* submit button  */}
-                            <input className=" bg-black w-full text-white mt-4 py-3 rounded hover:scale-105 duration-300 uppercase cursor-pointer hover:text-green-600" type="submit" value="Add Item" />
+                            {/* <input className=" bg-black w-full text-white mt-4 py-3 rounded hover:scale-105 duration-300 uppercase cursor-pointer hover:text-green-600" type="submit" value="Add Item" /> */}
+
+
+
+                            {
+                                addLoading ? <div className='text-center mt-1'>
+                                    <span className="loading loading-ball loading-xs"></span>
+                                    <span className="loading loading-ball loading-sm"></span>
+                                    <span className="loading loading-ball loading-md"></span>
+                                    <span className="loading loading-ball loading-lg"></span></div>
+                                    : <>  <input className=" bg-black w-full text-white mt-4 py-3 rounded hover:bg-gray-900 duration-300 uppercase cursor-pointer " type="submit" value="Add Item" /></>
+                            }
                         </form>
                     </div>
                 </div>

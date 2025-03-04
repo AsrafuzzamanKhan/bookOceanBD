@@ -8,6 +8,7 @@ import 'swiper/css/navigation';
 import { Autoplay, Pagination } from 'swiper/modules';
 
 import useBanner from '../../../hooks/useBanner';
+import React from 'react';
 
 const MainSlider = () => {
     const [bannerData] = useBanner()
@@ -31,7 +32,7 @@ const MainSlider = () => {
                     hero?.map((slide, i) => {
 
                         return <SwiperSlide key={i}>
-                            <div className='w-full flex flex-col justify-center items-center gap-4 lg:flex-row h-full p-8 dark:text-white'>
+                            <div className='w-full flex flex-col justify-center items-center gap-2 lg:flex-row h-full p-2 lg:p-8 dark:text-white'>
 
                                 <div className='flex-1 '>
                                     {/* text  */}
@@ -41,13 +42,21 @@ const MainSlider = () => {
                                         <div className=' capitalize'> {slide.name}</div>
                                         <div className='text-md lg:text-2xl'>
                                             by <span className=''>{slide.author}</span></div>
-
                                     </div>
 
                                 </div>
-                                <div className='flex-1 mx-auto'>
-                                    <img className='w-48 lg:w-96' src={slide.image} alt="" />
-                                </div>
+
+                                {/* <div className='flex-1 mx-auto p-2 md:p-0'>
+                                    <img className='w-64 lg:w-96' src={slide.image} alt={slide.name} />
+                                </div> */}
+
+                                <React.Suspense fallback={
+                                    <span className="loading loading-bars loading-lg"></span>
+                                }>
+                                    <div className='flex-1 mx-auto p-2 md:p-0'>
+                                        <img className='w-64 lg:w-96' src={slide.image} alt={slide.name} />
+                                    </div>
+                                </React.Suspense>
                             </div>
                         </SwiperSlide>
                     })

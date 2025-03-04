@@ -18,7 +18,7 @@ body {
 }
 .active {
   color: #0b9fd4;
-  /* background-color: rgb(230, 231, 231); */
+  background-color: rgb(230, 231, 231);
 }
 @layer base {
   .h2 {

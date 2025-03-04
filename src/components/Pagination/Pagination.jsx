@@ -1,45 +1,21 @@
+import './Pagination.css'
+const Pagination = ({ totalPosts, postsPerPage, setCurrentPage, currentPage }) => {
+    let pages = [];
 
-import { useState } from 'react';
-const Pagination = () => {
-    const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    const itemsPerPage = 3; // Number of items to display per page
-    const [currentPage, setCurrentPage] = useState(1);
-
-    // Calculate the start and end indices for the slice
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-
-    // Slice the data array based on the current page
-    const slicedData = data.slice(startIndex, endIndex);
-
-    // Function to handle page navigation
-    const nextPage = () => {
-        setCurrentPage(currentPage + 1);
-    };
-
-    const prevPage = () => {
-        setCurrentPage(currentPage - 1);
-    };
+    for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
+        pages.push(i)
+    }
     return (
-        <div>
-            <h1>Data Slicing in React</h1>
-            <ul>
-                {slicedData.map(item => (
-                    <li key={item}>{item}</li>
-                ))}
-            </ul>
-            <div>
-                <button onClick={prevPage} disabled={currentPage === 1}>
-                    Previous Page
+        <div className='pagination bg-slate-300 text-center my-10 rounded'>{
+            pages.map((page, index) =>
+                <button className={`${currentPage == page && 'active'} btn m-2`} key={index} onClick={() => setCurrentPage(page)}>{page}
                 </button>
-                <button onClick={nextPage} disabled={endIndex >= data.length}>
-                    Next Page
-                </button>
-            </div>
+            )
+        }
+
+
         </div>
-    );
-};
+    )
+}
 
-export default Pagination;
-
-
+export default Pagination

@@ -1,27 +1,33 @@
+
 [
   {
     "id": 1,
     "heading": "Best Prices & Offers",
-    "subHeading": "Order more than Two books and get a 5-10% discount."
+    "subHeading": "Order more than two books and get a 5-10% discount.",
+    "image":"gift.png"
   },
   {
     "id": 2,
-    "heading": "Secure Payment",
-    "subHeading": "Cash on delivery is available in all over the Bangladesh"
+    "heading": "Secure Payment System",
+    "subHeading": "Cash on delivery is available in all over Bangladesh.",
+    "image":"payment.png"
   },
   {
     "id": 3,
     "heading": "Original Print Book",
-    "subHeading": "All of our books are Original and imported from abroad."
+    "subHeading": "All of our books are original prints and have been imported from abroad.",
+    "image":"original.png"
   },
   {
     "id": 4,
-    "heading": "Pre-order",
-    "subHeading": "Pre-order any books from amazon.in through us."
+    "heading": "Pre-order Original Book",
+    "subHeading": "Pre-order any books from amazon.in through us at the cheapest rate.",
+    "image":"preorder.png"
   },
   {
     "id": 5,
-    "heading": "5 Days Return",
-    "subHeading": "If goods have problems or the item is wrong."
+    "heading": "5 Days Return service",
+    "subHeading": "If goods have problems or the item is wrong.",
+    "image":"return.png"
   }
 ]

@@ -63,7 +63,7 @@ const SignUp = () => {
                 <div className=" container mx-auto px-2">
                     <div className="flex justify-center items-center min-h-screen dark:text-black ">
                         <FadeIn delay={0.4} direction='down' >
-                            <div className="bg-gray-100 flex items-center rounded-2xl shadow-lg max-w-3xl p-5">
+                            <div className="bg-[#F4F5FF] flex items-center rounded-2xl shadow-lg max-w-3xl p-5">
                                 {/* image  */}
                                 <div className="md:block hidden w-1/2 ">
                                     <img className=" rounded-2xl" src={loginImg} alt="" />
@@ -139,12 +139,12 @@ const SignUp = () => {
                                     </div>
 
 
-                                    <div className="text-xm flex justify-between items-center mt-3">
+                                    <div className="text-sm flex justify-between items-center mt-3">
                                         <p>
                                             Already have an account?
                                         </p>
                                         <Link to='/login'>
-                                            <button className="py-2 bg-white px-2 border rounded-xl hover:scale-110 duration-300">Login</button></Link>
+                                            <button className="py-2 bg-white px-2 border rounded-md hover:bg-gray-200 duration-800 font-medium">Login</button></Link>
                                     </div>
                                 </div>
 

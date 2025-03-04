@@ -14,20 +14,20 @@ const BookSlider = ({ data }) => {
                 delay: 6000,
 
             }}
-            pagination={{
-                clickable: true,
-            }}
+            // pagination={{
+            //     clickable: true,
+            // }}
             modules={[Autoplay, Pagination, Navigation]}
 
-            loop={false}
-            navigation={true}
+            loop={true}
+            // navigation={true}
             breakpoints={{
                 320: {
-                    slidesPerView: 1,
-                    spaceBetween: 30
+                    slidesPerView: 2,
+                    spaceBetween: 10
                 },
                 768: {
-                    slidesPerView: 2,
+                    slidesPerView: 3,
                     spaceBetween: 30
                 },
                 1024: {
@@ -40,12 +40,12 @@ const BookSlider = ({ data }) => {
                 },
 
             }}
-            className='productSlider  w-full mx-auto'
+            className='w-full mx-auto '
         // className='productSlider  w-full mx-auto max-w-[360px] md:max-w-lg xl:max-w-[1410px]'
         >
             <>
                 {data?.map(book => {
-                    return <SwiperSlide className='mb-12' key={book._id}>
+                    return <SwiperSlide className='mb-6' key={book._id}>
                         <BookCard book={book}></BookCard>
                     </SwiperSlide>
                 })}

@@ -15,16 +15,16 @@ import {
 const LazyRoots = React.lazy(() => import('./Roots/Roots'));
 const LazyBookDetails = React.lazy(() => import('./components/BookDetails/BookDetails'));
 const LazySearchBook = React.lazy(() => import('./components/SearchBook/SearchBook'));
-const LazyBooks = React.lazy(() => import('./components/Book/Book'));
+const LazyBooks = React.lazy(() => import('./components/Books/Books'));
+const LazyBook = React.lazy(() => import('./components/Book/Book'));
 const LazyManageBooks = React.lazy(() => import('./components/Dashboard/ManageBooks/ManageBooks'));
 const LazyDashBoardLayout2 = React.lazy(() => import('./components/Layout/DashBoardLayout2/DashBoardLayout2'));
 import Home from './components/Home/Home/Home';
 import AuthProvider from './providers/AuthProvider/AuthProvider';
 import Login from './components/Login/Login';
-import SignUp from './components/SignUp/signUp';
 import Checkout from './components/Dashboard/Checkout/Checkout';
 import AddBooks from './components/Dashboard/AddBook/AddBooks';
-// import ManageBooks from './components/Dashboard/ManageBooks/ManageBooks';
+import SignUp from './components/SignUp/SignUp';
 import PrivateRoutes from './components/Routes/PrivateRoutes';
 import AllUsers from './components/Dashboard/AllUsers/AllUsers';
 import OrderHistory from './components/Dashboard/OrderHistory/OrderHistory';
@@ -36,35 +36,8 @@ import UserHome from './components/Dashboard/UserHome/UserHome';
 import AddBanner from './components/Dashboard/AddBanner/AddBanner';
 import ManageBanner from './components/Dashboard/ManageBanner/ManageBanner';
 import UpdateBook from './components/Dashboard/UpdateBook/UpdateBook';
-// import DashBoardLayout2 from './components/Layout/DashBoardLayout2/DashBoardLayout2';
 import Loading from './Loading/Loading';
-
-// import LocomotiveScroll from 'locomotive-scroll';
-
-
-// import Roots from './Roots/Roots';
-// import Home from './components/Home/Home/Home';
-// import BookDetails from './components/BookDetails/BookDetails';
-// import Books from './components/Books/Books';
-// import SearchBook from './components/SearchBook/SearchBook';
-// import AuthProvider from './providers/AuthProvider/AuthProvider';
-// import Login from './components/Login/Login';
-// import SignUp from './components/SignUp/signUp';
-// import Checkout from './components/Dashboard/Checkout/Checkout';
-// import AddBooks from './components/Dashboard/AddBook/AddBooks';
-// import ManageBooks from './components/Dashboard/ManageBooks/ManageBooks';
-// import PrivateRoutes from './components/Routes/PrivateRoutes';
-// import AllUsers from './components/Dashboard/AllUsers/AllUsers';
-// import OrderHistory from './components/Dashboard/OrderHistory/OrderHistory';
-// import AdminRoute from './components/Routes/AdminRoute';
-// import CartProvider from './providers/CartProvider/CartProvider';
-// import AllOrders from './components/Dashboard/AllOrders/AllOrders';
-// import AdminHome from './components/Dashboard/AdminHome/AdminHome';
-// import UserHome from './components/Dashboard/UserHome/UserHome';
-// import AddBanner from './components/Dashboard/AddBanner/AddBanner';
-// import ManageBanner from './components/Dashboard/ManageBanner/ManageBanner';
-// import UpdateBook from './components/Dashboard/UpdateBook/UpdateBook';
-// import DashBoardLayout2 from './components/Layout/DashBoardLayout2/DashBoardLayout2';
+import ErrorPage from './error-page';
 
 
 
@@ -75,14 +48,20 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <React.Suspense fallback={<Loading />}><LazyRoots></LazyRoots></React.Suspense>,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: '/',
         element: <Home />
       },
       {
-        path: '/books/:category',
+        path: '/books',
         element: <React.Suspense fallback={<Loading />}> <LazyBooks />
+        </React.Suspense>
+      },
+      {
+        path: '/books/:category',
+        element: <React.Suspense fallback={<Loading />}> <LazyBook />
         </React.Suspense>
       },
       {
@@ -177,9 +156,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <AuthProvider>
         <HelmetProvider>
           <CartProvider>
-
             <RouterProvider router={router} />
-
           </CartProvider>
         </HelmetProvider>
       </AuthProvider>

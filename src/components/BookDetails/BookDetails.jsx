@@ -1,15 +1,15 @@
+import './BookDetails.css'
 import { Link, useNavigate, useParams } from "react-router-dom";
 import useBookData from "../../hooks/useBookData";
 import RelatedBooks from "../RelatedBooks/RelatedBooks";
 import Swal from "sweetalert2";
 import useAuth from "../../hooks/useAuth";
 import useCart from "../../hooks/useCart";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { CartContext } from "../../providers/CartProvider/CartProvider";
 import FadeIn from "../../Animation/FadeIn";
 import { useAnimation } from "framer-motion"
 import { useInView } from "react-intersection-observer";
-import { Helmet } from "react-helmet-async";
 import { MdEdit } from "react-icons/md";
 import facebook from '../../assets/social/facebook.png'
 import instagram from '../../assets/social/instagram.png'
@@ -21,8 +21,11 @@ import { FaAmazon } from "react-icons/fa";
 
 import useAdmin from "../../hooks/useAdmin";
 import BookDescription from "../BookDescription/BookDescription";
+// import usePageSEO from "../../hooks/usePageSEO";
+import { Helmet } from "react-helmet";
 
 const BookDetails = () => {
+
     const { id } = useParams()
     const { user } = useAuth()
     const [isAdmin] = useAdmin()
@@ -31,6 +34,25 @@ const BookDetails = () => {
     const [, refetch] = useCart()
     const { setIsOpen, isOpen } = useContext(CartContext)
 
+    const [fullImg, setFullImg] = useState(false);
+
+    const sidebarRef = useRef(null);
+    useEffect(() => {
+        // Function to handle click outside of the sidebar
+        const handleClickOutside = (event) => {
+            if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+                setFullImg(false)
+            }
+        };
+
+        // Attach the event listener when the component mounts
+        document.addEventListener('mousedown', handleClickOutside);
+
+        // Detach the event listener when the component unmounts
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [setFullImg]);
 
     // animation 
     const { ref, inView } = useInView({
@@ -56,22 +78,38 @@ const BookDetails = () => {
 
 
     const productDetails = booksData?.find(pd => pd._id === id)
+    const discount = productDetails?.price * 0.05;
+    const discountPrice = parseInt(productDetails?.price - discount)
+    // usePageSEO(
+    //     {
+    //         title: `Buy ${productDetails?.name}`,
+    //         description: ` ${productDetails?.description}`,
+    //         keywords: ["Original Print Book", "Best Book shop in Bangladesh"],
+    //         ogTitle: `${productDetails?.name}`,
+    //         ogDescription: `${productDetails?.description}`,
+    //         ogImage: `${productDetails?.image}`,
+    //         ogUrl: "https://bookoceanbd.com/"
+    //     }
+    // )
+
 
     // console.log('product details', typeof (productDetails._id))
     // console.log('Id', typeof productDetails._id)
-    console.log(productDetails)
+    // console.log(productDetails)
 
     if (!productDetails) {
-        return <div className="container mx-auto text-center">loading...</div>
+        return <div className="container mx-auto flex text-center justify-center">Loading...
+        </div>
     }
 
     const handleAddToCart = (item) => {
 
-        const { category, name, image, price, _id, author } = item;
+        const { category, name, image, _id, author } = item;
+        // const { category, name, image, price, _id, author } = item;
 
-        const cartItem = { bookId: _id, category, name, author, image, price, email: user?.email, quantity: 1 }
+        const cartItem = { bookId: _id, category, name, author, image, discountPrice, email: user?.email, quantity: 1 }
         console.log('cartItem', cartItem)
-        console.log(id)
+        // console.log(id)
         // phh -------
         if (user) {
             fetch('https://book-ocean-bd-server.vercel.app/carts', {
@@ -113,14 +151,24 @@ const BookDetails = () => {
             });
         }
     }
+
+    // const handleImgClose = () => {
+    //     setFullImg(false)
+    //     console.log(fullImg);
+    // }
+    // const handleFullImg = () => {
+    //     setFullImg(true)
+    //     console.log(fullImg);
+    // }
+
     return (
-        <div className="mb-4 pt-32 md:pt-32 lg:pt-24 ">
-            <div className="container mx-auto min-h-screen">
+        <section className="mb-4 pt-[7rem] md:pt-32 lg:pt-[5rem] " >
+            <div className="container mx-auto min-h-screen " >
                 <Helmet>
                     <title>Buy {productDetails?.name}</title>
                     <meta name="description" content={productDetails?.description} />
                     <meta name="image" content={productDetails?.image} />
-                    <meta name="og:image" content={productDetails?.image} />
+                    <meta name="keywords" content="Original Print Book, Best Book shop in Bangladesh" />
                     <meta
                         name="og:title"
                         content={productDetails?.name}
@@ -129,18 +177,26 @@ const BookDetails = () => {
                         name="og:description"
                         content={productDetails?.description}
                     />
+                    <meta name="og:image" content={`${productDetails?.image} || https://i.ibb.co/yhDbPYf/logo2.jpg`} />
+                    <meta name="og:url" content="https://bookoceanbd.com" />
+                    <meta name="og:type" content="website" />
+                    <meta name="og:image:width" content="500" />
+                    <meta name="og:image:height" content="236" />
                 </Helmet>
                 {/* TABS  */}
                 {/* /book/:name/:id */}
                 <div className="flex flex-wrap items-center justify-start gap-x-2 px-[2vw] py-0 md:py-2 md:px-0 mb-2">
-                    <Link to='/' className=" hover:text-blue-900  duration-300"><IoMdHome size={20} /></Link>
-                    /
+                    <Link to='/' className=" hover:text-blue-900  duration-300 flex"><IoMdHome size={20} />
+
+                    </Link>
+                    <span> /</span>
                     <Link to={`/books/${productDetails?.category}`}>
                         <span className="text-blue-400 hover:text-blue-900 hover:underline duration-300 capitalize">
                             {productDetails?.category}
+
                         </span>
                     </Link>
-                    /
+                    <span> /</span>
                     <Link
                         to={`/authorbooks/${productDetails?.author}`}
                         author={productDetails?.author}>
@@ -149,7 +205,7 @@ const BookDetails = () => {
                             {productDetails?.author}
                         </span>
                     </Link>
-                    /
+                    <span> /</span>
                     <span className="">
                         {productDetails?.name}
                     </span>
@@ -160,15 +216,57 @@ const BookDetails = () => {
                 {/* text  */}
                 <div ref={ref} >
                     {/* <motion.div animate={animation} className="flex flex-col lg:flex-row lg:gap-[20px] gap-0 mb-[30px] items-center w-full bg-white dark:bg-[#1D232A] "> */}
-                    <div className="flex flex-col lg:flex-row lg:gap-[20px] gap-0 mb-[30px] items-center w-full bg-white dark:bg-[#1D232A] ">
-                        <div className="flex-1 w-full h-full rounded-[4px] flex justify-center items-center  " >
-                            <img src={productDetails?.image}
-                                className=" lg:max-w-[65%] max-h-96  h-full lg:p-0 p-4" loading="lazy"
-                                alt={productDetails?.name} />
-                            {/* </div> */}
+                    <div className="flex flex-col md:flex-row overflow-x-hidden rounded-lg">
+                        <div className="  flex-1  flex items-center justify-center ">
+                            <div className="  flex items-center justify-center w-full h-full overflow-hidden dark:bg-[#131624] bg-local bg-no-repeat  " style={{ backgroundImage: 'url(/bg.png)' }}>
+                                {/* 
+                                {
+                                    fullImg ? <div ref={sidebarRef} className='fullSlider absolute w-full h-full top-[56%] left-[50%] bg-gray-500 flex justify-center items-center bg-no-repeat ' >
+
+                                        <img
+                                            className="cursor-pointer w-[80%] h-[80%] object-contain"
+                                            src={productDetails?.image}
+                                            alt={productDetails?.name}
+                                            loading="lazy"
+
+                                        />
+
+                                    </div> : <img
+                                        className="w-48 lg:w-64 lg:p-0 p-4 cursor-pointer "
+                                        src={productDetails?.image}
+                                        alt={productDetails?.name}
+                                        loading="lazy"
+                                        onClick={handleFullImg}
+                                    />}
+
+
+                                {
+                                    fullImg && <div className="absolute top-28 lg:top-20 right-0 text-white text-2xl lg:text-3xl font-bold p-2 cursor-pointer  hover:bg-black m-2 border-0 transition duration-800 rounded" onClick={handleImgClose}>
+                                        X
+                                    </div>
+                                } */}
+
+
+
+
+                                <img
+                                    className="w-48 lg:w-64 lg:p-0 p-4 "
+                                    src={productDetails?.image}
+                                    alt={productDetails?.name}
+                                    loading="lazy"
+                                />
+
+
+                            </div>
                         </div>
 
-                        <div className="w-full flex-1 lg:py-10 py-4 md:px-8 px-[2vw]  flex flex-col justify-center dark:bg-base-200 dark:text-white text-black  rounded-[4px]  dark:border-none shadow-sm border ">
+                        {/* <div className="flex-1 w-full h-full rounded-[4px] flex justify-center items-center bg-red-400  " >
+                            <img src={productDetails?.image}
+                                className="w-48 lg:w-64 lg:p-0 p-4 " loading="lazy"
+                                alt={productDetails?.name} />
+                        </div> */}
+
+                        <div className="w-full flex-1 px-[2vw] lg:py-10 py-4 md:px-8   flex flex-col justify-center dark:bg-base-200 dark:text-white text-black  dark:border-none shadow-sm border md:rounded-r-2xl  ">
                             {/* book details  */}
                             <div className="flex flex-col gap-y-2">
                                 <h4 className="capitalize tracking-wide text-blue-400 text-lg font-medium ">
@@ -198,23 +296,33 @@ const BookDetails = () => {
 
                                 <div className=" flex justify-center items-center gap-2 ">
 
-                                    <div className="border rounded-[4px] shadow-sm flex flex-col text-center h-auto p-2">
-                                        <div >
+                                    <div className="border rounded-[4px] shadow-sm flex flex-col text-center gap-[2px] px-2 py-2">
+                                        < >
                                             {
-                                                productDetails?.cover === 'hardcover' && <span className="text-[15px] font-semibold tracking-wide"> Hardcover </span>
+                                                productDetails?.cover === 'hardcover' && <span className="text-[15px] font-medium tracking-wide"> Hardcover </span>
                                             }
                                             {
-                                                productDetails?.cover == 'paperback' && <span className="text-[15px] font-semibold tracking-wide "> Paperback </span>
+                                                productDetails?.cover == 'paperback' && <span className="text-[15px] font-medium tracking-wide "> Paperback </span>
                                             }
                                             {
-                                                productDetails?.cover == 'leather bound' && <span className="text-[15px] font-semibold tracking-wide "> Leather Bound </span>
+                                                productDetails?.cover == 'leather bound' && <span className="text-[15px] font-medium tracking-wide "> Leather Bound </span>
                                             }
-                                        </div>
+                                        </>
 
-                                        {
-                                            productDetails?.available === 'false' ? <div className=" text-red-600"> --- </div> : <div className="text-xl font-semibold text-blue-400"><span>&#x09F3;</span> {productDetails?.price}</div>
+                                        <>
+                                            {
+                                                productDetails?.available === 'false' ?
+                                                    <div className=" text-red-400"> --- </div>
+                                                    :
+                                                    <div className="flex gap-x-4">
 
-                                        }
+                                                        <p className="text-md lg:text-lg font-semibold text-orange-400 line-through flex"><span>&#x09F3;</span> {productDetails?.price}</p>
+                                                        <p className="text-md lg:text-lg font-semibold text-blue-400 flex"><span>&#x09F3;</span> {discountPrice}</p>
+
+
+                                                    </div>
+
+                                            }</>
 
 
                                     </div>
@@ -228,7 +336,7 @@ const BookDetails = () => {
                                             productDetails?.available === 'false' ? <h2 className="text-xl text-red-600">Stock Out</h2> : <div className="">
                                                 <button
                                                     onClick={() => handleAddToCart(productDetails)}
-                                                    className="btn h-auto bg-blue-400 text-black hover:text-white hover:bg-black hover:duration-300 transition-all text-[12px] lg:text-[14px] border-0 rounded-[4px]">Add to cart
+                                                    className="px-2 py-2 font-semibold tracking-wide bg-blue-400 text-black hover:text-white hover:bg-black hover:duration-300 transition-all text-[12px] lg:text-[14px] border-0 rounded-[4px] uppercase">Add to cart
                                                 </button>
 
                                             </div>
@@ -252,7 +360,7 @@ const BookDetails = () => {
                             <div className="flex">
                                 {
                                     productDetails?.available === 'false' &&
-                                    <div className="flex items-center justify-center gap-2 mt-1 border  dark:text-white p-4 text-[18px] rounded font-semibold shadow-lg hover:scale-90 hover:duration-300 transition-all">
+                                    <div className="flex items-center justify-center gap-2 mt-1 border  dark:text-white p-4 text-[18px] rounded font-semibold shadow-lg hover:scale-95 hover:duration-300 transition-all">
                                         <FaAmazon />
                                         <a href="https://m.me/bookoceanbd" target="_blank" rel="noreferrer" className="  text-[#FF9900]">Pre-order Now</a>
 
@@ -266,16 +374,16 @@ const BookDetails = () => {
 
                             {/* original  */}
                             <div className="flex flex-col gap-y-2 my-4">
-                                <div className="flex gap-2 items-center">
-                                    <TbTruckDelivery size={25} />
+                                <div className="flex gap-x-2 items-center">
+                                    <TbTruckDelivery className="w-7 h-7" />
                                     <p className="text-[14px] md:text-[16px] tracking-wide">Fast Shipping</p>
                                 </div>
-                                <div className="flex gap-2 items-center">
-                                    <MdOutlineGppGood size={25} />
+                                <div className="flex gap-x-2  items-center">
+                                    <MdOutlineGppGood className="w-7 h-7" />
                                     <p className="text-[14px] md:text-[16px] tracking-wide">Get Premium Quality Original Books</p>
                                 </div>
-                                <div className="flex gap-2 items-center">
-                                    <MdPayment size={25} />
+                                <div className="flex gap-x-2 items-center">
+                                    <MdPayment className="w-7 h-7" />
                                     <p className="text-[14px] md:text-[16px] tracking-wide">Cash On Delivery Service is Available</p>
                                 </div>
                             </div>
@@ -287,11 +395,11 @@ const BookDetails = () => {
                                 </h2>
                                 <div className=' flex max-w-max gap-x-4 text-lg mb-5'>
 
-                                    <a href="https://www.facebook.com/bookoceanbd/" target="_blank" rel="noreferrer" className="hover:text-green-600 transition-all">
+                                    <a href="https://www.facebook.com/bookoceanbd/" target="_blank" rel="noreferrer" className="hover:scale-95 duration-500">
                                         <img className='w-8' src={facebook} alt="" />
                                     </a>
 
-                                    <a href="https://www.instagram.com/bookoceanbd/" target="_blank" rel="noreferrer" className="hover:text-green-600 transition-all">
+                                    <a href="https://www.instagram.com/bookoceanbd/" target="_blank" rel="noreferrer" className="hover:scale-95 duration-500">
                                         <img className='w-8' src={instagram} alt="" />
                                     </a>
                                 </div>
@@ -318,7 +426,7 @@ const BookDetails = () => {
                     </FadeIn>
                 </section>
             </div >
-        </div >
+        </section >
     );
 };
 

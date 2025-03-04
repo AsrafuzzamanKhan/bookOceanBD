@@ -3,6 +3,7 @@ import useBookData from '../../hooks/useBookData';
 import BookCard from '../BookCard/BookCard';
 import CategoryNav from '../CategoryNav/CategoryNav';
 import { FaAmazon } from 'react-icons/fa';
+import Pagination from '../Pagination/Pagination';
 
 // import Loading from '../../Loading/Loading';
 
@@ -16,6 +17,8 @@ const SearchBook = () => {
     // Filter the data array based on the search term
     const filteredResults = booksData.filter((item) =>
         item.name.toLowerCase().includes(searchTerm.toLowerCase()) || item.author.toLowerCase().includes(searchTerm.toLowerCase()) || item.category.toLowerCase().includes(searchTerm.toLowerCase()));
+
+    console.log(filteredResults.length);
 
     const availableBooks = filteredResults.filter(item => item.available === "true")
     const unavailableBooks = filteredResults.filter(item => item.available === "false")
@@ -31,7 +34,6 @@ const SearchBook = () => {
         <div className="mb-[30px] pt-28 md:pt-28 lg:pt-24  min-h-screen">
             <div className=" container mx-auto">
                 <div className="flex gap-x-[30px] ">
-
                     {/* category nav  */}
                     <CategoryNav></CategoryNav>
 
@@ -89,9 +91,10 @@ const SearchBook = () => {
                         </div>
 
 
-                        {/* author  */}
 
+                        <Pagination />
                     </div>
+
 
                 </div>
             </div>

@@ -1,12 +1,13 @@
-
-// import { FaYoutube, FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa'
+import './Footer.css'
 import facebook from '../../../assets/social/facebook.png'
 import instagram from '../../../assets/social/instagram.png'
 const Footer = () => {
+
     return (
-        <footer className='pt-16 bg-slate-300 text-black'>
+        <footer className='pt-16 bg-slate-950 text-white/[.8]  '>
+
             <div className="container mx-auto px-2">
-                <div className='text-center text-black'>
+                <div className='text-center text-white/[.8]'>
                     <h2 className='h2 uppercase mb-6 font-semibold'>Subscribe to our newsletter</h2>
                     <p className=''>Be the first to get the latest news abour trends, promotions and much more!</p>
                 </div>
@@ -17,9 +18,7 @@ const Footer = () => {
                 </form>
                 {/* link  */}
                 <div className='text-base flex lg:flex-row flex-col gap-x-6 gap-y-4 max-w-max mx-auto mb-5  justify-between'>
-
                     <div className='lg:w-1/4 w-full'>
-
                         Welcome to <strong>Book Ocean BD</strong>, your premier destination for importing <strong>authentic and original print</strong> books in Bangladesh! Immerse yourself in the joy of reading with our extensive collection of carefully curated titles, spanning genres from fiction to non-fiction, mystery to romance, and everything in between.
 
                         <div className='mt-6'>
@@ -104,7 +103,7 @@ const Footer = () => {
 
                         </div>
                         <div className="my-2 text-gray-500">
-                            <hr className="border-gray-500" />
+                            <hr className="border-gray-500 dark:border-white" />
 
 
                         </div>
@@ -117,7 +116,7 @@ const Footer = () => {
 
             </div>
             {/* copy rigte  */}
-            <div className='py-10 border-t border-t-black'>
+            <div className='py-10 border-t border-white/[0.2]'>
                 <div className='container mx-auto'>
                     <div className='text-center text-sm px-[2vw]'>
                         Copyright &copy; Book Ocean BD 2024. All rights reserved

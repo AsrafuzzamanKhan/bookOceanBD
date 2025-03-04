@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import CartItem from "../../CartItem/CartItem";
+// import CartItem from "../../CartItem/CartItem";
 import useCart from "../../../hooks/useCart";
 import useAuth from "../../../hooks/useAuth";
 import { useForm } from "react-hook-form";
@@ -8,15 +8,24 @@ import Swal from "sweetalert2";
 import { format } from 'date-fns';
 import { Helmet } from "react-helmet-async";
 
-const Checkout = ({ item }) => {
+
+const Checkout = () => {
+
     const [cart, refetch] = useCart()
     const [axiosSecure] = useAxiosSecure()
     const { user } = useAuth()
-    const total = cart.reduce((sum, item) => parseInt(item.price) + sum, 0);
+    const total = cart.reduce((sum, item) => parseInt(item.discountPrice) + sum, 0);
+    // const total = cart.reduce((sum, item) => parseInt(item.price) + sum, 0);
+
+
+
+
     const deliveryCharge = 80;
     const totalAmount = (total + deliveryCharge);
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const navigate = useNavigate()
+
+
 
     const onSubmit = data => {
 
@@ -106,12 +115,12 @@ const Checkout = ({ item }) => {
 
                                     <select className="select select-bordered uppercase bg-white"  {...register("area", { required: true })}>
                                         <option disabled >Pick one</option>
-                                        <option value="dhaka">Dhaka</option>
-                                        <option value="outside_dhaka">Outside Dhaka</option>
+                                        <option value={dhakaArea}>Dhaka</option>
+                                        <option value='100'>Outside Dhaka-100</option>
 
                                     </select>
-                                </div>
-                                {errors?.address && <span className="text-red-600 font-semibold">Address is required*</span>} */}
+                                </div> */}
+                                {errors?.address && <span className="text-red-600 font-semibold">Address is required*</span>}
                                 {/* order summery  */}
                                 <div className="my-6">
                                     <div className="  border dark:border-0 dark:bg-gray-900 rounded-md shadow-2xl p-5 uppercase font-semibold  ">
@@ -208,7 +217,7 @@ const Checkout = ({ item }) => {
                                                 <td className="!p-1">
 
                                                     <div className="flex gap-1">
-                                                        <span>&#x09F3;</span> <p>{book.price}</p>
+                                                        <span>&#x09F3;</span> <p>{book.discountPrice}</p>
                                                     </div>
                                                 </td>
 

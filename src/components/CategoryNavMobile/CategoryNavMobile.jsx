@@ -39,7 +39,7 @@ const CategoryNavMobile = ({ setCatNavMobile }) => {
             <div className="flex flex-col gap-y-4 pb-12 overflow-x-hidden h-[80vh] " >
                 {
                     uniqueCategories?.map((category, i) => {
-                        return <NavLink key={i} to={`/books/${category}`} className='capitalize font-semibold hover:text-green-600 duration-300 px-2 rounded tracking-wide'
+                        return <NavLink key={i} to={`/books/${category}`} className='capitalize font-medium hover:text-green-600 duration-300 px-2 rounded tracking-wide'
                             onClick={() => setCatNavMobile(false)}
                         >  {category} Books
                         </NavLink>

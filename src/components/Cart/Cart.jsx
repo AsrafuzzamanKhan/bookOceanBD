@@ -1,12 +1,12 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import { IoArrowForward, IoCart } from 'react-icons/io5';
 
 import CartItem from '../CartItem/CartItem';
 import { Link } from 'react-router-dom';
-import useAuth from '../../hooks/useAuth';
+
 import useCart from '../../hooks/useCart';
-import Swal from 'sweetalert2';
+
 import { CartContext } from '../../providers/CartProvider/CartProvider';
 
 
@@ -36,7 +36,8 @@ const Cart = () => {
         };
     }, [setIsOpen]);
 
-    const total = cart.reduce((sum, item) => parseInt(item.price) + sum, 0)
+    const total = cart.reduce((sum, item) => parseInt(item.discountPrice) + sum, 0)
+    // const total = cart.reduce((sum, item) => parseInt(item.price) + sum, 0)
     // console.log(parseInt(total))
 
 

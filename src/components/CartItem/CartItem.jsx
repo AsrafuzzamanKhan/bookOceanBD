@@ -87,6 +87,12 @@ const CartItem = ({ item }) => {
                                     {item.price} <span>&#x09F3;</span>
                                 </span>
                             </div>
+                            {/* discount  */}
+                            <div>
+                                <span className="text-blue-400">
+                                    {item.discountPrice} <span>&#x09F3;</span>
+                                </span>
+                            </div>
                             {/* <div className="bg-gray-200">
                                 <div className="flex gap-4 p-2">
 

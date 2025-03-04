@@ -133,8 +133,8 @@ const UpdateBook = () => {
                                     <option disabled >Pick one</option>
                                     <option value='barnes & noble'>barnes & noble</option>
                                     <option value='biography'>biography</option>
-                                    <option value='children'>children</option>
-                                    <option value='classic'>classics</option>
+                                    <option value="children's">children's</option>
+                                    <option value='classics'>classics</option>
                                     <option value='comics'>comics</option>
                                     <option value='crime'>crime</option>
                                     <option value='deluxe edition'>deluxe edition</option>
@@ -169,7 +169,7 @@ const UpdateBook = () => {
                                     <span className="label-text font-semibold">cover*</span>
 
                                 </label>
-                                <select defaultValue={productDetails?.cover} className="select select-bordered capitalize bg-white"  {...register("cover", { required: true })}>
+                                <select defaultValue={productDetails?.cover} className="select select-bordered capitalize bg-white text-black"  {...register("cover", { required: true })}>
                                     <option disabled >Pick one</option>
                                     <option value="hardcover">Hardcover</option>
                                     <option value="paperback">Paperback</option>
@@ -230,7 +230,7 @@ const UpdateBook = () => {
                                     <span className="label-text">Description</span>
 
                                 </label>
-                                <textarea defaultValue={productDetails?.description} className="textarea textarea-bordered h-24" placeholder="Description"
+                                <textarea defaultValue={productDetails?.description} className="textarea textarea-bordered h-24 bg-white text-black" placeholder="Description"
                                     {...register("description", { required: true })}></textarea>
 
                             </div>
@@ -239,7 +239,7 @@ const UpdateBook = () => {
                                 <label className="label">
                                     <span className="label-text font-semibold ">Publisher*</span>
                                 </label>
-                                <input defaultValue={productDetails?.publisher} type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                <input defaultValue={productDetails?.publisher} type="text" placeholder="Type here" className="input input-bordered w-full bg-white text-black "
                                     {...register("publisher", { required: true })} />
                             </div>
                             {/* Language  */}
@@ -248,7 +248,7 @@ const UpdateBook = () => {
                                     <span className="label-text font-semibold">Language*</span>
 
                                 </label>
-                                <select defaultValue={productDetails?.language} className="select select-bordered uppercase"  {...register("language", { required: true })}>
+                                <select defaultValue={productDetails?.language} className="select select-bordered uppercase bg-white text-black"  {...register("language", { required: true })}>
                                     <option disabled >Pick one</option>
                                     <option>english</option>
                                     <option>bangla</option>
@@ -260,7 +260,7 @@ const UpdateBook = () => {
                                 <label className="label">
                                     <span className="label-text font-semibold ">Page*</span>
                                 </label>
-                                <input defaultValue={productDetails?.page} type="number" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                <input defaultValue={productDetails?.page} type="number" placeholder="Type here" className="input input-bordered w-full bg-white text-black "
                                     {...register("page", { required: true })} />
                             </div>
                             {/* ISBN-10  */}
@@ -268,7 +268,7 @@ const UpdateBook = () => {
                                 <label className="label">
                                     <span className="label-text font-semibold ">ISBN-10*</span>
                                 </label>
-                                <input defaultValue={productDetails?.isbn10} type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                <input defaultValue={productDetails?.isbn10} type="text" placeholder="Type here" className="input input-bordered w-full bg-white text-black "
                                     {...register("isbn10", { required: true })} />
                             </div>
                             {/* isbn-13  */}
@@ -276,7 +276,7 @@ const UpdateBook = () => {
                                 <label className="label">
                                     <span className="label-text font-semibold ">ISBN-13*</span>
                                 </label>
-                                <input defaultValue={productDetails?.isbn13} type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                <input defaultValue={productDetails?.isbn13} type="text" placeholder="Type here" className="input input-bordered w-full bg-white text-black "
                                     {...register("isbn13", { required: true })} />
                             </div>
                             {/* Item Weight  */}
@@ -284,7 +284,7 @@ const UpdateBook = () => {
                                 <label className="label">
                                     <span className="label-text font-semibold ">Item Weight*</span>
                                 </label>
-                                <input defaultValue={productDetails?.itemWeight} type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                <input defaultValue={productDetails?.itemWeight} type="text" placeholder="Type here" className="input input-bordered w-full bg-white text-black "
                                     {...register("itemWeight", { required: true })} />
                             </div>
                             {/* Dimensions   */}
@@ -292,7 +292,7 @@ const UpdateBook = () => {
                                 <label className="label">
                                     <span className="label-text font-semibold ">Dimensions*</span>
                                 </label>
-                                <input defaultValue={productDetails?.dimensions} type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                <input defaultValue={productDetails?.dimensions} type="text" placeholder="Type here" className="input input-bordered w-full bg-white text-black "
                                     {...register("dimensions", { required: true })} />
                             </div>
                         </div>
@@ -339,7 +339,7 @@ const UpdateBook = () => {
                                     <span className="loading loading-ball loading-sm"></span>
                                     <span className="loading loading-ball loading-md"></span>
                                     <span className="loading loading-ball loading-lg"></span></div>
-                                    : <> <input className=" bg-black w-full text-white mt-4 py-3 rounded hover:scale-105 duration-300 uppercase cursor-pointer hover:text-green-600" type="submit" value="Update Book" /></>
+                                    : <> <input className=" bg-black w-full text-white mt-4 py-3 rounded duration-300 uppercase cursor-pointer hover:bg-slate-800" type="submit" value="Update Book" /></>
                             }
                         </div>
 

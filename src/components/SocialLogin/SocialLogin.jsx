@@ -38,7 +38,7 @@ const SocialLogin = () => {
         <div>
             <button
                 onClick={handleGoogleSigIn}
-                className="bg-white border p-2 w-full rounded-xl mt-5 flex justify-center items-center text-sm hover:scale-105 duration-300">
+                className="bg-white  p-2 w-full rounded-xl mt-5 flex justify-center items-center text-sm hover:bg-gray-200 duration-300 font-medium">
 
                 {
                     googleLoading ? <>
