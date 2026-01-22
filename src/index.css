@@ -1,12 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* 1. FONT OPTIMIZATION */
+/* If you are self-hosting fonts, keep these. If using Google Fonts, ensure '&display=swap' is in the URL */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/inter-regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/inter-bold.woff2') format('woff2');
+}
 
 * {
-  /* font-family: "Exo 2", sans-serif; */
-  /* font-family: "Poppins", sans-serif; */
-  font-family: "Inter", sans-serif;
-  margin: 0;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
@@ -15,6 +30,7 @@ body {
   /* overflow: hidden; */
   overflow-x: hidden;
   scroll-behavior: smooth;
+  @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100;
 }
 .active {
   color: #0b9fd4;
@@ -39,5 +55,30 @@ body {
 
   .input {
     @apply h-[50px] rounded-[8px] w-full outline-none px-6 text-primary;
+  }
+}
+/* In your CSS file */
+.skeleton {
+  background-color: #e2e8f0;
+  /* light gray */
+  overflow: hidden;
+  position: relative;
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.2) 20%, rgba(255, 255, 255, 0.5) 60%, rgba(255, 255, 255, 0));
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
   }
 }

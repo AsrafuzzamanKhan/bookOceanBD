@@ -5,6 +5,9 @@ const AdminHome = () => {
                 <div className=' text-center mb-8 w-[50%] mx-auto'>
                     <h1 className=' bg-slate-800 text-white px-8 py-3 rounded'>  Admin Home</h1>
                 </div>
+                <div>
+                    
+                </div>
             </div>
         </div>
     );

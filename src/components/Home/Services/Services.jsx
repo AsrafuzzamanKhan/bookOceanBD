@@ -28,12 +28,12 @@ const Services = () => {
                     {services.map(service =>
                         <FadeIn delay={0.4} direction='down' key={service.id} >
 
-                            <div className="w-full flex gap-4 bg-white items-center h-[9rem] px-2 rounded">
-                                <div className="w-16 ">
-                                    <img className="w-full object-cover" src={service.image} alt="image" />
+                            <div className="w-full gap-4 bg-white items-center h-[9rem] px-2 rounded">
+                                <div className="w-8 flex items-center justify-center mx-auto">
+                                    <img className="w-full m-2" src={service.image} alt="image" />
                                 </div>
                                 <div className=" text-black">
-                                    <h2 className="text-md xl:text-lg font-semibold">{service.heading}</h2>
+                                    <h2 className="text-md xl:text-lg font-semibold text-blue-400">{service.heading}</h2>
                                     <p className="xl:text-md lg:text-sm leading-5">{service.subHeading}</p>
                                 </div>
 

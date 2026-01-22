@@ -92,10 +92,12 @@ const Header = () => {
                                     {
                                         user?.email &&
                                         <NavLink to={isAdmin ? '/dashboard/adminhome' : "/dashboard/orderHistory"
-                                        } className='text-black text-[14px] dark:hover:text-gray-300'>Dashbord</NavLink>
+                                        } className='text-black text-[14px] dark:hover:text-gray-300'>
+                                            {isAdmin ? "Dashboard" : "My Order List"}
+                                        </NavLink>
                                     }
                                 </li>
-                                <li className="mt-1 mx-auto">
+                                <li className=" mx-auto">
                                     <div className=" text-black hover:scale-95 hover:bg-slate-400 dark:hover:bg-blue-400
                                     dark:hover:text-white
                                     ">

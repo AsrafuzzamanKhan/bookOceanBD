@@ -2,7 +2,7 @@ import './Footer.css'
 import facebook from '../../../assets/social/facebook.png'
 import instagram from '../../../assets/social/instagram.png'
 const Footer = () => {
-
+    const currentYear = new Date().getFullYear();
     return (
         <footer className='pt-16 bg-slate-950 text-white/[.8]  '>
 
@@ -75,7 +75,7 @@ const Footer = () => {
                         </div>
                         <div className='flex flex-col gap-y-1'>
                             <div>
-                                Call us: <span className='mx-2'><a href="tel:+8801851718980" target="_blank" rel="noreferrer" className=" hover:text-blue-600 hover:underline hover:duration-300 transition-all">+88-01851718980</a></span>
+                                Call us: <span className='mx-2'><a href="tel:+8801568175528" target="_blank" rel="noreferrer" className=" hover:text-blue-600 hover:underline hover:duration-300 transition-all">+88-01568175528</a></span>
                             </div>
                             <div>
 
@@ -119,7 +119,7 @@ const Footer = () => {
             <div className='py-10 border-t border-white/[0.2]'>
                 <div className='container mx-auto'>
                     <div className='text-center text-sm px-[2vw]'>
-                        Copyright &copy; Book Ocean BD 2024. All rights reserved
+                        Copyright &copy; Book Ocean BD {currentYear}. All rights reserved.
                     </div>
                 </div>
             </div>
