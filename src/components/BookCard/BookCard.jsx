@@ -9,7 +9,8 @@ const BookCard = ({ book }) => {
 
     // 1. State to track image loading
     const [isLoaded, setIsLoaded] = useState(false);
-    const discount = price * 0.05;
+    // const discount = price * 0.05;
+    const discount = price * 0.15;
     const discountPrice = parseInt(price - discount)
     // console.log(typeof (discountPrice));
 
