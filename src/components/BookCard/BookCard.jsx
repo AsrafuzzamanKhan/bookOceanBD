@@ -9,8 +9,8 @@ const BookCard = ({ book }) => {
 
     // 1. State to track image loading
     const [isLoaded, setIsLoaded] = useState(false);
-    // const discount = price * 0.05;
-    const discount = price * 0.15;
+    const discount = price * 0.05;
+    // const discount = price * 0.15;
     const discountPrice = parseInt(price - discount)
     // console.log(typeof (discountPrice));
 
@@ -31,7 +31,7 @@ const BookCard = ({ book }) => {
 
         //             </div>
         //             </React.Suspense>
-                    
+
 
         //             {/* text  */}
         //             <div className="flex flex-col gap-y-2 md:gap-y-4 px-[2vw] lg:px-6 ">
@@ -40,7 +40,7 @@ const BookCard = ({ book }) => {
         //                     {/* category  */}
         //                     <h4 className="text-sm text-blue-400 capitalize">{category}</h4>
         //                     {/* title  */}
-                            
+
         //                     <h1 className="text-sm tooltip text-start line-clamp-1 hover:line-clamp-2" >
         //                         {name}
         //                     </h1>
@@ -121,10 +121,10 @@ const BookCard = ({ book }) => {
                                 ) : (
                                     <>
                                         <div className="flex flex-col">
-                                                <span className="text-[11px] line-through text-orange-400">৳{price}</span>
+                                            <span className="text-[11px] line-through text-orange-400">৳{price}</span>
                                             <span className="text-lg font-bold text-blue-600 dark:text-blue-400">৳{discountPrice}</span>
                                         </div>
-                                       
+
                                     </>
                                 )}
                             </div>

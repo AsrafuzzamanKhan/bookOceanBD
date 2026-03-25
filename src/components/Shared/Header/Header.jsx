@@ -87,7 +87,8 @@ const Header = () => {
 
                             </label>
                             <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 dark:bg-white">
-                                <li className="bg-black p-2 rounded">Hello, {user?.displayName}</li>
+
+                                <li className="bg-black p-2 rounded">Hello {user?.displayName}</li>
                                 <li className="mt-1 mx-auto">
                                     {
                                         user?.email &&

@@ -78,8 +78,8 @@ const BookDetails = () => {
 
 
     const productDetails = booksData?.find(pd => pd._id === id)
-    // const discount = productDetails?.price * 0.05;
-    const discount = productDetails?.price * 0.15;
+    const discount = productDetails?.price * 0.05;
+    // const discount = productDetails?.price * 0.15;
     const discountPrice = parseInt(productDetails?.price - discount)
     // usePageSEO(
     //     {
@@ -111,7 +111,7 @@ const BookDetails = () => {
         const cartItem = { bookId: _id, category, name, author, image, discountPrice, email: user?.email, quantity: 1 }
         console.log('cartItem', cartItem)
         // console.log(id)
-        
+
         if (user) {
             fetch('https://book-ocean-bd-server.vercel.app/carts', {
                 method: "POST",

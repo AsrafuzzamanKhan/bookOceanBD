@@ -68,7 +68,7 @@ const Checkout = () => {
                 <title>Book Ocean BD || Checkout</title>
             </Helmet>
             <div className="container mx-auto px-1 lg:px-2 dark:text-white">
-                <h1 className="uppercase text-2xl text-center font-semibold mb-2">
+                <h1 className="uppercase text-lg md:text-2xl text-center font-semibold mb-2">
                     check out
                 </h1>
                 <div className="w-full flex flex-col xl:flex-row lg:flex-row  gap-4">
@@ -124,10 +124,10 @@ const Checkout = () => {
                                 {/* order summery  */}
                                 <div className="my-6">
                                     <div className="  border dark:border-0 dark:bg-gray-900 rounded-md shadow-2xl p-5 uppercase font-semibold  ">
-                                        <h2 className="text-2xl font-semibold mb-2 text-center">Order summary</h2>
+                                        <h2 className="text-lg lg:text-xl font-semibold mb-2 text-center">Order summary</h2>
                                         <hr />
 
-                                        <div className="text-center text-lg lg:text-xl my-4">
+                                        <div className="text-center text-md lg:text-xl my-4">
                                             *** Cash on Delivery ***
                                         </div>
                                         <div className="flex justify-between">
@@ -158,7 +158,7 @@ const Checkout = () => {
                         </div>
                     </div>
                     <div className="lg:w-2/3  w-full border dark:border-none rounded shadow-2xl">
-                        <h1 className="uppercase font-semibold text-2xl text-center mt-4 lg:mt-8 ">
+                        <h1 className="uppercase font-semibold text-lg md:text-2xl text-center mt-4 lg:mt-8 ">
                             Order Details
                         </h1>
                         <div className="flex flex-col items-center py-4 lg:py-6 ">
@@ -181,7 +181,7 @@ const Checkout = () => {
 
 
 
-                                            <tr key={i} className="hover:bg-gray-200 duration-300 transition-all" >
+                                            <tr key={i} className="dark:hover:bg-gray-700 hover:bg-gray-200 duration-300 transition-all" >
                                                 <th className="!p-4">
                                                     {i + 1}
                                                 </th>
