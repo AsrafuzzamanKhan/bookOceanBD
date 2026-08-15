@@ -5,9 +5,10 @@ import CategoryNav from "../CategoryNav/CategoryNav";
 // import FadeIn from "../../Animation/FadeIn";
 import { Helmet } from "react-helmet-async";
 
-// import Pagination from "../Pagination/Pagination";
-// import { useState } from "react";
+import Pagination from "../Pagination/Pagination";
+import { useEffect, useState } from "react";
 
+const BOOKS_PER_PAGE = 20;
 
 const Book = () => {
     const [booksData] = useBookData()
@@ -67,6 +68,18 @@ const Book = () => {
     // Use the filter method to get products of the selected category
     const filteredAuthor = booksData.filter(item => item.author === selectedAuthor);
 
+    // only one of these three is ever non-empty depending on the current route
+    const allBooks = [...availableBooks, ...unavailableBooks, ...filteredAuthor];
+
+    const [currentPage, setCurrentPage] = useState(1);
+    // jump back to page 1 whenever the category/author changes so we don't
+    // land on an out-of-range page after navigating via CategoryNav
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [category, author]);
+
+    const startIndex = (currentPage - 1) * BOOKS_PER_PAGE;
+    const currentBooks = allBooks.slice(startIndex, startIndex + BOOKS_PER_PAGE);
 
     return (
         <section className="mb-4 pt-[6rem] md:pt-28 lg:pt-24 min-h-screen">
@@ -282,19 +295,7 @@ const Book = () => {
 
                                 })} */}
 
-                                {availableBooks.map((book, i) => {
-                                    return <BookCard key={i} book={book}>
-                                    </BookCard>
-
-                                })}
-                                {unavailableBooks.map((book, i) => {
-                                    return <BookCard key={i} book={book}>
-                                    </BookCard>
-
-                                })}
-
-                                {/* get author books  */}
-                                {filteredAuthor.map((book, i) => {
+                                {currentBooks.map((book, i) => {
                                     return <BookCard key={i} book={book}>
                                     </BookCard>
 
@@ -306,14 +307,12 @@ const Book = () => {
                             {/* </FadeIn> */}
                         </main>
                         {/* pagination  */}
-                        {/* <div>
-                            <Pagination
-                                totalPosts={filteredProducts.length}
-                                postsPerPage={postsPerPage}
-                                currentPage={currentPage}
-                                setCurrentPage={setCurrentPage}
-                            />
-                        </div> */}
+                        <Pagination
+                            totalPosts={allBooks.length}
+                            postsPerPage={BOOKS_PER_PAGE}
+                            currentPage={currentPage}
+                            setCurrentPage={setCurrentPage}
+                        />
                     </div>
 
                     {/* author  */}

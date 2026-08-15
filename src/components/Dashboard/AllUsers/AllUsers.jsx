@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { Helmet } from "react-helmet-async";
-import Swal from "sweetalert2";
+import { showSuccessToast } from "../../../utils/toast";
 import { AiFillDelete } from "react-icons/ai";
 import { FaUserShield } from "react-icons/fa";
 
@@ -22,13 +22,7 @@ const AllUsers = () => {
                 console.log(res.data)
                 if (res.data.modifiedCount > 0) {
                     refetch();
-                    Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        title: `${user.name} is an Admin Now!`,
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
+                    showSuccessToast(`${user.name} is an Admin Now!`)
                 }
             })
     }
@@ -43,14 +37,7 @@ const AllUsers = () => {
                 if (data.deletedCount > 0) {
 
                     refetch()
-                    Swal.fire({
-                        title: "Removed!",
-                        text: "User has removed",
-                        icon: "success",
-                        showConfirmButton: false,
-                        timer: 1500
-
-                    });
+                    showSuccessToast("Removed!", "User has removed")
                 }
 
             })

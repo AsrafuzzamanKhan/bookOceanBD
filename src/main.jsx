@@ -36,6 +36,7 @@ import UserHome from './components/Dashboard/UserHome/UserHome';
 import AddBanner from './components/Dashboard/AddBanner/AddBanner';
 import ManageBanner from './components/Dashboard/ManageBanner/ManageBanner';
 import UpdateBook from './components/Dashboard/UpdateBook/UpdateBook';
+import MyProfile from './components/Dashboard/MyProfile/MyProfile';
 import Loading from './Loading/Loading';
 import ErrorPage from './error-page';
 
@@ -66,7 +67,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/authorbooks/:author',
-        element: <React.Suspense fallback={<Loading />}> <LazyBooks /></React.Suspense>
+        element: <React.Suspense fallback={<Loading />}> <LazyBook /></React.Suspense>
       },
       {
         // path: '/book/:name',
@@ -143,6 +144,10 @@ const router = createBrowserRouter([
       {
         path: 'orderHistory',
         element: <OrderHistory></OrderHistory>
+      },
+      {
+        path: 'myProfile',
+        element: <MyProfile></MyProfile>
       }
     ]
 

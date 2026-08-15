@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
+import { GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
 import { app } from "../../firebase/firebase.config";
 import axios from "axios";
 
@@ -28,10 +28,14 @@ const AuthProvider = ({ children }) => {
         setLoading(true)
         return signInWithEmailAndPassword(auth, email, password)
     }
-    // logout 
+    // logout
     const logOut = () => {
         setLoading(true)
         return signOut(auth)
+    }
+    // send a password reset email (Firebase handles the actual reset flow/page)
+    const resetPassword = (email) => {
+        return sendPasswordResetEmail(auth, email)
     }
 
     // user subscribe 
@@ -59,13 +63,20 @@ const AuthProvider = ({ children }) => {
         }
     }, [])
 
-    // user profile update 
+    // user profile update
     const updateUserProfile = (name, photo) => {
         return updateProfile(auth.currentUser, {
             displayName: name, photoURL: photo
         })
     }
-    // value 
+    // re-syncs local `user` state after updateUserProfile() - Firebase updates
+    // auth.currentUser in place but that doesn't by itself trigger a re-render,
+    // since onAuthStateChanged only fires on sign-in/out, not on profile edits.
+    const refreshUser = async () => {
+        await auth.currentUser.reload()
+        setUser({ ...auth.currentUser })
+    }
+    // value
     const authInfo = {
         googleSignIn,
         user,
@@ -74,7 +85,9 @@ const AuthProvider = ({ children }) => {
         createUser,
         signIn,
         logOut,
-        updateUserProfile
+        resetPassword,
+        updateUserProfile,
+        refreshUser
     }
     return (
         <AuthContext.Provider value={authInfo}>

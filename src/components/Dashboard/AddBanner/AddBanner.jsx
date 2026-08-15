@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import Swal from "sweetalert2";
+import { showSuccessToast } from "../../../utils/toast";
 import { Helmet } from 'react-helmet-async';
 const img_hosting_token = import.meta.env.VITE_image_Upload_token;
 const AddBanner = () => {
@@ -31,13 +31,7 @@ const AddBanner = () => {
                             console.log('Post in database', data);
                             if (data.data.insertedId) {
                                 reset()
-                                Swal.fire({
-                                    position: 'top-end',
-                                    icon: 'success',
-                                    title: 'Banner is added successfully!!!',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                })
+                                showSuccessToast('Banner is added successfully!!!')
                             }
                         })
                 }

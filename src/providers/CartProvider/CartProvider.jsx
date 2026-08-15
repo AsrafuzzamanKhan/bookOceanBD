@@ -1,6 +1,5 @@
 import { createContext, useEffect, useState } from "react";
 
-import Swal from "sweetalert2";
 import useCart from "../../hooks/useCart";
 
 // create context 

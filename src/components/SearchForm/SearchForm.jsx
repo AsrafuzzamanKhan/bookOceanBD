@@ -35,7 +35,7 @@ const SearchForm = () => {
 
         if (searchTerm.length > 0) {
             setSearchTerm('');
-            navigate(`/search?query=${searchTerm}`)
+            navigate(`/search?query=${encodeURIComponent(searchTerm)}`)
             document.querySelector('input').value = '';
 
         } else {

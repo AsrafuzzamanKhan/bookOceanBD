@@ -1,7 +1,7 @@
 import { Link, NavLink, Outlet } from "react-router-dom";
 import useAdmin from "../../../hooks/useAdmin";
 import { IoHomeSharp } from "react-icons/io5";
-import { FaBook, FaUsers } from "react-icons/fa";
+import { FaBook, FaUserCircle, FaUsers } from "react-icons/fa";
 import { MdManageHistory, MdOutlineDevicesOther } from "react-icons/md";
 import { TbDeviceDesktopStar } from "react-icons/tb";
 import { ImBooks } from "react-icons/im";
@@ -76,6 +76,10 @@ const DashBoardLayout2 = () => {
                                     <ImBooks size={30} />
                                     <span className={`${!open && 'hidden'} origin-left duration-200`}>All Orders</span>
                                 </NavLink>
+                                <NavLink to='/dashboard/myProfile' className={`text-gray-300 text-xm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-600 rounded-md duration-300`}>
+                                    <FaUserCircle size={30} />
+                                    <span className={`${!open && 'hidden'} origin-left duration-200`}>My Profile</span>
+                                </NavLink>
 
                             </> : <>
                                 {/* <NavLink to='/dashboard/userhome' className={`text-gray-300 text-xm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-600 rounded-md duration-300`}>
@@ -86,6 +90,10 @@ const DashBoardLayout2 = () => {
                                 <NavLink to='/dashboard/orderHistory' className={`text-gray-300 text-xm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-600 rounded-md duration-300`}>
                                     <RiFileHistoryFill size={30} />
                                     <span className={`${!open && 'hidden'} origin-left duration-200`}>All Orders</span>
+                                </NavLink>
+                                <NavLink to='/dashboard/myProfile' className={`text-gray-300 text-xm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-600 rounded-md duration-300`}>
+                                    <FaUserCircle size={30} />
+                                    <span className={`${!open && 'hidden'} origin-left duration-200`}>My Profile</span>
                                 </NavLink>
                             </>
                         }

@@ -8,6 +8,7 @@ import { IoMdPricetags } from "react-icons/io";
 import { FaPhone } from "react-icons/fa6";
 
 import Swal from "sweetalert2";
+import { showSuccessToast } from "../../../utils/toast";
 import { Link } from "react-router-dom";
 
 const OrderHistory = () => {
@@ -39,11 +40,7 @@ const OrderHistory = () => {
                     .then(data => {
                         if (data.deletedCount > 0) {
                             refetch()
-                            Swal.fire({
-                                title: "Canceled!",
-                                text: "Your Order has been Canceled and Removed from History.",
-                                icon: "success"
-                            });
+                            showSuccessToast("Canceled!", "Your Order has been Canceled and Removed from History.")
                         }
                         // setIsOpen(false)
                     })

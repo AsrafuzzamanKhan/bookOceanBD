@@ -1,6 +1,7 @@
 import { AiFillDelete } from "react-icons/ai";
 import useBookData from "../../../hooks/useBookData";
 import Swal from "sweetalert2";
+import { showSuccessToast } from "../../../utils/toast";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
@@ -39,11 +40,7 @@ const ManageBooks = () => {
                     .then(res => {
                         if (res.data.deletedCount > 0) {
                             refetch();
-                            Swal.fire(
-                                'Deleted!',
-                                'Your item has been deleted.',
-                                'success'
-                            )
+                            showSuccessToast('Deleted!', 'Your item has been deleted.')
                         }
                     })
 

@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import useBookData from "../../hooks/useBookData";
 import RelatedBooks from "../RelatedBooks/RelatedBooks";
 import Swal from "sweetalert2";
+import { showSuccessToast } from "../../utils/toast";
 import useAuth from "../../hooks/useAuth";
 import useCart from "../../hooks/useCart";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -125,14 +126,7 @@ const BookDetails = () => {
                     if (data.insertedId) {
                         refetch()
                         setIsOpen(!isOpen)
-                        Swal.fire({
-                            position: "top-end",
-                            icon: "success",
-                            title: "Add to the cart",
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-
+                        showSuccessToast("Add to the cart")
                     }
                 })
         } else {

@@ -1,7 +1,8 @@
 import { useContext, useState } from "react";
 import SearchForm from "../../SearchForm/SearchForm";
-import { FiMenu, FiShoppingBag } from 'react-icons/fi'
-import { FaRegUserCircle } from "react-icons/fa";
+import { FiLogIn, FiLogOut, FiMenu, FiShoppingBag } from 'react-icons/fi'
+import { FaClipboardList, FaRegUserCircle } from "react-icons/fa";
+import { MdDashboard } from "react-icons/md";
 import CategoryNavMobile from "../../CategoryNavMobile/CategoryNavMobile";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import Cart from "../../Cart/Cart";
@@ -10,7 +11,7 @@ import useCart from "../../../hooks/useCart";
 import { CartContext } from "../../../providers/CartProvider/CartProvider";
 import useAdmin from "../../../hooks/useAdmin";
 import logoSvg from '../../../assets/logo/navlogo.png'
-import Swal from "sweetalert2";
+import { showSuccessToast } from "../../../utils/toast";
 
 
 const Header = () => {
@@ -26,13 +27,7 @@ const Header = () => {
     const handleLogOut = () => {
         logOut()
             .then(() => {
-                Swal.fire({
-                    // position: "top-end",
-                    icon: "success",
-                    title: "You have successfully logged out",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
+                showSuccessToast("You have successfully logged out");
                 // Sign-out successful.
                 navigate('/')
                 // console.log(navigate)
@@ -79,37 +74,65 @@ const Header = () => {
                         <div className="dropdown dropdown-hover dropdown-bottom dropdown-end cursor-pointer ">
                             <label tabIndex={0} >
                                 <div className="avatar online placeholder">
-                                    <div className="bg-neutral text-neutral-content rounded-full w-7 md:w-10">
-                                        {user ? <img src={user?.photoURL} alt={user?.displayName} /> : <><FaRegUserCircle /></>}
+                                    <div className="bg-neutral text-neutral-content rounded-full w-7 md:w-10 ring-2 ring-transparent hover:ring-blue-400 duration-300">
+                                        {user ? <img src={user?.photoURL} alt={user?.displayName} referrerPolicy="no-referrer" /> : <><FaRegUserCircle /></>}
 
                                     </div>
                                 </div>
 
                             </label>
-                            <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 dark:bg-white">
+                            <div tabIndex={0} className="dropdown-content z-[1] mt-3 w-64 rounded-xl shadow-2xl overflow-hidden bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
+                                {user?.email ? (
+                                    <>
+                                        {/* user info  */}
+                                        <div className="flex items-center gap-3 p-4 bg-slate-900">
+                                            <div className="avatar">
+                                                <div className="w-11 rounded-full ring-2 ring-blue-400">
+                                                    {user?.photoURL
+                                                        ? <img src={user.photoURL} alt={user?.displayName} referrerPolicy="no-referrer" />
+                                                        : <div className="bg-neutral text-neutral-content flex items-center justify-center h-full"><FaRegUserCircle className="text-2xl" /></div>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div className="min-w-0">
+                                                <p className="font-semibold text-white truncate">{user?.displayName || 'Welcome'}</p>
+                                                <p className="text-xs text-gray-400 truncate">{user?.email}</p>
+                                            </div>
+                                        </div>
 
-                                <li className="bg-black p-2 rounded">Hello {user?.displayName}</li>
-                                <li className="mt-1 mx-auto">
-                                    {
-                                        user?.email &&
-                                        <NavLink to={isAdmin ? '/dashboard/adminhome' : "/dashboard/orderHistory"
-                                        } className='text-black text-[14px] dark:hover:text-gray-300'>
-                                            {isAdmin ? "Dashboard" : "My Order List"}
-                                        </NavLink>
-                                    }
-                                </li>
-                                <li className=" mx-auto">
-                                    <div className=" text-black hover:scale-95 hover:bg-slate-400 dark:hover:bg-blue-400
-                                    dark:hover:text-white
-                                    ">
-                                        {user?.email ?
-                                            <button onClick={handleLogOut} className="text-[16px]">Logout</button>
-                                            :
-                                            <Link className="text-[16px] " to='/login'> Login</Link>
-                                        }
+                                        {/* menu  */}
+                                        <ul className="py-2">
+                                            <li>
+                                                <NavLink
+                                                    to={isAdmin ? '/dashboard/adminhome' : "/dashboard/orderHistory"}
+                                                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 duration-200"
+                                                >
+                                                    {isAdmin ? <MdDashboard size={18} /> : <FaClipboardList size={16} />}
+                                                    {isAdmin ? "Dashboard" : "My Order List"}
+                                                </NavLink>
+                                            </li>
+                                        </ul>
+                                        <div className="border-t dark:border-gray-700">
+                                            <button
+                                                onClick={handleLogOut}
+                                                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 duration-200"
+                                            >
+                                                <FiLogOut size={18} /> Logout
+                                            </button>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="p-4">
+                                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">Sign in to track orders and manage your cart.</p>
+                                        <Link
+                                            to='/login'
+                                            className="flex items-center justify-center gap-2 w-full py-2 rounded bg-blue-500 text-white hover:bg-blue-600 duration-200"
+                                        >
+                                            <FiLogIn size={18} /> Login
+                                        </Link>
                                     </div>
-                                </li>
-                            </ul>
+                                )}
+                            </div>
                         </div>
 
 

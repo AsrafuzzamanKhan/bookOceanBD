@@ -1,14 +1,16 @@
 import { useForm } from 'react-hook-form';
 import loginImg from '../../assets/log.jpg'
 import { Link, useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from '../../providers/AuthProvider/AuthProvider';
-import Swal from 'sweetalert2';
+import { showSuccessToast } from '../../utils/toast';
 import { Helmet } from 'react-helmet-async';
 import SocialLogin from '../SocialLogin/SocialLogin';
 import FadeIn from '../../Animation/FadeIn';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 const SignUp = () => {
     const { createUser, updateUserProfile } = useContext(AuthContext)
+    const [showPassword, setShowPassword] = useState(false)
     const {
         register,
         handleSubmit,
@@ -38,13 +40,7 @@ const SignUp = () => {
                                 console.log('new account', data)
                                 if (data.insertedId) {
                                     reset();
-                                    Swal.fire({
-                                        position: 'top-end',
-                                        icon: 'success',
-                                        title: 'Account Created Successfully',
-                                        showConfirmButton: false,
-                                        timer: 1500
-                                    })
+                                    showSuccessToast('Account Created Successfully')
                                     navigate('/')
                                 }
                             })
@@ -98,8 +94,8 @@ const SignUp = () => {
                                         {/* password  */}
                                         <div className="relative">
                                             <input
-                                                className="p-2 mt-2 rounded-xl border w-full dark:bg-white"
-                                                type="password"
+                                                className="p-2 mt-2 rounded-xl border w-full dark:bg-white pr-10"
+                                                type={showPassword ? 'text' : 'password'}
                                                 name="password"
                                                 placeholder="Password"
                                                 {...register("password", {
@@ -109,6 +105,14 @@ const SignUp = () => {
                                                     pattern: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z].)/
                                                 })}
                                             />
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowPassword(!showPassword)}
+                                                className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                                            >
+                                                {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
+                                            </button>
                                             {errors.password?.type === "required" && (
                                                 <p role="alert">password is required</p>
                                             )}
@@ -118,12 +122,6 @@ const SignUp = () => {
                                                 Password must be less then 20 charecters</p>}
                                             {errors.password?.type === 'pattern' && <p>
                                                 Password must include one Lowercase, one uppercase one digit and one spacial charecter</p>}
-
-                                            {/* <div>
-                                            <AiOutlineEye
-                                                className="absolute top-1/2 right-4 -translate-y-1/2"
-                                            />
-                                        </div> */}
                                         </div>
                                         <input type="submit" value="Sign Up" className="bg-blue-400 rounded-xl py-2 hover:scale-105 duration-300" />
 

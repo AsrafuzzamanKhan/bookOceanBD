@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import Swal from "sweetalert2";
+import { showSuccessToast } from "../../../utils/toast";
 import { Helmet } from "react-helmet-async";
 
 // import { AiFillDelete } from "react-icons/ai";
@@ -29,13 +29,7 @@ const AllOrders = () => {
                 console.log(res.data)
                 if (res.data.modifiedCount > 0) {
                     refetch();
-                    Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        title: `order is Approved`,
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
+                    showSuccessToast(`order is Approved`)
                 }
             })
     }
@@ -47,13 +41,7 @@ const AllOrders = () => {
                 console.log(res.data)
                 if (res.data.modifiedCount > 0) {
                     refetch();
-                    Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        title: `order is Canceled`,
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
+                    showSuccessToast(`order is Canceled`)
                 }
             })
     }
@@ -65,13 +53,7 @@ const AllOrders = () => {
                 console.log(res.data)
                 if (res.data.modifiedCount > 0) {
                     refetch();
-                    Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        title: `Delivered`,
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
+                    showSuccessToast(`Delivered`)
                 }
             })
     }

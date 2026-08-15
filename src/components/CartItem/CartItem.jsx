@@ -2,7 +2,7 @@ import { IoClose } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
 import useCart from "../../hooks/useCart";
-import Swal from "sweetalert2";
+import { showSuccessToast } from "../../utils/toast";
 
 
 const CartItem = ({ item }) => {
@@ -20,14 +20,7 @@ const CartItem = ({ item }) => {
                 if (data.deletedCount > 0) {
                     refetch();
 
-                    Swal.fire({
-                        title: "Removed!",
-                        text: "Book has been removed from cart.",
-                        icon: "success",
-                        showConfirmButton: false,
-                        timer: 1500
-
-                    });
+                    showSuccessToast("Removed!", "Book has been removed from cart.")
                 }
 
             })

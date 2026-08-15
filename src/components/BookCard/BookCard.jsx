@@ -5,7 +5,7 @@ import { useState } from "react";
 
 
 const BookCard = ({ book }) => {
-    const { _id, name, author, price, image, available, newBook, category, cover } = book;
+    const { _id, name, author, price, image, thumbnail, available, newBook, category, cover } = book;
 
     // 1. State to track image loading
     const [isLoaded, setIsLoaded] = useState(false);
@@ -94,9 +94,10 @@ const BookCard = ({ book }) => {
                         <img
                             className={`w-28 object-contain transition-all duration-500 group-hover:scale-105 ${isLoaded ? "opacity-100" : "opacity-0"
                                 }`}
-                            src={image}
+                            src={thumbnail || image}
                             alt={name}
                             loading="lazy"
+                            decoding="async"
                             onLoad={() => setIsLoaded(true)}
                         />
                     </div>

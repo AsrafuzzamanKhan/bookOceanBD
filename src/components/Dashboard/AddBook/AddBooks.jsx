@@ -1,7 +1,7 @@
 
 import { useForm } from 'react-hook-form';
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import Swal from "sweetalert2";
+import { showSuccessToast, showErrorToast } from "../../../utils/toast";
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 const img_hosting_token = import.meta.env.VITE_image_Upload_token;
@@ -15,41 +15,76 @@ const AddBooks = () => {
 
     console.log(img_hosting_url);
 
-    const onSubmit = data => {
+    // Resizes an image file proportionally (no cropping) so book cards can
+    // load a small cover instead of the full-size original.
+    // NOTE: don't swap this for imgbb's own `data.thumb.url` - that variant
+    // is a hard square center-crop that chops off the top/bottom of covers.
+    const THUMB_MAX_DIMENSION = 400;
+    const resizeImageFile = (file, maxDimension = THUMB_MAX_DIMENSION) =>
+        new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onerror = reject;
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onerror = reject;
+                img.onload = () => {
+                    let { width, height } = img;
+                    if (width > height && width > maxDimension) {
+                        height = Math.round(height * (maxDimension / width));
+                        width = maxDimension;
+                    } else if (height > maxDimension) {
+                        width = Math.round(width * (maxDimension / height));
+                        height = maxDimension;
+                    }
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                    canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.85);
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+    const uploadToImgbb = (fileOrBlob) => {
+        const formData = new FormData();
+        formData.append('image', fileOrBlob);
+        return fetch(img_hosting_url, { method: 'POST', body: formData }).then(res => res.json());
+    };
+
+    const onSubmit = async data => {
         console.log('add book data', data);
         setAddLoading(true)
-        const formData = new FormData();
-        formData.append('image', data.image[0]);
+        try {
+            const file = data.image[0];
+            const thumbBlob = await resizeImageFile(file);
 
-        fetch(img_hosting_url, {
-            method: "POST",
-            body: formData
-        })
-            .then(res => res.json())
-            .then(imgResponse => {
-                if (imgResponse.success) {
-                    const imaURL = imgResponse.data.display_url;
-                    const { name, price, category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, author, available, best, cover, new: newBook } = data;
-                    const newBookItem = { name, price: parseFloat(price), category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, image: imaURL, author, available, best, cover, newBook }
-                    console.log(newBookItem)
-                    axiosSecure.post('/books', newBookItem)
-                        .then(data => {
-                            console.log('Post in database', data);
-                            if (data.data.insertedId) {
-                                reset()
-                                setAddLoading(false)
-                                Swal.fire({
-                                    position: 'top-end',
-                                    icon: 'success',
-                                    title: 'Book is added successfully!!!',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                })
-                            }
-                        })
-                }
-            })
+            const [fullRes, thumbRes] = await Promise.all([
+                uploadToImgbb(file),
+                uploadToImgbb(thumbBlob),
+            ]);
 
+            if (!fullRes.success) throw new Error('Cover image upload failed');
+
+            const imaURL = fullRes.data.display_url;
+            const thumbURL = thumbRes.success ? thumbRes.data.display_url : imaURL;
+
+            const { name, price, category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, author, available, best, cover, new: newBook } = data;
+            const newBookItem = { name, price: parseFloat(price), category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, image: imaURL, thumbnail: thumbURL, author, available, best, cover, newBook }
+            console.log(newBookItem)
+            const res = await axiosSecure.post('/books', newBookItem)
+            console.log('Post in database', res);
+            if (res.data.insertedId) {
+                reset()
+                setAddLoading(false)
+                showSuccessToast('Book is added successfully!!!')
+            }
+        } catch (err) {
+            console.error(err);
+            setAddLoading(false)
+            showErrorToast('Failed to add book', err.message)
+        }
     };
     // console.log(errors);
     console.log(img_hosting_token)

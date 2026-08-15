@@ -82,3 +82,44 @@ body {
     transform: translateX(100%);
   }
 }
+
+/* ---------- toast notifications (SweetAlert2, see src/utils/toast.js) ---------- */
+.boc-toast.swal2-popup {
+  border-radius: 12px !important;
+  padding: 0.85rem 1.15rem !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18) !important;
+  background: #ffffff !important;
+}
+
+.boc-toast .swal2-title {
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  color: #111827 !important;
+}
+
+.boc-toast .swal2-html-container {
+  font-size: 0.8rem !important;
+  color: #6b7280 !important;
+  margin-top: 0.15rem !important;
+}
+
+.boc-toast .swal2-timer-progress-bar {
+  background: #60a5fa !important;
+  /* brand blue-400, matches the site's accent color */
+}
+
+@media (prefers-color-scheme: dark) {
+  .boc-toast.swal2-popup {
+    background: #1f2937 !important;
+    /* gray-800, matches the app's dashboard cards */
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55) !important;
+  }
+
+  .boc-toast .swal2-title {
+    color: #f9fafb !important;
+  }
+
+  .boc-toast .swal2-html-container {
+    color: #9ca3af !important;
+  }
+}
