@@ -13,7 +13,7 @@ const LatestBook = () => {
     return (
 
         <section className='container mx-auto px-4 lg:px-0'>
-            <FadeIn delay={0.4} direction='down'  >
+            <FadeIn delay={0.1} direction='down'  >
                 <div className="w-full">
                     <h1 className='text-xl md:text-2xl tracking-wide text-center xl:text-left mb-5 font-semibold dark:text-white'>Latest Books</h1>
                     <BookSlider data={sliceData}></BookSlider>

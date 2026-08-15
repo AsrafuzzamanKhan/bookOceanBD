@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { endOfMonth, endOfWeek, isWithinInterval, parse, startOfMonth, startOfWeek } from 'date-fns';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
-import { FaBook, FaUsers, FaShoppingCart, FaMoneyBillWave, FaPlus, FaListUl } from 'react-icons/fa';
+import { FaBook, FaUsers, FaShoppingCart, FaMoneyBillWave, FaPlus, FaListUl, FaDownload } from 'react-icons/fa';
 import { MdManageHistory, MdOutlineDevicesOther } from 'react-icons/md';
 
 const salesPeriods = [
@@ -23,7 +23,7 @@ const statMeta = [
     { key: 'products', label: 'Total Books', icon: FaBook, color: 'text-blue-500' },
     { key: 'users', label: 'Total Users', icon: FaUsers, color: 'text-green-500' },
     { key: 'orders', label: 'Total Orders', icon: FaShoppingCart, color: 'text-orange-500' },
-    { key: 'revenue', label: 'Total Revenue', icon: FaMoneyBillWave, color: 'text-emerald-500', isCurrency: true },
+    { key: 'revenue', label: 'Revenue (Delivered)', icon: FaMoneyBillWave, color: 'text-emerald-500', isCurrency: true },
 ];
 
 const quickLinks = [
@@ -62,19 +62,55 @@ const AdminHome = () => {
 
     const recentOrders = orders.slice().reverse().slice(0, 5);
 
+    // Delivered orders only, everywhere on this page (COD - an order isn't
+    // real revenue, and arguably isn't a completed "sale" at all, until it's
+    // actually delivered and paid for).
+    const deliveredOrders = useMemo(() => orders.filter((o) => o.status === 'delivered'), [orders]);
+
     const [salesPeriod, setSalesPeriod] = useState('week');
     const periodOrders = useMemo(() => {
-        if (salesPeriod === 'all') return orders;
+        if (salesPeriod === 'all') return deliveredOrders;
         const now = new Date();
         const range = salesPeriod === 'week'
             ? { start: startOfWeek(now), end: endOfWeek(now) }
             : { start: startOfMonth(now), end: endOfMonth(now) };
-        return orders.filter((order) => {
+        return deliveredOrders.filter((order) => {
             const d = parseOrderDate(order.date);
             return d && isWithinInterval(d, range);
         });
-    }, [orders, salesPeriod]);
+    }, [deliveredOrders, salesPeriod]);
     const periodRevenue = periodOrders.reduce((sum, o) => sum + (o.totalAmount || 0), 0);
+
+    // Day-by-day breakdown of delivered orders, newest first
+    const dailyBreakdown = useMemo(() => {
+        const byDate = new Map();
+        deliveredOrders.forEach((order) => {
+            const [datePart] = (order.date || '').split(' ');
+            if (!datePart) return;
+            const entry = byDate.get(datePart) || { date: datePart, orders: 0, revenue: 0 };
+            entry.orders += 1;
+            entry.revenue += order.totalAmount || 0;
+            byDate.set(datePart, entry);
+        });
+        return Array.from(byDate.values()).sort((a, b) => b.date.localeCompare(a.date));
+    }, [deliveredOrders]);
+
+    const [selectedDate, setSelectedDate] = useState('');
+    const selectedDayData = dailyBreakdown.find((d) => d.date === selectedDate);
+
+    const handleDownloadCsv = () => {
+        const header = 'Date,Orders,Revenue\n';
+        const rows = dailyBreakdown.map((d) => `${d.date},${d.orders},${d.revenue}`).join('\n');
+        const blob = new Blob([header + rows], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `book-ocean-bd-daily-sales-${new Date().toISOString().slice(0, 10)}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    };
 
     return (
         <div className='container mx-auto'>
@@ -146,7 +182,7 @@ const AdminHome = () => {
                     </div>
                     <div className='grid grid-cols-2 gap-4'>
                         <div className='border dark:border-0 dark:bg-gray-800 rounded-[8px] p-5 shadow-sm'>
-                            <p className='text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400'>Orders</p>
+                            <p className='text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400'>Orders (Delivered)</p>
                             <p className='text-2xl font-bold dark:text-white'>
                                 {ordersLoading
                                     ? <span className='loading loading-spinner loading-sm'></span>
@@ -154,7 +190,7 @@ const AdminHome = () => {
                             </p>
                         </div>
                         <div className='border dark:border-0 dark:bg-gray-800 rounded-[8px] p-5 shadow-sm'>
-                            <p className='text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400'>Revenue</p>
+                            <p className='text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400'>Revenue (Delivered)</p>
                             <p className='text-2xl font-bold dark:text-white'>
                                 {ordersLoading
                                     ? <span className='loading loading-spinner loading-sm'></span>
@@ -162,7 +198,81 @@ const AdminHome = () => {
                             </p>
                         </div>
                     </div>
-                    <p className='text-xs text-gray-400 mt-2'>Includes orders of all statuses (pending, approved, delivered, canceled), matching Total Revenue above.</p>
+                    <p className='text-xs text-gray-400 mt-2'>Only orders that have actually been delivered are counted here (pending/approved/canceled are excluded).</p>
+                </div>
+
+                {/* daily sales report */}
+                <div className='mb-8'>
+                    <div className='flex flex-wrap justify-between items-center gap-3 mb-3'>
+                        <h2 className='text-lg font-semibold dark:text-white'>Daily Sales Report</h2>
+                        <div className='flex flex-wrap items-center gap-2'>
+                            <input
+                                type='date'
+                                value={selectedDate}
+                                onChange={(e) => setSelectedDate(e.target.value)}
+                                className='px-3 py-1.5 rounded text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none'
+                            />
+                            {selectedDate && (
+                                <button
+                                    onClick={() => setSelectedDate('')}
+                                    className='text-xs text-blue-500 hover:underline'
+                                >
+                                    Clear
+                                </button>
+                            )}
+                            <button
+                                onClick={handleDownloadCsv}
+                                disabled={dailyBreakdown.length === 0}
+                                className='flex items-center gap-2 px-3 py-1.5 rounded text-sm font-medium bg-slate-800 text-white hover:bg-slate-700 duration-200 disabled:opacity-40 disabled:cursor-not-allowed'
+                            >
+                                <FaDownload size={12} /> Download CSV
+                            </button>
+                        </div>
+                    </div>
+
+                    {selectedDate && (
+                        <div className='border dark:border-0 dark:bg-gray-800 rounded-[8px] p-4 mb-3 flex items-center justify-between'>
+                            <span className='text-sm text-gray-500 dark:text-gray-400'>{selectedDate}</span>
+                            {selectedDayData ? (
+                                <span className='font-semibold dark:text-white'>{selectedDayData.orders} order{selectedDayData.orders === 1 ? '' : 's'} &middot; ৳{selectedDayData.revenue.toLocaleString()}</span>
+                            ) : (
+                                <span className='text-sm text-gray-400'>No delivered orders on this date</span>
+                            )}
+                        </div>
+                    )}
+
+                    {ordersLoading ? (
+                        <div className='text-center py-8'>
+                            <span className='loading loading-spinner loading-md'></span>
+                        </div>
+                    ) : dailyBreakdown.length === 0 ? (
+                        <p className='dark:text-white border dark:border-0 dark:bg-gray-800 rounded-[8px] p-5'>No delivered orders yet.</p>
+                    ) : (
+                        <div className='overflow-y-auto max-h-96 overflow-x-auto border dark:border-0 dark:bg-gray-800 rounded-[8px]'>
+                            <table className='table w-full'>
+                                <thead className='sticky top-0 bg-white dark:bg-gray-800'>
+                                    <tr className='dark:text-white'>
+                                        <th>Date</th>
+                                        <th>Orders</th>
+                                        <th>Revenue</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {dailyBreakdown.map((day) => (
+                                        <tr
+                                            key={day.date}
+                                            onClick={() => setSelectedDate(day.date)}
+                                            className={`cursor-pointer dark:text-white dark:hover:bg-gray-700 hover:bg-gray-100 duration-300 ${selectedDate === day.date ? 'bg-blue-50 dark:bg-blue-900/30' : ''}`}
+                                        >
+                                            <td>{day.date}</td>
+                                            <td>{day.orders}</td>
+                                            <td>৳{day.revenue.toLocaleString()}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
                 </div>
 
                 {/* recent orders */}

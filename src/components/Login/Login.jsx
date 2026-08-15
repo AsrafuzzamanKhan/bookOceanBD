@@ -6,7 +6,6 @@ import loginImg from '../../assets/log.jpg'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import SocialLogin from "../SocialLogin/SocialLogin";
 import { showSuccessToast, showErrorToast, showWarningToast } from "../../utils/toast";
-import FadeIn from "../../Animation/FadeIn";
 
 
 const Login = () => {
@@ -65,8 +64,7 @@ const Login = () => {
         <div className="bg-blue-200/40 dark:bg-gray-900">
             <div className=" container mx-auto px-2">
                 <div className="flex justify-center items-center min-h-screen text-black dark:text-white">
-                    <FadeIn delay={0.4} direction='down' >
-                        <div className="bg-[#F4F5FF] dark:bg-gray-800 flex items-center rounded-2xl shadow-lg max-w-3xl p-5">
+                    <div className="bg-[#F4F5FF] dark:bg-gray-800 flex items-center rounded-2xl shadow-lg max-w-3xl p-5">
                             {/* form  */}
 
                             <div className="md:w-1/2 px-8">
@@ -123,7 +121,6 @@ const Login = () => {
                                 <img className=" rounded-2xl" src={loginImg} loading="lazy" alt="" />
                             </div>
                         </div>
-                    </FadeIn>
                 </div>
             </div>
         </div>

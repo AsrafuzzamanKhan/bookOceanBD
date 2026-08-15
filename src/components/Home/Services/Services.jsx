@@ -26,7 +26,7 @@ const Services = () => {
 
                 <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-4">
                     {services.map(service =>
-                        <FadeIn delay={0.4} direction='down' key={service.id} >
+                        <FadeIn delay={0.15} direction='down' key={service.id} >
 
                             <div className="w-full gap-4 bg-white items-center h-[9rem] px-2 rounded">
                                 <div className="w-8 flex items-center justify-center mx-auto">

@@ -8,7 +8,6 @@ import useAuth from "../../hooks/useAuth";
 import useCart from "../../hooks/useCart";
 import { useContext, useEffect, useRef, useState } from "react";
 import { CartContext } from "../../providers/CartProvider/CartProvider";
-import FadeIn from "../../Animation/FadeIn";
 import { useAnimation } from "framer-motion"
 import { useInView } from "react-intersection-observer";
 import { MdEdit } from "react-icons/md";
@@ -417,11 +416,9 @@ const BookDetails = () => {
                 </section>
                 {/* relatged  product  */}
                 <section>
-                    <FadeIn delay={0.4} direction='up' >
-                        <RelatedBooks
-                            categoryTitle={productDetails?.category}
-                        ></RelatedBooks>
-                    </FadeIn>
+                    <RelatedBooks
+                        categoryTitle={productDetails?.category}
+                    ></RelatedBooks>
                 </section>
             </div >
         </section >

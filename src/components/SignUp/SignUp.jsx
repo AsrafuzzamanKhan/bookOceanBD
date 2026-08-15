@@ -6,7 +6,6 @@ import { AuthContext } from '../../providers/AuthProvider/AuthProvider';
 import { showSuccessToast } from '../../utils/toast';
 import { Helmet } from 'react-helmet-async';
 import SocialLogin from '../SocialLogin/SocialLogin';
-import FadeIn from '../../Animation/FadeIn';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 const SignUp = () => {
     const { createUser, updateUserProfile, sendVerificationEmail } = useContext(AuthContext)
@@ -62,7 +61,6 @@ const SignUp = () => {
             <div className="bg-blue-200/40 dark:bg-gray-900">
                 <div className=" container mx-auto px-2">
                     <div className="flex justify-center items-center min-h-screen text-black dark:text-white">
-                        <FadeIn delay={0.4} direction='down' >
                             <div className="bg-[#F4F5FF] dark:bg-gray-800 flex items-center rounded-2xl shadow-lg max-w-3xl p-5">
                                 {/* image  */}
                                 <div className="md:block hidden w-1/2 ">
@@ -151,7 +149,6 @@ const SignUp = () => {
                                 </div>
 
                             </div>
-                        </FadeIn>
                     </div>
                 </div>
             </div>

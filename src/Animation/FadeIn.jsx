@@ -1,63 +1,35 @@
-import { useAnimation, useInView } from "framer-motion";
-import { useEffect, useRef } from "react";
-import { motion } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion";
 
+// Fades content in (with an optional directional slide) once it scrolls into
+// view. Uses framer-motion's built-in whileInView/viewport - simpler and
+// actually correct, unlike the previous manual useInView + useAnimation +
+// useEffect version, which had a bug where both branches of an if/else did
+// the same thing, so it always animated on mount regardless of scroll
+// position. viewport={{ once: true }} means it plays once, not every time
+// the section scrolls in and out.
+//
+// Respects prefers-reduced-motion - skips the animation entirely for users
+// who've asked their OS/browser for less motion.
+const FadeIn = ({ children, delay = 0, direction }) => {
+    const shouldReduceMotion = useReducedMotion();
 
-const FadeIn = ({ children, delay, direction, fullWidth, padding }) => {
-    const ref = useRef(null)
-    // const isInView = useInView(ref, { once: true })
-    const isInView = useInView(ref, {
-        threshold: 0.1
-    })
+    if (shouldReduceMotion) {
+        return children;
+    }
 
-
-    const controls = useAnimation()
-    useEffect(() => {
-        if (isInView) {
-            controls.start('visible')
-        }
-        if (!isInView) {
-            controls.start('visible')
-        }
-
-
-        // if (isInView) {
-        //     controls.start('visible')
-        // }
-    }, [isInView, controls])
     return (
-        <div
-            ref={ref}
+        <motion.div
+            initial={{
+                opacity: 0,
+                x: direction === 'right' ? -40 : direction === 'left' ? 40 : 0,
+                y: direction === 'up' ? 40 : direction === 'down' ? -40 : 0,
+            }}
+            whileInView={{ opacity: 1, x: 0, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.4, delay, ease: 'easeOut' }}
         >
-            <motion.div
-                variants={{
-                    hidden: {
-                        opacity: 0,
-                        x: direction === 'right' ? -100 : direction === 'left' ? 100 : 0,
-                        y: direction === 'up' ? 100 : direction === 'down' ? -100 : 0,
-                    },
-                    visible: {
-                        opacity: 1,
-                        x: 0,
-                        y: 0,
-                    }
-
-
-                }}
-                initial='hidden'
-                animate={controls}
-                transition={{
-                    duration: 1.25,
-                    type: 'tween',
-                    delay: delay,
-                    ease: [0.25, 0.25, 0.25, 0.75]
-                }}
-
-            >
-                {children}
-
-            </motion.div>
-        </div >
+            {children}
+        </motion.div>
     );
 };
 

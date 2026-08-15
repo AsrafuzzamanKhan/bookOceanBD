@@ -13,7 +13,7 @@ const Trending = () => {
     return (
         <section className='container mx-auto px-4 lg:px-0'>
             <div className='lg:px-0 pb-4'>
-                <FadeIn delay={0.8} direction='up'  >
+                <FadeIn delay={0.15} direction='up'  >
                     <h1 className='text-xl md:text-2xl font-semibold  text-center lg:text-left mb-5 dark:text-white'>Best Selling Books</h1>
                     <BookSlider data={sliceData}></BookSlider>
                 </FadeIn>
