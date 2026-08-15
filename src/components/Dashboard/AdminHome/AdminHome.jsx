@@ -1,9 +1,23 @@
+import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import { endOfMonth, endOfWeek, isWithinInterval, parse, startOfMonth, startOfWeek } from 'date-fns';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { FaBook, FaUsers, FaShoppingCart, FaMoneyBillWave, FaPlus, FaListUl } from 'react-icons/fa';
 import { MdManageHistory, MdOutlineDevicesOther } from 'react-icons/md';
+
+const salesPeriods = [
+    { key: 'week', label: 'This Week' },
+    { key: 'month', label: 'This Month' },
+    { key: 'all', label: 'All Time' },
+];
+
+// orders are stored with date as 'yyyy-MM-dd HH:mm:ss' (see Checkout.jsx)
+const parseOrderDate = (dateStr) => {
+    const parsed = parse(dateStr || '', 'yyyy-MM-dd HH:mm:ss', new Date());
+    return isNaN(parsed) ? null : parsed;
+};
 
 const statMeta = [
     { key: 'products', label: 'Total Books', icon: FaBook, color: 'text-blue-500' },
@@ -47,6 +61,20 @@ const AdminHome = () => {
     });
 
     const recentOrders = orders.slice().reverse().slice(0, 5);
+
+    const [salesPeriod, setSalesPeriod] = useState('week');
+    const periodOrders = useMemo(() => {
+        if (salesPeriod === 'all') return orders;
+        const now = new Date();
+        const range = salesPeriod === 'week'
+            ? { start: startOfWeek(now), end: endOfWeek(now) }
+            : { start: startOfMonth(now), end: endOfMonth(now) };
+        return orders.filter((order) => {
+            const d = parseOrderDate(order.date);
+            return d && isWithinInterval(d, range);
+        });
+    }, [orders, salesPeriod]);
+    const periodRevenue = periodOrders.reduce((sum, o) => sum + (o.totalAmount || 0), 0);
 
     return (
         <div className='container mx-auto'>
@@ -95,6 +123,46 @@ const AdminHome = () => {
                             );
                         })}
                     </div>
+                </div>
+
+                {/* sales filter */}
+                <div className='mb-8'>
+                    <div className='flex justify-between items-center mb-3'>
+                        <h2 className='text-lg font-semibold dark:text-white'>Sales Overview</h2>
+                        <div className='flex gap-2'>
+                            {salesPeriods.map((p) => (
+                                <button
+                                    key={p.key}
+                                    onClick={() => setSalesPeriod(p.key)}
+                                    className={`px-3 py-1.5 rounded text-sm font-medium duration-200 ${salesPeriod === p.key
+                                        ? 'bg-blue-500 text-white'
+                                        : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                                        }`}
+                                >
+                                    {p.label}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                    <div className='grid grid-cols-2 gap-4'>
+                        <div className='border dark:border-0 dark:bg-gray-800 rounded-[8px] p-5 shadow-sm'>
+                            <p className='text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400'>Orders</p>
+                            <p className='text-2xl font-bold dark:text-white'>
+                                {ordersLoading
+                                    ? <span className='loading loading-spinner loading-sm'></span>
+                                    : periodOrders.length.toLocaleString()}
+                            </p>
+                        </div>
+                        <div className='border dark:border-0 dark:bg-gray-800 rounded-[8px] p-5 shadow-sm'>
+                            <p className='text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400'>Revenue</p>
+                            <p className='text-2xl font-bold dark:text-white'>
+                                {ordersLoading
+                                    ? <span className='loading loading-spinner loading-sm'></span>
+                                    : `৳${periodRevenue.toLocaleString()}`}
+                            </p>
+                        </div>
+                    </div>
+                    <p className='text-xs text-gray-400 mt-2'>Includes orders of all statuses (pending, approved, delivered, canceled), matching Total Revenue above.</p>
                 </div>
 
                 {/* recent orders */}

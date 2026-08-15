@@ -62,11 +62,11 @@ const Login = () => {
             })
     }
     return (
-        <div className="bg-blue-200/40 dark:glass">
+        <div className="bg-blue-200/40 dark:bg-gray-900">
             <div className=" container mx-auto px-2">
-                <div className="flex justify-center items-center min-h-screen text-black">
+                <div className="flex justify-center items-center min-h-screen text-black dark:text-white">
                     <FadeIn delay={0.4} direction='down' >
-                        <div className="bg-[#F4F5FF] flex items-center rounded-2xl shadow-lg max-w-3xl p-5">
+                        <div className="bg-[#F4F5FF] dark:bg-gray-800 flex items-center rounded-2xl shadow-lg max-w-3xl p-5">
                             {/* form  */}
 
                             <div className="md:w-1/2 px-8">
@@ -75,10 +75,10 @@ const Login = () => {
 
                                 {/* form  */}
                                 <form onSubmit={handleLogin} className="flex flex-col gap-4">
-                                    <input ref={emailRef} className="p-2 mt-8 rounded-xl border dark:bg-white" type="email" name="email" placeholder="Email" required />
+                                    <input ref={emailRef} className="p-2 mt-8 rounded-xl border text-black dark:bg-white" type="email" name="email" placeholder="Email" required />
                                     <div className="relative"
                                     >
-                                        <input className="p-2 mt-3 rounded-xl border w-full dark:bg-white pr-10" type={showPassword ? 'text' : 'password'} name="password" placeholder="Password" required />
+                                        <input className="p-2 rounded-xl border w-full text-black dark:bg-white pr-10" type={showPassword ? 'text' : 'password'} name="password" placeholder="Password" required />
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
@@ -87,8 +87,8 @@ const Login = () => {
                                         >
                                             {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
                                         </button>
-                                        {loginError && <div className="mt-2 text-red-600">Your password is wrong. Try again.</div>}
                                     </div>
+                                    {loginError && <div className="text-red-600 dark:text-red-400">Your password is wrong. Try again.</div>}
                                     <div className="text-right -mt-2">
                                         <button type="button" onClick={handleForgotPassword} className="text-xs text-blue-500 hover:underline">
                                             Forgot password?
@@ -113,7 +113,7 @@ const Login = () => {
                                         {"Don't"} have an account
                                     </p>
                                     <Link to='/signup'>
-                                        <button className="py-2 bg-white px-2 border rounded-md hover:bg-gray-200 duration-300">Register</button>
+                                        <button className="py-2 bg-white text-black px-2 border rounded-md hover:bg-gray-200 duration-300">Register</button>
                                     </Link>
                                 </div>
                             </div>

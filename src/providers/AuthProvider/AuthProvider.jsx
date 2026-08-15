@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
+import { EmailAuthProvider, GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, reauthenticateWithCredential, signInWithEmailAndPassword, signInWithPopup, signOut, updatePassword, updateProfile } from "firebase/auth";
 import { app } from "../../firebase/firebase.config";
 import axios from "axios";
 
@@ -33,9 +33,29 @@ const AuthProvider = ({ children }) => {
         setLoading(true)
         return signOut(auth)
     }
-    // send a password reset email (Firebase handles the actual reset flow/page)
+    // Sends a branded password reset email via our own server (mailer.js /
+    // Gmail SMTP) instead of Firebase's default one, which arrives from a
+    // generic firebaseapp.com address with no branding and gets flagged as
+    // spam. The server still uses Firebase Admin to generate the actual
+    // reset link/token - we just own the email itself.
     const resetPassword = (email) => {
-        return sendPasswordResetEmail(auth, email)
+        return axios.post('https://book-ocean-bd-server.vercel.app/auth/forgot-password', { email })
+    }
+    // Same reasoning as resetPassword: a branded email via our own server/
+    // mailer instead of Firebase's generic default. Used right after signup,
+    // and again from the "resend" button on the verify-email banner.
+    const sendVerificationEmail = (email) => {
+        return axios.post('https://book-ocean-bd-server.vercel.app/auth/send-verification-email', { email })
+    }
+    // changing a password requires a "recent" login - re-authenticate with
+    // their current password first so this doesn't randomly fail with
+    // auth/requires-recent-login on an older session, and so nobody can
+    // change the password on an account they don't actually have the
+    // password for even if the browser session is still logged in.
+    const changePassword = async (currentPassword, newPassword) => {
+        const credential = EmailAuthProvider.credential(auth.currentUser.email, currentPassword)
+        await reauthenticateWithCredential(auth.currentUser, credential)
+        return updatePassword(auth.currentUser, newPassword)
     }
 
     // user subscribe 
@@ -74,7 +94,9 @@ const AuthProvider = ({ children }) => {
     // since onAuthStateChanged only fires on sign-in/out, not on profile edits.
     const refreshUser = async () => {
         await auth.currentUser.reload()
-        setUser({ ...auth.currentUser })
+        const refreshed = { ...auth.currentUser }
+        setUser(refreshed)
+        return refreshed
     }
     // value
     const authInfo = {
@@ -86,6 +108,8 @@ const AuthProvider = ({ children }) => {
         signIn,
         logOut,
         resetPassword,
+        sendVerificationEmail,
+        changePassword,
         updateUserProfile,
         refreshUser
     }

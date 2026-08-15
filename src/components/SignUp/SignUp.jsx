@@ -9,7 +9,7 @@ import SocialLogin from '../SocialLogin/SocialLogin';
 import FadeIn from '../../Animation/FadeIn';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 const SignUp = () => {
-    const { createUser, updateUserProfile } = useContext(AuthContext)
+    const { createUser, updateUserProfile, sendVerificationEmail } = useContext(AuthContext)
     const [showPassword, setShowPassword] = useState(false)
     const {
         register,
@@ -40,7 +40,11 @@ const SignUp = () => {
                                 console.log('new account', data)
                                 if (data.insertedId) {
                                     reset();
-                                    showSuccessToast('Account Created Successfully')
+                                    // fire-and-forget - a failed verification email shouldn't
+                                    // block signup itself, and the verify-email banner lets
+                                    // them resend later either way
+                                    sendVerificationEmail(loggedUser.email).catch(err => console.log(err))
+                                    showSuccessToast('Account Created Successfully', 'Check your email to verify your account.')
                                     navigate('/')
                                 }
                             })
@@ -55,11 +59,11 @@ const SignUp = () => {
             <Helmet>
                 <title>Book Ocean BD | Sign up</title>
             </Helmet>
-            <div className="bg-blue-200/40 dark:glass">
+            <div className="bg-blue-200/40 dark:bg-gray-900">
                 <div className=" container mx-auto px-2">
-                    <div className="flex justify-center items-center min-h-screen dark:text-black ">
+                    <div className="flex justify-center items-center min-h-screen text-black dark:text-white">
                         <FadeIn delay={0.4} direction='down' >
-                            <div className="bg-[#F4F5FF] flex items-center rounded-2xl shadow-lg max-w-3xl p-5">
+                            <div className="bg-[#F4F5FF] dark:bg-gray-800 flex items-center rounded-2xl shadow-lg max-w-3xl p-5">
                                 {/* image  */}
                                 <div className="md:block hidden w-1/2 ">
                                     <img className=" rounded-2xl" src={loginImg} alt="" />
@@ -74,27 +78,27 @@ const SignUp = () => {
 
                                         {/* name  */}
                                         <input
-                                            className="p-2 mt-8 rounded-xl border dark:bg-white"
+                                            className="p-2 mt-8 rounded-xl border text-black dark:bg-white"
                                             type="text"
                                             name="name"
                                             placeholder="Name"
                                             {...register("name", { required: true })}
                                         />
-                                        {errors.name && <span>Name is required</span>}
+                                        {errors.name && <span className="text-red-600 dark:text-red-400">Name is required</span>}
 
                                         {/* email  */}
                                         <input
-                                            className="p-2 mt-2 rounded-xl border dark:bg-white"
+                                            className="p-2 mt-2 rounded-xl border text-black dark:bg-white"
                                             type="email"
                                             name="email"
                                             placeholder="Email"
                                             {...register("email", { required: true })}
                                         />
-                                        {errors.email && <span> Email is required</span>}
+                                        {errors.email && <span className="text-red-600 dark:text-red-400"> Email is required</span>}
                                         {/* password  */}
                                         <div className="relative">
                                             <input
-                                                className="p-2 mt-2 rounded-xl border w-full dark:bg-white pr-10"
+                                                className="p-2 rounded-xl border w-full text-black dark:bg-white pr-10"
                                                 type={showPassword ? 'text' : 'password'}
                                                 name="password"
                                                 placeholder="Password"
@@ -113,16 +117,16 @@ const SignUp = () => {
                                             >
                                                 {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
                                             </button>
-                                            {errors.password?.type === "required" && (
-                                                <p role="alert">password is required</p>
-                                            )}
-                                            {errors.password?.type === 'minLength' && <p>
-                                                Password must be in 6 charecters</p>}
-                                            {errors.password?.type === 'maxLength' && <p>
-                                                Password must be less then 20 charecters</p>}
-                                            {errors.password?.type === 'pattern' && <p>
-                                                Password must include one Lowercase, one uppercase one digit and one spacial charecter</p>}
                                         </div>
+                                        {errors.password?.type === "required" && (
+                                            <p role="alert" className="text-red-600 dark:text-red-400">password is required</p>
+                                        )}
+                                        {errors.password?.type === 'minLength' && <p className="text-red-600 dark:text-red-400">
+                                            Password must be in 6 charecters</p>}
+                                        {errors.password?.type === 'maxLength' && <p className="text-red-600 dark:text-red-400">
+                                            Password must be less then 20 charecters</p>}
+                                        {errors.password?.type === 'pattern' && <p className="text-red-600 dark:text-red-400">
+                                            Password must include one Lowercase, one uppercase one digit and one spacial charecter</p>}
                                         <input type="submit" value="Sign Up" className="bg-blue-400 rounded-xl py-2 hover:scale-105 duration-300" />
 
                                     </form>
@@ -142,7 +146,7 @@ const SignUp = () => {
                                             Already have an account?
                                         </p>
                                         <Link to='/login'>
-                                            <button className="py-2 bg-white px-2 border rounded-md hover:bg-gray-200 duration-800 font-medium">Login</button></Link>
+                                            <button className="py-2 bg-white text-black px-2 border rounded-md hover:bg-gray-200 duration-800 font-medium">Login</button></Link>
                                     </div>
                                 </div>
 

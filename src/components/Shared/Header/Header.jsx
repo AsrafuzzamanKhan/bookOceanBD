@@ -74,9 +74,11 @@ const Header = () => {
                         <div className="dropdown dropdown-hover dropdown-bottom dropdown-end cursor-pointer ">
                             <label tabIndex={0} >
                                 <div className="avatar online placeholder">
-                                    <div className="bg-neutral text-neutral-content rounded-full w-7 md:w-10 ring-2 ring-transparent hover:ring-blue-400 duration-300">
-                                        {user ? <img src={user?.photoURL} alt={user?.displayName} referrerPolicy="no-referrer" /> : <><FaRegUserCircle /></>}
-
+                                    <div className="bg-gray-700 dark:bg-gray-600 text-white rounded-full w-7 md:w-10 ring-2 ring-transparent hover:ring-blue-400 duration-300 flex items-center justify-center overflow-hidden">
+                                        {user?.photoURL
+                                            ? <img src={user.photoURL} alt={user?.displayName} referrerPolicy="no-referrer" />
+                                            : <FaRegUserCircle className="text-xl md:text-2xl" />
+                                        }
                                     </div>
                                 </div>
 
@@ -87,10 +89,10 @@ const Header = () => {
                                         {/* user info  */}
                                         <div className="flex items-center gap-3 p-4 bg-slate-900">
                                             <div className="avatar">
-                                                <div className="w-11 rounded-full ring-2 ring-blue-400">
+                                                <div className="w-11 rounded-full ring-2 ring-blue-400 overflow-hidden">
                                                     {user?.photoURL
                                                         ? <img src={user.photoURL} alt={user?.displayName} referrerPolicy="no-referrer" />
-                                                        : <div className="bg-neutral text-neutral-content flex items-center justify-center h-full"><FaRegUserCircle className="text-2xl" /></div>
+                                                        : <div className="bg-gray-700 text-white flex items-center justify-center h-full"><FaRegUserCircle className="text-2xl" /></div>
                                                     }
                                                 </div>
                                             </div>

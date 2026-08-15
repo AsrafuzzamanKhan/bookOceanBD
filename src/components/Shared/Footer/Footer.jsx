@@ -1,126 +1,144 @@
-import './Footer.css'
-import facebook from '../../../assets/social/facebook.png'
-import instagram from '../../../assets/social/instagram.png'
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import navlogo from '../../../assets/logo/navlogo.png';
+import {
+    FaFacebookF, FaInstagram, FaPhoneAlt, FaEnvelope, FaFacebookMessenger,
+    FaShieldAlt, FaTruck, FaBookOpen, FaBoxOpen,
+} from 'react-icons/fa';
+import { showSuccessToast, showWarningToast } from '../../../utils/toast';
+
+const quickLinks = [
+    { to: '/', label: 'Home' },
+    { to: '/books', label: 'All Books' },
+    { to: '/search', label: 'Search' },
+    { to: '/login', label: 'Login' },
+    { to: '/signup', label: 'Sign Up' },
+];
+
+const highlights = [
+    { icon: FaShieldAlt, label: 'Authenticity Guarantee' },
+    { icon: FaTruck, label: 'Nationwide Delivery' },
+    { icon: FaBoxOpen, label: 'Easy Pre-Orders' },
+    { icon: FaBookOpen, label: 'Diverse Collection' },
+];
+
+const socialLinks = [
+    { href: 'https://www.facebook.com/bookoceanbd/', icon: FaFacebookF, label: 'Facebook' },
+    { href: 'https://www.instagram.com/bookoceanbd/', icon: FaInstagram, label: 'Instagram' },
+];
+
 const Footer = () => {
     const currentYear = new Date().getFullYear();
+    const [newsletterEmail, setNewsletterEmail] = useState('');
+
+    // NOTE: nothing collects/stores these emails yet - this just confirms
+    // intent client-side. Wire up a real backend endpoint before relying on
+    // this for an actual mailing list.
+    const handleNewsletterSubmit = (e) => {
+        e.preventDefault();
+        if (!newsletterEmail) {
+            showWarningToast('Enter your email', 'Type your email address to subscribe.');
+            return;
+        }
+        showSuccessToast('Thanks for your interest!', "We'll be in touch with updates soon.");
+        setNewsletterEmail('');
+    };
+
     return (
-        <footer className='pt-16 bg-slate-950 text-white/[.8]  '>
-
-            <div className="container mx-auto px-2">
-                <div className='text-center text-white/[.8]'>
-                    <h2 className='h2 uppercase mb-6 font-semibold'>Subscribe to our newsletter</h2>
-                    <p className=''>Be the first to get the latest news abour trends, promotions and much more!</p>
-                </div>
-                <form className='w-full max-w-3xl mx-auto flex flex-col md:flex-row gap-5 my-8' >
-                    <input type="email" placeholder="Your Email Address"
-                        className="input bg-white  " />
-                    <button className="btn bg-blue-400 hover:bg-black min-w-[150px] text-white outline-none border-0">Join</button>
-                </form>
-                {/* link  */}
-                <div className='text-base flex lg:flex-row flex-col gap-x-6 gap-y-4 max-w-max mx-auto mb-5  justify-between'>
-                    <div className='lg:w-1/4 w-full'>
-                        Welcome to <strong>Book Ocean BD</strong>, your premier destination for importing <strong>authentic and original print</strong> books in Bangladesh! Immerse yourself in the joy of reading with our extensive collection of carefully curated titles, spanning genres from fiction to non-fiction, mystery to romance, and everything in between.
-
-                        <div className='mt-6'>
-                            <div className='font-semibold mb-2'>
-                                <h1> Why choose Book Ocean BD?</h1>
-                            </div>
-                            <p>We take pride in delivering the literary treasures you love, right to your doorstep, anywhere in Bangladesh. Our commitment to quality ensures that every book you order is an authentic, high-quality print edition, promising you an unparalleled reading experience.</p>
-                        </div>
-
-                    </div>
-                    <div className='lg:w-2/5 w-full hidden lg:block'>
-
-                        <div>
-                            <p>
-                                Experience the convenience of pre-ordering your desired books with us. Stay ahead of the literary curve by securing your copy in advance, and {"we'll"} make sure it reaches you promptly. No more waiting in anticipation – we prioritize your love for reading by making pre-orders a seamless and efficient process.
-                            </p>
-                        </div>
-
-                        <div className='font-semibold mt-2'>
-                            <h1>{"Here's"} what sets us apart:</h1>
-                        </div>
-                        <div className='my-2'>
-                            <div>
-                                <span className='font-semibold me-2'> Authenticity Guarantee:</span> Every book we offer is an original print edition, promising you the genuine joy of holding a physical book in your hands.
-                            </div>
-
-
-                            <div>
-                                <span className='font-semibold me-2'>Nationwide Delivery:</span>
-                                No matter where you are in Bangladesh, {"we'll"} bring the world of literature to your doorstep. Our reliable delivery service ensures a smooth and secure transit for your books.
-                            </div>
-
-                            <div>
-                                <span className='font-semibold me-2'>Effortless Pre-Ordering:</span>
-                                Be the first to get your hands on the latest releases or secure your favorite titles before they hit the shelves. Our pre-ordering system is designed to be quick and hassle-free.
-                            </div>
-
-                            <div>
-                                <span className='font-semibold me-2'>Diverse Collection:</span>
-                                Explore a diverse range of genres and authors, carefully selected to cater to every reading taste. From bestsellers to hidden gems, we have something for everyone.
-                            </div>
-                        </div>
-
-
-
-
-
-
-
-                    </div>
-                    <div className='lg:w-1/4 w-full'>
-                        <div className='text-lg mb-4 font-semibold'>
-                            Need help?
-                        </div>
-                        <div className='flex flex-col gap-y-1'>
-                            <div>
-                                Call us: <span className='mx-2'><a href="tel:+8801568175528" target="_blank" rel="noreferrer" className=" hover:text-blue-600 hover:underline hover:duration-300 transition-all">+88-01568175528</a></span>
-                            </div>
-                            <div>
-
-                                E-mail us: <span className='mx-2'><a href="mailto:info@bookoceanbd.com" target="_blank" rel="noreferrer" className=" hover:text-blue-600 hover:underline hover:duration-300 transition-all">info@bookoceanbd.com</a></span>
-                            </div>
-                            <div>
-                                Join our Messenger: <span className='mx-2'><a href="https://m.me/bookoceanbd" target="_blank" rel="noreferrer" className=" hover:text-blue-600 hover:underline hover:duration-300 transition-all">m.me/bookoceanbd</a></span>
-                            </div>
-                            {/* socila  */}
-                            <div>
-                                <div className='font-semibold my-4'>
-                                    Our presence in Social Medias:
-                                </div>
-                                <div className=' flex max-w-max gap-x-4 text-lg mb-5'>
-
-                                    <a href="https://www.facebook.com/bookoceanbd/" target="_blank" rel="noreferrer" className="hover:text-green-600 transition-all">
-                                        <img className='w-10' src={facebook} alt="" />
-                                    </a>
-
-                                    <a href="https://www.instagram.com/bookoceanbd/" target="_blank" rel="noreferrer" className="hover:text-green-600 transition-all">
-                                        <img className='w-10' src={instagram} alt="" />
-                                    </a>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="my-2 text-gray-500">
-                            <hr className="border-gray-500 dark:border-white" />
-
-
-                        </div>
-                        <div>
-                            Discover the joy of reading with <strong>Book Ocean BD</strong>. Order your favorite books today and embark on a literary journey that transcends boundaries, delivered to your doorstep with care and precision.
-                        </div>
-                    </div>
+        <footer className='pt-16 bg-slate-950 text-white/[.8]'>
+            <div className='container mx-auto px-4'>
+                {/* newsletter */}
+                <div className='text-center max-w-xl mx-auto mb-14'>
+                    <h2 className='text-2xl font-bold text-white mb-2'>Subscribe to our newsletter</h2>
+                    <p className='text-white/60 mb-6'>Be the first to know about new arrivals, promotions and more.</p>
+                    <form onSubmit={handleNewsletterSubmit} className='flex flex-col sm:flex-row gap-3'>
+                        <input
+                            type='email'
+                            value={newsletterEmail}
+                            onChange={(e) => setNewsletterEmail(e.target.value)}
+                            placeholder='Your email address'
+                            className='flex-1 px-4 py-3 rounded-lg bg-white text-black outline-none focus:ring-2 focus:ring-blue-400'
+                        />
+                        <button className='px-8 py-3 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-semibold duration-300'>
+                            Subscribe
+                        </button>
+                    </form>
                 </div>
 
+                {/* main grid */}
+                <div className='grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10 pb-14 border-t border-white/10 pt-14'>
+                    {/* brand */}
+                    <div className='col-span-2 md:col-span-1'>
+                        <img src={navlogo} alt='Book Ocean BD' className='w-40 mb-4' />
+                        <p className='text-sm text-white/60 leading-relaxed mb-4'>
+                            {"Bangladesh's"} trusted source for authentic, original print books - delivered to your doorstep nationwide.
+                        </p>
+                        <div className='flex gap-3'>
+                            {socialLinks.map(({ href, icon: Icon, label }) => (
+                                <a
+                                    key={label}
+                                    href={href}
+                                    target='_blank'
+                                    rel='noreferrer'
+                                    aria-label={label}
+                                    className='w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-blue-500 duration-300'
+                                >
+                                    <Icon size={15} />
+                                </a>
+                            ))}
+                        </div>
+                    </div>
 
+                    {/* quick links */}
+                    <div>
+                        <h3 className='text-white font-semibold mb-4'>Quick Links</h3>
+                        <ul className='flex flex-col gap-y-2 text-sm text-white/60'>
+                            {quickLinks.map((link) => (
+                                <li key={link.to}>
+                                    <Link to={link.to} className='hover:text-blue-400 duration-300'>{link.label}</Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* why choose us */}
+                    <div>
+                        <h3 className='text-white font-semibold mb-4'>Why Choose Us</h3>
+                        <ul className='flex flex-col gap-y-3 text-sm text-white/60'>
+                            {highlights.map(({ icon: Icon, label }) => (
+                                <li key={label} className='flex items-center gap-2'>
+                                    <Icon className='text-blue-400 shrink-0' size={14} />
+                                    <span>{label}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* contact */}
+                    <div>
+                        <h3 className='text-white font-semibold mb-4'>Need Help?</h3>
+                        <ul className='flex flex-col gap-y-3 text-sm text-white/60'>
+                            <li className='flex items-center gap-2'>
+                                <FaPhoneAlt className='text-blue-400 shrink-0' size={13} />
+                                <a href='tel:+8801568175528' className='hover:text-blue-400 duration-300'>+88 01568175528</a>
+                            </li>
+                            <li className='flex items-center gap-2'>
+                                <FaEnvelope className='text-blue-400 shrink-0' size={13} />
+                                <a href='mailto:info@bookoceanbd.com' className='hover:text-blue-400 duration-300'>info@bookoceanbd.com</a>
+                            </li>
+                            <li className='flex items-center gap-2'>
+                                <FaFacebookMessenger className='text-blue-400 shrink-0' size={13} />
+                                <a href='https://m.me/bookoceanbd' target='_blank' rel='noreferrer' className='hover:text-blue-400 duration-300'>m.me/bookoceanbd</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            {/* copy rigte  */}
-            <div className='py-10 border-t border-white/[0.2]'>
-                <div className='container mx-auto'>
-                    <div className='text-center text-sm px-[2vw]'>
-                        Copyright &copy; Book Ocean BD {currentYear}. All rights reserved.
-                    </div>
+
+            {/* copyright */}
+            <div className='py-6 border-t border-white/10'>
+                <div className='container mx-auto px-4 text-center text-xs text-white/50'>
+                    &copy; {currentYear} Book Ocean BD. All rights reserved.
                 </div>
             </div>
         </footer>

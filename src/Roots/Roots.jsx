@@ -1,6 +1,7 @@
 import { Outlet, ScrollRestoration, useLocation } from "react-router-dom";
 import Header from "../components/Shared/Header/Header";
 import Footer from "../components/Shared/Footer/Footer";
+import VerifyEmailBanner from "../components/Shared/VerifyEmailBanner/VerifyEmailBanner";
 import { Helmet } from "react-helmet";
 
 
@@ -19,6 +20,7 @@ const Roots = () => {
             <ScrollRestoration />
             <Outlet></Outlet>
             {noHeaderFooter || <Footer />}
+            <VerifyEmailBanner />
         </div>
     );
 };

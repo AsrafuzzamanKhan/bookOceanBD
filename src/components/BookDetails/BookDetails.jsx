@@ -160,23 +160,26 @@ const BookDetails = () => {
         <section className="mb-4 pt-[7rem] md:pt-32 lg:pt-[5rem] " >
             <div className="container mx-auto min-h-screen " >
                 <Helmet>
-                    <title>Buy {productDetails?.name}</title>
+                    <title>Buy {productDetails?.name} by {productDetails?.author} | Book Ocean BD</title>
                     <meta name="description" content={productDetails?.description} />
-                    <meta name="image" content={productDetails?.image} />
                     <meta name="keywords" content="Original Print Book, Best Book shop in Bangladesh" />
-                    <meta
-                        name="og:title"
-                        content={productDetails?.name}
-                    />
-                    <meta
-                        name="og:description"
-                        content={productDetails?.description}
-                    />
-                    <meta name="og:image" content={`${productDetails?.image} || https://i.ibb.co/yhDbPYf/logo2.jpg`} />
-                    <meta name="og:url" content="https://bookoceanbd.com" />
-                    <meta name="og:type" content="website" />
-                    <meta name="og:image:width" content="500" />
-                    <meta name="og:image:height" content="236" />
+
+                    {/* Open Graph - must use `property`, not `name`, or Facebook/
+                        WhatsApp/Messenger crawlers ignore these entirely. Note:
+                        this is a client-rendered SPA, so crawlers that don't run
+                        JS (most of them) never see these - only index.html's
+                        static defaults. See index.html for the full explanation. */}
+                    <meta property="og:type" content="website" />
+                    <meta property="og:site_name" content="Book Ocean BD" />
+                    <meta property="og:title" content={`${productDetails?.name} by ${productDetails?.author}`} />
+                    <meta property="og:description" content={productDetails?.description} />
+                    <meta property="og:image" content={productDetails?.image || 'https://i.ibb.co/yhDbPYf/logo2.jpg'} />
+                    <meta property="og:url" content={`https://bookoceanbd.com/book/${productDetails?.name?.replace(/\s/g, "_")}/${productDetails?._id}`} />
+
+                    <meta name="twitter:card" content="summary_large_image" />
+                    <meta name="twitter:title" content={`${productDetails?.name} by ${productDetails?.author}`} />
+                    <meta name="twitter:description" content={productDetails?.description} />
+                    <meta name="twitter:image" content={productDetails?.image || 'https://i.ibb.co/yhDbPYf/logo2.jpg'} />
                 </Helmet>
                 {/* TABS  */}
                 {/* /book/:name/:id */}
