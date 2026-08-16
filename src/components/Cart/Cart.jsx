@@ -44,18 +44,25 @@ const Cart = () => {
 
 
     return (
-        <div className="w-full h-full px-4 text-white " ref={sidebarRef}
+        <div className="w-full h-full px-3 sm:px-4 text-white flex flex-col" ref={sidebarRef}
         >
             <div
                 onClick={() => setIsOpen(!isOpen)}
-                className='text-4xl w-full h-[70px] flex justify-start items-center cursor-pointerfixed'>
+                className='text-3xl sm:text-4xl w-full h-[60px] sm:h-[70px] flex justify-start items-center cursor-pointer flex-shrink-0'>
                 <IoMdClose></IoMdClose>
             </div>
-            <div className='overflow-y-auto overflow-x-hidden h-[70vh]  '>
-                {/* close icon  */}
+            <div className='overflow-y-auto overflow-x-hidden flex-1 min-h-0'>
+                {
+                    cart.length === 0 &&
+                    <div className='h-full flex justify-center items-center flex-col text-white/30'>
+                        <h1 className='text-xl sm:text-2xl text-center px-4'> Your Cart is Empty</h1>
+                        <div className='text-5xl sm:text-6xl'>
+                            <IoCart></IoCart>
+                        </div>
+                    </div>
+                }
 
-
-                <div className='flex flex-col gap-y-10 px-2'>
+                <div className='flex flex-col gap-y-6 sm:gap-y-8 px-1 sm:px-2 pb-4'>
 
                     {
                         cart.map((item, i) => {
@@ -65,52 +72,30 @@ const Cart = () => {
                 </div>
             </div>
             {/* subtotal and total  */}
-            <div className='flex flex-col gap-8'>
-                <div className=''>
-                    {
-                        cart.length >= 1 && < div className=''>
-                            <div className='px-6 flex flex-col '>
-                                {/* sub  */}
-                                <div className='flex justify-between'>
-                                </div>
-                                {/* Subtotal: */}
-                                <div className='flex justify-between text-2xl'>
-                                    <h1>Subtotal:</h1>
-                                    <p>
-                                        {total} <span>&#x09F3;</span>
-                                        {/* {parseFloat(total.toFixed(2))} <span>&#x09F3;</span> */}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    }
+            {
+                cart.length >= 1 &&
+                <div className='flex flex-col gap-4 sm:gap-6 flex-shrink-0 py-3 sm:py-4 border-t border-white/10'>
+                    {/* Subtotal: */}
+                    <div className='flex justify-between text-xl sm:text-2xl px-4 sm:px-6'>
+                        <h1>Subtotal:</h1>
+                        <p>
+                            {total} <span>&#x09F3;</span>
+                        </p>
+                    </div>
+                    {/* button  */}
+                    <div className='px-4 sm:px-6'
+                        onClick={() => setIsOpen(!isOpen)}>
+                        <Link to='/checkout' className='block'>
+                            <button
+                                className='btn bg-blue-400 hover:bg-blue-200 text-primary w-full px-2 gap-x-2 flex-wrap text-center'>
+                                Proceed to buy ({cart.length}
+                                {cart.length === 1 ? ' item' : ' items'})
+                                <IoArrowForward className='text-lg'></IoArrowForward>
+                            </button>
+                        </Link>
+                    </div>
                 </div>
-                {/* button  */}
-                <div className='px-6'>
-                    {
-                        cart.length >= 1 ?
-                            <div className='flex justify-between gap-x-4'
-                                onClick={() => setIsOpen(!isOpen)}>
-
-                                <Link to='/checkout' >
-                                    <button
-                                        className='btn bg-blue-400 hover:bg-blue-200 text-primary flex-1 px-2 gap-x-2'>Procced to buy ({cart.length}
-                                        {cart.length === 1 ? ' item' : ' items'})
-                                        <IoArrowForward className='text-lg'></IoArrowForward></button>
-                                </Link>
-
-
-                            </div>
-                            : <div className='h-full  absolute top-0 right-0 left-0 flex justify-center items-center -z-10 flex-col text-white/30'>
-                                <h1 className='text-2xl'> Your Cart is Empty</h1>
-                                <div className='text-6xl'>
-                                    <IoCart></IoCart>
-                                </div>
-                            </div>
-
-                    }
-                </div>
-            </div>
+            }
         </div >
     );
 };

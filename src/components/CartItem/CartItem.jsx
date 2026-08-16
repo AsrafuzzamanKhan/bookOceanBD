@@ -10,7 +10,7 @@ const CartItem = ({ item }) => {
     // const { price, quantity } = item;
     // const [productQuantity, setProductQuantity] = useState(quantity)
 
-    // remover from cart 
+    // remover from cart
     const handleCartRemove = item => {
         fetch(`https://book-ocean-bd-server.vercel.app/carts/${item._id}`, {
             method: "DELETE"
@@ -40,74 +40,62 @@ const CartItem = ({ item }) => {
     // }
     // const totalPrice = price * productQuantity;
     return (
-        <div className="flex gap-x-8">
+        <div className="flex gap-x-3 sm:gap-x-4">
             <Link
-                to={`/book/${item.
-                    bookId}`}
-                className="w-[70px] h-[70px]">
-                <img src={item.image} alt="mage" />
+                to={`/book/${item.bookId}`}
+                className="w-[60px] h-[60px] sm:w-[70px] sm:h-[70px] flex-shrink-0 rounded overflow-hidden bg-white/5">
+                <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
             </Link>
             {/* title and remove icon  */}
-            <div className="flex-1">
-                <div className="flex justify-between gap-x-4 mb-3">
-                    <div className="flex flex-col">
-                        <Link className="text-xl"
-                            to={`book/${item.
-                                bookId}`}
+            <div className="flex-1 min-w-0">
+                <div className="flex justify-between gap-x-2 mb-2">
+                    <div className="flex flex-col min-w-0">
+                        <Link className="text-base sm:text-xl line-clamp-2 break-words"
+                            to={`/book/${item.bookId}`}
                         > {item.name}
 
                         </Link>
                         <Link
-                            to={`book/${item.
-                                bookId}`}
+                            className="text-sm sm:text-base truncate"
+                            to={`/book/${item.bookId}`}
                         > by <span className="text-blue-400"> {item.author}</span>
 
                         </Link>
                     </div>
-                    <div className="cursor-pointer text-[24px] hover:text-red-400 transition-all">
-                        <IoClose onClick={() => handleCartRemove(item)}></IoClose>
-                    </div>
+                    <button
+                        onClick={() => handleCartRemove(item)}
+                        aria-label="Remove from cart"
+                        className="shrink-0 cursor-pointer text-[22px] sm:text-[24px] p-1 -m-1 hover:text-red-400 transition-all">
+                        <IoClose />
+                    </button>
                 </div>
-                <div className=" flex items-center gap-x-12">
-                    {/* amount  */}
-                    <div className="flex gap-x-4 mb-2 items-center">
-
-                        <div className="flex gap-x-6 items-center  text-primary ">
-
-                            {/* price  */}
-                            <div>
-                                <span className="text-blue-400">
-                                    {item.price} <span>&#x09F3;</span>
-                                </span>
-                            </div>
-                            {/* discount  */}
-                            <div>
-                                <span className="text-blue-400">
-                                    {item.discountPrice} <span>&#x09F3;</span>
-                                </span>
-                            </div>
-                            {/* <div className="bg-gray-200">
-                                <div className="flex gap-4 p-2">
+                <div className="flex items-center gap-x-3 flex-wrap">
+                    {/* price  */}
+                    {item.price != null && item.price !== item.discountPrice && (
+                        <span className="text-xs sm:text-sm line-through text-orange-400">
+                            ৳{item.price}
+                        </span>
+                    )}
+                    {/* discount  */}
+                    <span className="text-sm sm:text-base font-bold text-blue-400">
+                        ৳{item.discountPrice}
+                    </span>
+                    {/* <div className="bg-gray-200">
+                        <div className="flex gap-4 p-2">
 
 
-                                    <button onClick={handleIncrement}><FaPlus />
-                                    </button>
-                                    <p>{productQuantity}</p>
-                                    <button onClick={handleDecrement}><FaMinus />
-                                    </button>
-                                </div>
-
-                            </div> */}
-                            {/* <span className="text-blue-400">
-                                {totalPrice} <span>&#x09F3;</span>
-                            </span> */}
-
+                            <button onClick={handleIncrement}><FaPlus />
+                            </button>
+                            <p>{productQuantity}</p>
+                            <button onClick={handleDecrement}><FaMinus />
+                            </button>
                         </div>
-                    </div>
 
+                    </div> */}
+                    {/* <span className="text-blue-400">
+                        {totalPrice} <span>&#x09F3;</span>
+                    </span> */}
                 </div>
-
-
 
             </div>
 
