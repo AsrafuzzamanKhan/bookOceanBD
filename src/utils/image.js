@@ -20,11 +20,19 @@ const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
 
 // Resizes an image file proportionally (no cropping) to at most
-// `maxDimension` on its longest side, encoded as JPEG.
+// `maxDimension` on its longest side.
 // NOTE: don't substitute a host's own auto-generated square-crop thumbnail
 // for this - imgbb's `data.thumb.url` was a hard center-crop that chopped
 // off the top/bottom of covers/banners (learned this the hard way once
 // already on book cover thumbnails).
+//
+// Output format depends on the source: JPEG has no alpha channel, so a
+// transparent PNG/WebP/GIF forced through JPEG would have its transparent
+// areas flattened onto SOME color (browsers default to black) - that's a
+// background that wasn't there in the original, not "resizing". So formats
+// that support transparency are re-encoded as PNG (kept genuinely
+// transparent, no color added); only formats with no transparency to begin
+// with (JPEG) get the smaller JPEG re-encode.
 export const resizeImageFile = (file, maxDimension = 400) =>
     new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -44,15 +52,14 @@ export const resizeImageFile = (file, maxDimension = 400) =>
                 const canvas = document.createElement('canvas');
                 canvas.width = width;
                 canvas.height = height;
-                const ctx = canvas.getContext('2d');
-                // JPEG has no alpha channel - without this, transparent areas
-                // of a PNG/WebP source (e.g. a cover with a transparent
-                // background) get flattened to black by default instead of
-                // blending into the site's white cards.
-                ctx.fillStyle = '#ffffff';
-                ctx.fillRect(0, 0, width, height);
-                ctx.drawImage(img, 0, 0, width, height);
-                canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.85);
+                canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+
+                const canBeTransparent = /png|webp|gif/i.test(file.type);
+                if (canBeTransparent) {
+                    canvas.toBlob((blob) => resolve(blob), 'image/png');
+                } else {
+                    canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.85);
+                }
             };
             img.src = event.target.result;
         };
