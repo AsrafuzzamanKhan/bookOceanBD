@@ -39,10 +39,13 @@ const CartItem = ({ item }) => {
     //     console.log('decrement')
     // }
     // const totalPrice = price * productQuantity;
+    // route is /book/:name/:id (see main.jsx) - a link with only the id
+    // 404s, which is what was happening here before
+    const bookLink = `/book/${(item.name || "").replace(/\s/g, "_")}/${item.bookId}`;
     return (
         <div className="flex gap-x-3 sm:gap-x-4">
             <Link
-                to={`/book/${item.bookId}`}
+                to={bookLink}
                 className="w-[60px] h-[60px] sm:w-[70px] sm:h-[70px] flex-shrink-0 rounded overflow-hidden bg-white/5">
                 <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
             </Link>
@@ -51,13 +54,13 @@ const CartItem = ({ item }) => {
                 <div className="flex justify-between gap-x-2 mb-2">
                     <div className="flex flex-col min-w-0">
                         <Link className="text-base sm:text-xl line-clamp-2 break-words"
-                            to={`/book/${item.bookId}`}
+                            to={bookLink}
                         > {item.name}
 
                         </Link>
                         <Link
                             className="text-sm sm:text-base truncate"
-                            to={`/book/${item.bookId}`}
+                            to={bookLink}
                         > by <span className="text-blue-400"> {item.author}</span>
 
                         </Link>
