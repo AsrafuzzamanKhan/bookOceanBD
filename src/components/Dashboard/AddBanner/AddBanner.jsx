@@ -3,7 +3,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { showSuccessToast, showErrorToast } from "../../../utils/toast";
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
-import { resizeImageFile, uploadToImgbb } from '../../../utils/imgbb';
+import { resizeImageFile, uploadToCloudinary } from '../../../utils/image';
 
 const AddBanner = () => {
     const [axiosSecure] = useAxiosSecure()
@@ -22,7 +22,7 @@ const AddBanner = () => {
         try {
             const file = data.image[0];
             const resized = await resizeImageFile(file, BANNER_MAX_DIMENSION);
-            const imgResponse = await uploadToImgbb(resized);
+            const imgResponse = await uploadToCloudinary(resized);
             if (!imgResponse.success) throw new Error('Banner image upload failed');
 
             const imaURL = imgResponse.data.display_url;

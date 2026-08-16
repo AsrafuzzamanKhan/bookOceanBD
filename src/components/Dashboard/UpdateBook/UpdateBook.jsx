@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useState } from "react";
-import { resizeImageFile, uploadToImgbb } from "../../../utils/imgbb";
+import { resizeImageFile, uploadToCloudinary } from "../../../utils/image";
 import { showSuccessToast, showErrorToast } from "../../../utils/toast";
 
 // same cap as AddBooks.jsx - see comment there
@@ -40,8 +40,8 @@ const UpdateBook = () => {
                     resizeImageFile(file),
                 ]);
                 const [fullRes, thumbRes] = await Promise.all([
-                    uploadToImgbb(fullBlob),
-                    uploadToImgbb(thumbBlob),
+                    uploadToCloudinary(fullBlob),
+                    uploadToCloudinary(thumbBlob),
                 ]);
                 if (!fullRes.success) throw new Error('Cover image upload failed');
                 updateBookItem.image = fullRes.data.display_url;

@@ -4,7 +4,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { showSuccessToast, showErrorToast } from "../../../utils/toast";
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
-import { resizeImageFile, uploadToImgbb } from '../../../utils/imgbb';
+import { resizeImageFile, uploadToCloudinary } from '../../../utils/image';
 
 // full cover image cap - plenty of resolution for a zoomed-in product view,
 // well below what an unedited phone/camera photo comes in at (often 3000px+
@@ -27,8 +27,8 @@ const AddBooks = () => {
             ]);
 
             const [fullRes, thumbRes] = await Promise.all([
-                uploadToImgbb(fullBlob),
-                uploadToImgbb(thumbBlob),
+                uploadToCloudinary(fullBlob),
+                uploadToCloudinary(thumbBlob),
             ]);
 
             if (!fullRes.success) throw new Error('Cover image upload failed');
