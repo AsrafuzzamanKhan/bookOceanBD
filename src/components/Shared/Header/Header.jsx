@@ -142,13 +142,14 @@ const Header = () => {
                         <div onClick={() => setIsOpen(!isOpen)} className="relative cursor-pointer">
                             <FiShoppingBag className="text-2xl md:text-3xl"></FiShoppingBag>
 
-                            {/* amount  */}
-                            {/* cart total  */}
-                            <div className="flex justify-center items-center bg-blue-400 absolute w-[18px] h-[18px] rounded-full top-3 -right-1 text-[14px] font-semibold ">{cart?.length || 0}</div>
+                            {/* amount - total copies across all lines, not just distinct books */}
+                            <div className="flex justify-center items-center bg-blue-500 text-white absolute w-[18px] h-[18px] rounded-full top-3 -right-1 text-[11px] font-semibold ">
+                                {cart?.reduce((sum, item) => sum + (item.quantity || 1), 0) || 0}
+                            </div>
                         </div>
 
                         {/* cart  */}
-                        <div className={`${isOpen ? 'right-0' : '-right-full'}  bg-black shadow-xl fixed top-0 bottom-0 w-full h-screen z-10 md:max-w-[500px] transition-all duration-300`}>
+                        <div className={`${isOpen ? 'right-0' : '-right-full'} bg-white dark:bg-gray-900 shadow-2xl fixed top-0 bottom-0 w-full h-screen z-10 md:max-w-[420px] transition-all duration-300`}>
                             <Cart></Cart>
                         </div>
 
