@@ -75,7 +75,10 @@ const Cart = () => {
             {/* subtotal and total  */}
             {
                 cart.length >= 1 &&
-                <div className='flex flex-col gap-4 sm:gap-6 flex-shrink-0 py-3 sm:py-4 border-t border-white/10'>
+                // extra bottom padding (+ safe-area-inset for notched phones)
+                // so the button has real breathing room above the screen
+                // edge instead of sitting flush against it on mobile
+                <div className='flex flex-col gap-4 sm:gap-6 flex-shrink-0 pt-3 sm:pt-4 pb-6 sm:pb-8 border-t border-white/10' style={{ paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))' }}>
                     {/* Subtotal: */}
                     <div className='flex justify-between text-xl sm:text-2xl px-4 sm:px-6'>
                         <h1>Subtotal:</h1>
