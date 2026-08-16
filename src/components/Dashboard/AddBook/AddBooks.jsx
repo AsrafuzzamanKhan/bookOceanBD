@@ -4,54 +4,12 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { showSuccessToast, showErrorToast } from "../../../utils/toast";
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
-const img_hosting_token = import.meta.env.VITE_image_Upload_token;
+import { resizeImageFile, uploadToImgbb } from '../../../utils/imgbb';
 
 const AddBooks = () => {
     const [axiosSecure] = useAxiosSecure()
     const [addLoading, setAddLoading] = useState(false)
     const { register, reset, handleSubmit } = useForm();
-
-    const img_hosting_url = `https://api.imgbb.com/1/upload?key=${img_hosting_token}`
-
-    console.log(img_hosting_url);
-
-    // Resizes an image file proportionally (no cropping) so book cards can
-    // load a small cover instead of the full-size original.
-    // NOTE: don't swap this for imgbb's own `data.thumb.url` - that variant
-    // is a hard square center-crop that chops off the top/bottom of covers.
-    const THUMB_MAX_DIMENSION = 400;
-    const resizeImageFile = (file, maxDimension = THUMB_MAX_DIMENSION) =>
-        new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onerror = reject;
-            reader.onload = (event) => {
-                const img = new Image();
-                img.onerror = reject;
-                img.onload = () => {
-                    let { width, height } = img;
-                    if (width > height && width > maxDimension) {
-                        height = Math.round(height * (maxDimension / width));
-                        width = maxDimension;
-                    } else if (height > maxDimension) {
-                        width = Math.round(width * (maxDimension / height));
-                        height = maxDimension;
-                    }
-                    const canvas = document.createElement('canvas');
-                    canvas.width = width;
-                    canvas.height = height;
-                    canvas.getContext('2d').drawImage(img, 0, 0, width, height);
-                    canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.85);
-                };
-                img.src = event.target.result;
-            };
-            reader.readAsDataURL(file);
-        });
-
-    const uploadToImgbb = (fileOrBlob) => {
-        const formData = new FormData();
-        formData.append('image', fileOrBlob);
-        return fetch(img_hosting_url, { method: 'POST', body: formData }).then(res => res.json());
-    };
 
     const onSubmit = async data => {
         console.log('add book data', data);
@@ -86,8 +44,6 @@ const AddBooks = () => {
             showErrorToast('Failed to add book', err.message)
         }
     };
-    // console.log(errors);
-    console.log(img_hosting_token)
     return (
         <div className=" container mx-auto">
             <Helmet>

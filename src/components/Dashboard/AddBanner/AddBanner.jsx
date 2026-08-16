@@ -1,45 +1,45 @@
 import { useForm } from 'react-hook-form';
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import { showSuccessToast } from "../../../utils/toast";
+import { showSuccessToast, showErrorToast } from "../../../utils/toast";
 import { Helmet } from 'react-helmet-async';
-const img_hosting_token = import.meta.env.VITE_image_Upload_token;
+import { useState } from 'react';
+import { resizeImageFile, uploadToImgbb } from '../../../utils/imgbb';
+
 const AddBanner = () => {
     const [axiosSecure] = useAxiosSecure()
-    const { register, reset, handleSubmit, formState: { errors } } = useForm();
-    const img_hosting_url = `https://api.imgbb.com/1/upload?key=${img_hosting_token}`
-    console.log(img_hosting_url);
+    const [addLoading, setAddLoading] = useState(false)
+    const { register, reset, handleSubmit } = useForm();
 
+    // Banners were previously uploaded as-is (raw admin-exported PNGs, 74-131KB
+    // each, no resizing) and shown eagerly on the homepage hero - directly
+    // slowing down the first thing visitors see. Resize to 800px (comfortably
+    // covers the largest display size - the hero slider at lg:w-96 - with
+    // headroom for retina screens) and re-encode as JPEG before upload.
+    const BANNER_MAX_DIMENSION = 800;
 
-    const onSubmit = data => {
-        console.log('add banner data', data)
-        const formData = new FormData();
-        formData.append('image', data.image[0]);
+    const onSubmit = async data => {
+        setAddLoading(true)
+        try {
+            const file = data.image[0];
+            const resized = await resizeImageFile(file, BANNER_MAX_DIMENSION);
+            const imgResponse = await uploadToImgbb(resized);
+            if (!imgResponse.success) throw new Error('Banner image upload failed');
 
-        fetch(img_hosting_url, {
-            method: "POST",
-            body: formData
-        })
-            .then(res => res.json())
-            .then(imgResponse => {
-                if (imgResponse.success) {
-                    const imaURL = imgResponse.data.display_url;
-                    const { name, discount, author, category, promo } = data;
-                    const newBannerItem = { name, category, image: imaURL, author, discount, promo }
-                    console.log(newBannerItem)
-                    axiosSecure.post('/banners', newBannerItem)
-                        .then(data => {
-                            console.log('Post in database', data);
-                            if (data.data.insertedId) {
-                                reset()
-                                showSuccessToast('Banner is added successfully!!!')
-                            }
-                        })
-                }
-            })
-
+            const imaURL = imgResponse.data.display_url;
+            const { name, discount, author, category, promo } = data;
+            const newBannerItem = { name, category, image: imaURL, author, discount, promo }
+            const res = await axiosSecure.post('/banners', newBannerItem)
+            if (res.data.insertedId) {
+                reset()
+                showSuccessToast('Banner is added successfully!!!')
+            }
+        } catch (err) {
+            console.error(err);
+            showErrorToast('Failed to add banner', err.message)
+        } finally {
+            setAddLoading(false)
+        }
     };
-    // console.log(errors);
-    console.log(img_hosting_token)
     return (
         <div className=" container mx-auto">
             <Helmet>
@@ -128,7 +128,14 @@ const AddBanner = () => {
                                     {...register("image", { required: true })} />
 
                             </div>
-                            <input className=" bg-black w-full text-white mt-4 py-3 rounded hover:scale-105 duration-300 uppercase cursor-pointer hover:text-green-600" type="submit" value="Add Item" />
+                            {
+                                addLoading ? <div className='text-center mt-1'>
+                                    <span className="loading loading-ball loading-xs"></span>
+                                    <span className="loading loading-ball loading-sm"></span>
+                                    <span className="loading loading-ball loading-md"></span>
+                                    <span className="loading loading-ball loading-lg"></span></div>
+                                    : <input className=" bg-black w-full text-white mt-4 py-3 rounded hover:scale-105 duration-300 uppercase cursor-pointer hover:text-green-600" type="submit" value="Add Item" />
+                            }
                         </form>
                     </div>
                 </div>

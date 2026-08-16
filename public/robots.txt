@@ -1,6 +1,3 @@
 User-agent: *
-Disallow: 
+Disallow: /dashboard
 Sitemap: https://bookoceanbd.com/sitemap.xml
-Sitemap: https://www.bookoceanbd.com/sitemap.xml
-Sitemap: https://bookoceanbd.com/sitemap.txt
-Sitemap: https://www.bookoceanbd.com/sitemap.txt

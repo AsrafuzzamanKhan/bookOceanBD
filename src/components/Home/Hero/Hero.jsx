@@ -35,7 +35,7 @@ const Hero = () => {
                                             </div>
 
                                             <div className=' flex-1 w-full flex justify-center items-center '>
-                                                <img className='w-[120px] p-2 object-cover' src={item.image} alt={item.image} />
+                                                <img className='w-[120px] p-2 object-cover' src={item.image} alt={item.name} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
                                             </div>
 
                                         </div>

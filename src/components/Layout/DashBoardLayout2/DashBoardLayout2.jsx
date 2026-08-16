@@ -25,7 +25,7 @@ const DashBoardLayout2 = () => {
                     <div className="flex-1 px-2 mx-0">
                         {/* logo  */}
                         <Link to='/' className='flex mx-auto w-64'>
-                            <img src={logoSvg} alt="" />
+                            <img src={logoSvg} alt="Book Ocean BD" />
 
                         </Link>
 

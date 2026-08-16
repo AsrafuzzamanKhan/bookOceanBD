@@ -56,7 +56,7 @@ const Header = () => {
 
                     {/* logo  */}
                     <Link to={'/'} className="w-[200px] md:w-[250px]" >
-                        <img className="" src={logoSvg} alt="" />
+                        <img className="" src={logoSvg} alt="Book Ocean BD" />
                     </Link>
 
                     {/* search in dextop  */}

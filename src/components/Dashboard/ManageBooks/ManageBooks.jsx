@@ -1,7 +1,8 @@
 import { AiFillDelete } from "react-icons/ai";
+import { FaSync } from "react-icons/fa";
 import useBookData from "../../../hooks/useBookData";
 import Swal from "sweetalert2";
-import { showSuccessToast } from "../../../utils/toast";
+import { showSuccessToast, showErrorToast } from "../../../utils/toast";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
@@ -13,6 +14,30 @@ const ManageBooks = () => {
     const [booksData, , refetch] = useBookData()
     const [filter, setFilter] = useState(booksData)
     const [axiosSecure] = useAxiosSecure()
+    const [syncing, setSyncing] = useState(false)
+    const [syncResult, setSyncResult] = useState(null)
+
+    // dryRun: true previews the sync (updated/created counts, category
+    // breakdown) without writing anything - only pulls name/author/category/
+    // availability/price from the sheet, see googleSheetSync.js on the server
+    const handleSyncSheet = (dryRun) => {
+        setSyncing(true)
+        setSyncResult(null)
+        axiosSecure.post('/admin/sync-google-sheet', { dryRun })
+            .then(res => {
+                setSyncResult(res.data)
+                if (dryRun) {
+                    showSuccessToast('Preview ready', `${res.data.updated} would update, ${res.data.created} would be created.`)
+                } else {
+                    showSuccessToast('Sync complete', `${res.data.updated} updated, ${res.data.created} new books added.`)
+                    refetch()
+                }
+            })
+            .catch(err => {
+                showErrorToast('Sync failed', err.response?.data?.message || err.message)
+            })
+            .finally(() => setSyncing(false))
+    }
 
 
 
@@ -65,7 +90,55 @@ const ManageBooks = () => {
                 <div className="flex items-center justify-center bg-slate-300 py-4 rounded gap-4 ">
                     <label htmlFor="" className="text-md font-semibold">Filter: </label>
                     <input type="text" className="p-2  rounded-xl border dark:bg-white w-1/2 " onChange={filterBook} placeholder="Name / Author name/ Category" name="" id="" /></div>
-                <div className=" grid lg:grid-cols-4 md:grid-cols-2 gap-6">
+
+                {/* google sheet sync */}
+                <div className="my-6 border dark:border-0 dark:bg-gray-800 rounded-[8px] p-4">
+                    <div className="flex flex-wrap items-center justify-between gap-3 mb-2">
+                        <h2 className="font-semibold dark:text-white">Sync from Google Sheet</h2>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => handleSyncSheet(true)}
+                                disabled={syncing}
+                                className="px-4 py-2 rounded text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 duration-200 disabled:opacity-50"
+                            >
+                                {syncing ? 'Working...' : 'Preview (no changes)'}
+                            </button>
+                            <button
+                                onClick={() => handleSyncSheet(false)}
+                                disabled={syncing}
+                                className="flex items-center gap-2 px-4 py-2 rounded text-sm font-medium bg-slate-800 text-white hover:bg-slate-700 duration-200 disabled:opacity-50"
+                            >
+                                <FaSync size={12} /> {syncing ? 'Syncing...' : 'Sync Now'}
+                            </button>
+                        </div>
+                    </div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+                        Only updates name/author/category/availability/price. Existing books are matched by name+author;
+                        anything not already in your catalog is added with a placeholder cover for you to finish manually.
+                        Also runs automatically once a day.
+                    </p>
+
+                    {syncResult && (
+                        <div className="text-sm dark:text-white">
+                            <div className="flex flex-wrap gap-4 mb-3">
+                                <span>Rows processed: <strong>{syncResult.totalRows}</strong></span>
+                                <span className="text-blue-500">Updated: <strong>{syncResult.updated}</strong></span>
+                                <span className="text-green-500">{syncResult.dryRun ? 'Would create' : 'Created'}: <strong>{syncResult.created}</strong></span>
+                            </div>
+                            {syncResult.newlyCreated?.length > 0 && (
+                                <div className="max-h-48 overflow-y-auto border-t dark:border-gray-700 pt-2">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                                        {syncResult.dryRun ? 'Would be newly created (needs a cover added afterward):' : 'Newly created - needs a cover added:'}
+                                    </p>
+                                    <ul className="text-xs space-y-1">
+                                        {syncResult.newlyCreated.map((b, i) => (
+                                            <li key={i}>{b.name} — <span className="text-gray-400">{b.author} · {b.category}{b.price ? ` · ৳${b.price}` : ''}</span></li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </div>
                 <div className="">
                     <div className="overflow-x-auto border">

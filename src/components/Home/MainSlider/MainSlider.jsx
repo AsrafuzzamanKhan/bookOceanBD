@@ -54,7 +54,7 @@ const MainSlider = () => {
                                     <span className="loading loading-bars loading-lg"></span>
                                 }>
                                     <div className='flex-1 mx-auto p-2 md:p-0'>
-                                        <img className='w-64 lg:w-96' src={slide.image} alt={slide.name} />
+                                        <img className='w-64 lg:w-96' src={slide.image} alt={slide.name} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
                                     </div>
                                 </React.Suspense>
                             </div>

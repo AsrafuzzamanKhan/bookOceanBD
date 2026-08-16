@@ -17,33 +17,40 @@ const LazyBookDetails = React.lazy(() => import('./components/BookDetails/BookDe
 const LazySearchBook = React.lazy(() => import('./components/SearchBook/SearchBook'));
 const LazyBooks = React.lazy(() => import('./components/Books/Books'));
 const LazyBook = React.lazy(() => import('./components/Book/Book'));
-const LazyManageBooks = React.lazy(() => import('./components/Dashboard/ManageBooks/ManageBooks'));
+const LazyLogin = React.lazy(() => import('./components/Login/Login'));
+const LazySignUp = React.lazy(() => import('./components/SignUp/SignUp'));
+const LazyCheckout = React.lazy(() => import('./components/Dashboard/Checkout/Checkout'));
+
+// Dashboard/admin-only pages - a regular customer browsing the store never
+// needs any of this code, so none of it belongs in their initial bundle.
+// Previously every one of these was imported eagerly at the top level,
+// meaning every visitor downloaded the entire admin dashboard (add/manage
+// book forms, banner management, user/order management, CSV export, etc.)
+// whether they'd ever see it or not.
 const LazyDashBoardLayout2 = React.lazy(() => import('./components/Layout/DashBoardLayout2/DashBoardLayout2'));
+const LazyManageBooks = React.lazy(() => import('./components/Dashboard/ManageBooks/ManageBooks'));
+const LazyAdminHome = React.lazy(() => import('./components/Dashboard/AdminHome/AdminHome'));
+const LazyAddBooks = React.lazy(() => import('./components/Dashboard/AddBook/AddBooks'));
+const LazyAddBanner = React.lazy(() => import('./components/Dashboard/AddBanner/AddBanner'));
+const LazyManageBanner = React.lazy(() => import('./components/Dashboard/ManageBanner/ManageBanner'));
+const LazyUpdateBook = React.lazy(() => import('./components/Dashboard/UpdateBook/UpdateBook'));
+const LazyAllUsers = React.lazy(() => import('./components/Dashboard/AllUsers/AllUsers'));
+const LazyAllOrders = React.lazy(() => import('./components/Dashboard/AllOrders/AllOrders'));
+const LazyUserHome = React.lazy(() => import('./components/Dashboard/UserHome/UserHome'));
+const LazyOrderHistory = React.lazy(() => import('./components/Dashboard/OrderHistory/OrderHistory'));
+const LazyMyProfile = React.lazy(() => import('./components/Dashboard/MyProfile/MyProfile'));
+
 import Home from './components/Home/Home/Home';
 import AuthProvider from './providers/AuthProvider/AuthProvider';
-import Login from './components/Login/Login';
-import Checkout from './components/Dashboard/Checkout/Checkout';
-import AddBooks from './components/Dashboard/AddBook/AddBooks';
-import SignUp from './components/SignUp/SignUp';
 import PrivateRoutes from './components/Routes/PrivateRoutes';
-import AllUsers from './components/Dashboard/AllUsers/AllUsers';
-import OrderHistory from './components/Dashboard/OrderHistory/OrderHistory';
 import AdminRoute from './components/Routes/AdminRoute';
 import CartProvider from './providers/CartProvider/CartProvider';
-import AllOrders from './components/Dashboard/AllOrders/AllOrders';
-import AdminHome from './components/Dashboard/AdminHome/AdminHome';
-import UserHome from './components/Dashboard/UserHome/UserHome';
-import AddBanner from './components/Dashboard/AddBanner/AddBanner';
-import ManageBanner from './components/Dashboard/ManageBanner/ManageBanner';
-import UpdateBook from './components/Dashboard/UpdateBook/UpdateBook';
-import MyProfile from './components/Dashboard/MyProfile/MyProfile';
 import Loading from './Loading/Loading';
 import ErrorPage from './error-page';
 
 
 
 const queryClient = new QueryClient()
-// const locomotiveScroll = new LocomotiveScroll();
 
 const router = createBrowserRouter([
   {
@@ -82,17 +89,17 @@ const router = createBrowserRouter([
       ,
       {
         path: '/login',
-        element: <Login />
+        element: <React.Suspense fallback={<Loading />}><LazyLogin /></React.Suspense>
       }
       ,
       {
         path: '/signup',
-        element: <SignUp />
+        element: <React.Suspense fallback={<Loading />}><LazySignUp /></React.Suspense>
       }
       ,
       {
         path: '/checkout',
-        element: <Checkout />
+        element: <React.Suspense fallback={<Loading />}><LazyCheckout /></React.Suspense>
       }
     ]
   },
@@ -104,50 +111,50 @@ const router = createBrowserRouter([
     children: [
       {
         path: 'adminhome',
-        element: <AdminRoute><AdminHome></AdminHome></AdminRoute>
+        element: <React.Suspense fallback={<Loading />}><AdminRoute><LazyAdminHome></LazyAdminHome></AdminRoute></React.Suspense>
       },
       {
         path: 'addBook',
-        element: <AdminRoute><AddBooks></AddBooks></AdminRoute>
+        element: <React.Suspense fallback={<Loading />}><AdminRoute><LazyAddBooks></LazyAddBooks></AdminRoute></React.Suspense>
       },
       {
         path: 'addBanner',
-        element: <AdminRoute><AddBanner></AddBanner></AdminRoute>
+        element: <React.Suspense fallback={<Loading />}><AdminRoute><LazyAddBanner></LazyAddBanner></AdminRoute></React.Suspense>
       },
       {
         path: 'manageBanner',
-        element: <AdminRoute><ManageBanner /></AdminRoute>
+        element: <React.Suspense fallback={<Loading />}><AdminRoute><LazyManageBanner /></AdminRoute></React.Suspense>
       },
       {
         path: 'manageBooks',
 
-        element: <React.Suspense fallback="Loading..."> <AdminRoute><LazyManageBooks></LazyManageBooks></AdminRoute></React.Suspense>
+        element: <React.Suspense fallback={<Loading />}> <AdminRoute><LazyManageBooks></LazyManageBooks></AdminRoute></React.Suspense>
       },
       {
         path: 'updateBook/:id',
-        element: <AdminRoute><UpdateBook></UpdateBook></AdminRoute>
+        element: <React.Suspense fallback={<Loading />}><AdminRoute><LazyUpdateBook></LazyUpdateBook></AdminRoute></React.Suspense>
       },
       {
         path: 'allUsers',
-        element: <AdminRoute><AllUsers></AllUsers></AdminRoute>
+        element: <React.Suspense fallback={<Loading />}><AdminRoute><LazyAllUsers></LazyAllUsers></AdminRoute></React.Suspense>
 
       },
       {
         path: 'allOrders',
-        element: <AdminRoute><AllOrders></AllOrders></AdminRoute>
+        element: <React.Suspense fallback={<Loading />}><AdminRoute><LazyAllOrders></LazyAllOrders></AdminRoute></React.Suspense>
 
       },
       {
         path: 'userhome',
-        element: <UserHome></UserHome>
+        element: <React.Suspense fallback={<Loading />}><LazyUserHome></LazyUserHome></React.Suspense>
       },
       {
         path: 'orderHistory',
-        element: <OrderHistory></OrderHistory>
+        element: <React.Suspense fallback={<Loading />}><LazyOrderHistory></LazyOrderHistory></React.Suspense>
       },
       {
         path: 'myProfile',
-        element: <MyProfile></MyProfile>
+        element: <React.Suspense fallback={<Loading />}><LazyMyProfile></LazyMyProfile></React.Suspense>
       }
     ]
 
