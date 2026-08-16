@@ -28,7 +28,11 @@
 html,
 body {
   /* overflow: hidden; */
-  overflow-x: hidden;
+  /* overflow-x: hidden (not "clip") turns html/body into a scroll
+     container, which silently breaks position: sticky for every
+     descendant in the page (e.g. CategoryNav) - clip keeps the same
+     "no horizontal scrollbar/bleed" behavior without that side effect. */
+  overflow-x: clip;
   scroll-behavior: smooth;
   @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100;
 }
