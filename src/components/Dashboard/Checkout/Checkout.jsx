@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 // import CartItem from "../../CartItem/CartItem";
 import useCart from "../../../hooks/useCart";
 import useAuth from "../../../hooks/useAuth";
+import useBookData from "../../../hooks/useBookData";
 import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { showSuccessToast, showErrorToast } from "../../../utils/toast";
@@ -10,20 +11,63 @@ import { Helmet } from "react-helmet-async";
 import { useState } from "react";
 import { FaMapMarkerAlt, FaPhone, FaReceipt, FaTruck, FaUser } from "react-icons/fa";
 
-const DELIVERY_CHARGE = {
-    dhaka: 80,
-    outside: 100,
-};
+const NORMAL_DELIVERY_CHARGE = { dhaka: 80, outside: 100 };
+const HEAVY_DELIVERY_CHARGE = { dhaka: 100, outside: 120 };
+const HEAVY_ORDER_THRESHOLD_GRAMS = 2000; // 2 kg
+// ~37% of the catalog has no itemWeight on file - used for those (and for
+// anything unparseable) so a handful of missing weights can't silently
+// zero out the whole order's weight. 350g is a typical single paperback.
+const FALLBACK_BOOK_WEIGHT_GRAMS = 350;
+
+// Book weight is admin-typed free text ("310 g", "1 kg 70 g", "1.8 pounds",
+// occasionally "N/A" or even dimensions pasted in by mistake) - not a
+// normalized number+unit. Sums every kg/g/pound/ounce amount found in the
+// string; a bare number with no unit is treated as grams (the dominant
+// format in the data). Verified against all 563 distinct values actually in
+// the catalog before shipping this - see conversation for the audit.
+function parseWeightToGrams(raw) {
+    if (!raw) return 0;
+    const text = raw.toString().replace(/[‎‏‪-‮]/g, '').trim();
+    if (!text) return 0;
+    // a few entries have dimensions pasted into this field by mistake
+    // (e.g. "13.97 x 3.07 x 21.59 cm") - don't misread those as a weight
+    if (/\bcm\b|\bmm\b|\bx\b/i.test(text)) return 0;
+
+    let grams = 0;
+    let matched = false;
+    for (const m of text.matchAll(/(\d+(?:\.\d+)?)\s*kg\b/gi)) { grams += parseFloat(m[1]) * 1000; matched = true; }
+    for (const m of text.matchAll(/(\d+(?:\.\d+)?)\s*g\b/gi)) { grams += parseFloat(m[1]); matched = true; }
+    for (const m of text.matchAll(/(\d+(?:\.\d+)?)\s*pounds?\b/gi)) { grams += parseFloat(m[1]) * 453.592; matched = true; }
+    for (const m of text.matchAll(/(\d+(?:\.\d+)?)\s*ounces?\b/gi)) { grams += parseFloat(m[1]) * 28.3495; matched = true; }
+
+    if (!matched) {
+        const bare = text.match(/(\d+(?:\.\d+)?)/);
+        if (bare) grams = parseFloat(bare[1]);
+    }
+    return grams;
+}
 
 const Checkout = () => {
 
     const [cart, refetch] = useCart()
+    const [booksData] = useBookData()
     const [axiosSecure] = useAxiosSecure()
     const { user } = useAuth()
     const [isSubmitting, setIsSubmitting] = useState(false)
     // per-line total, not just unit price - a cart line can be more than one
     // copy of the same book (see CartItem's quantity stepper)
     const total = cart.reduce((sum, item) => sum + parseInt(item.discountPrice) * (item.quantity || 1), 0);
+
+    // total order weight, looked up live from each book's current
+    // itemWeight (not stored on the cart item) - used to decide whether the
+    // heavier delivery rate applies
+    const totalWeightGrams = cart.reduce((sum, item) => {
+        const book = booksData?.find(b => b._id === item.bookId);
+        const perCopy = parseWeightToGrams(book?.itemWeight) || FALLBACK_BOOK_WEIGHT_GRAMS;
+        return sum + perCopy * (item.quantity || 1);
+    }, 0);
+    const isHeavyOrder = totalWeightGrams > HEAVY_ORDER_THRESHOLD_GRAMS;
+    const DELIVERY_CHARGE = isHeavyOrder ? HEAVY_DELIVERY_CHARGE : NORMAL_DELIVERY_CHARGE;
 
 
     const { register, handleSubmit, reset, watch, formState: { errors } } = useForm();
@@ -46,6 +90,7 @@ const Checkout = () => {
 
         const order = {
             cart, orderQuantity: cart.reduce((sum, item) => sum + (item.quantity || 1), 0), total, deliveryCharge, totalAmount, data, date, email: user?.email,
+            totalWeightGrams, isHeavyOrder,
             cartItems: cart.map(item => item?._id),
             itemNames: cart.map(item => item?.name),
             bookItems: cart.map(item => item?.bookId),
@@ -169,6 +214,11 @@ const Checkout = () => {
                                                 </div>
                                             }
                                         </div>
+                                        {cart.length > 0 && isHeavyOrder && (
+                                            <p className="normal-case text-xs text-orange-500 dark:text-orange-400 -mt-1 mb-1 text-right">
+                                                Heavier delivery rate applies - order weighs over 2kg
+                                            </p>
+                                        )}
                                         <hr className="my-2" />
                                         <div className="flex justify-between text-lg text-blue-500 dark:text-blue-400">
                                             <h2>Total:</h2>
