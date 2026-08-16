@@ -1,14 +1,26 @@
+import { useState } from "react";
+import { FaMinus, FaPlus } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
 import useCart from "../../hooks/useCart";
-import { showSuccessToast } from "../../utils/toast";
+import useBookData from "../../hooks/useBookData";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { showSuccessToast, showErrorToast } from "../../utils/toast";
 
 
 const CartItem = ({ item }) => {
     const [, refetch] = useCart();
-    // const { price, quantity } = item;
-    // const [productQuantity, setProductQuantity] = useState(quantity)
+    const [axiosSecure] = useAxiosSecure();
+    const [booksData] = useBookData();
+    const [updating, setUpdating] = useState(false);
+
+    // stock is looked up live from the book, not stored on the cart item -
+    // it's the current source of truth and can change after the item was
+    // added (someone else bought the last copy, admin restocked, etc)
+    const book = booksData?.find(b => b._id === item.bookId);
+    const stock = book?.quantity ?? 1;
+    const qty = item.quantity || 1;
 
     // remover from cart
     const handleCartRemove = item => {
@@ -27,18 +39,15 @@ const CartItem = ({ item }) => {
 
     }
 
-    // const handleIncrement = () => {
-    //     setProductQuantity(productQuantity + 1)
-    //     console.log('increment')
-    // }
-    // const handleDecrement = () => {
-    //     if (productQuantity > 1) {
-    //         setProductQuantity(productQuantity - 1)
-    //     }
+    const updateQuantity = (newQty) => {
+        if (newQty < 1 || newQty > stock || updating) return;
+        setUpdating(true);
+        axiosSecure.patch(`/carts/${item._id}`, { quantity: newQty })
+            .then(() => refetch())
+            .catch(err => showErrorToast('Failed to update quantity', err.response?.data?.message || err.message))
+            .finally(() => setUpdating(false));
+    };
 
-    //     console.log('decrement')
-    // }
-    // const totalPrice = price * productQuantity;
     // route is /book/:name/:id (see main.jsx) - a link with only the id
     // 404s, which is what was happening here before
     const bookLink = `/book/${(item.name || "").replace(/\s/g, "_")}/${item.bookId}`;
@@ -82,22 +91,30 @@ const CartItem = ({ item }) => {
                     {/* discount  */}
                     <span className="text-sm sm:text-base font-bold text-blue-400">
                         ৳{item.discountPrice}
+                        {qty > 1 && <span className="text-gray-400 font-normal"> &times; {qty} = ৳{item.discountPrice * qty}</span>}
                     </span>
-                    {/* <div className="bg-gray-200">
-                        <div className="flex gap-4 p-2">
 
-
-                            <button onClick={handleIncrement}><FaPlus />
-                            </button>
-                            <p>{productQuantity}</p>
-                            <button onClick={handleDecrement}><FaMinus />
-                            </button>
-                        </div>
-
-                    </div> */}
-                    {/* <span className="text-blue-400">
-                        {totalPrice} <span>&#x09F3;</span>
-                    </span> */}
+                    {/* quantity stepper - capped at the book's current stock */}
+                    <div className="flex items-center gap-x-2 border border-white/20 rounded px-1.5 py-0.5">
+                        <button
+                            onClick={() => updateQuantity(qty - 1)}
+                            disabled={qty <= 1 || updating}
+                            aria-label="Decrease quantity"
+                            className="p-1 disabled:opacity-30 hover:text-blue-400 transition-all">
+                            <FaMinus size={10} />
+                        </button>
+                        <span className="text-sm w-4 text-center">{qty}</span>
+                        <button
+                            onClick={() => updateQuantity(qty + 1)}
+                            disabled={qty >= stock || updating}
+                            aria-label="Increase quantity"
+                            className="p-1 disabled:opacity-30 hover:text-blue-400 transition-all">
+                            <FaPlus size={10} />
+                        </button>
+                    </div>
+                    {qty >= stock && (
+                        <span className="text-[11px] text-orange-400">Max in stock</span>
+                    )}
                 </div>
 
             </div>

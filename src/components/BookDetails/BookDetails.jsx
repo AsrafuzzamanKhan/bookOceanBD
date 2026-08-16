@@ -122,10 +122,19 @@ const BookDetails = () => {
             })
                 .then(res => res.json())
                 .then(data => {
-                    if (data.insertedId) {
+                    if (data.insertedId || data.modifiedCount > 0 || data.matchedCount > 0) {
                         refetch()
                         setIsOpen(!isOpen)
-                        showSuccessToast("Add to the cart")
+                        // quantity is capped at current stock (see POST /carts) - let
+                        // the customer know if adding another copy didn't actually
+                        // do anything because they're already at the stock limit
+                        if (data.existed && data.quantity >= data.maxQty) {
+                            showSuccessToast(`Already ${data.quantity} in your cart`, "That's all we have in stock right now.")
+                        } else if (data.existed) {
+                            showSuccessToast('Added another copy', `${data.quantity} in your cart now.`)
+                        } else {
+                            showSuccessToast("Add to the cart")
+                        }
                     }
                 })
         } else {

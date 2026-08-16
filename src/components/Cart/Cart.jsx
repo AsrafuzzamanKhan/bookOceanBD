@@ -36,9 +36,10 @@ const Cart = () => {
         };
     }, [setIsOpen]);
 
-    const total = cart.reduce((sum, item) => parseInt(item.discountPrice) + sum, 0)
-    // const total = cart.reduce((sum, item) => parseInt(item.price) + sum, 0)
-    // console.log(parseInt(total))
+    // per-line total, not just unit price - a cart line can now be more than
+    // one copy of the same book (see CartItem's quantity stepper)
+    const total = cart.reduce((sum, item) => sum + parseInt(item.discountPrice) * (item.quantity || 1), 0)
+    const totalItemCount = cart.reduce((sum, item) => sum + (item.quantity || 1), 0)
 
 
 
@@ -88,8 +89,8 @@ const Cart = () => {
                         <Link to='/checkout' className='block'>
                             <button
                                 className='btn bg-blue-400 hover:bg-blue-200 text-primary w-full px-2 gap-x-2 flex-wrap text-center'>
-                                Proceed to buy ({cart.length}
-                                {cart.length === 1 ? ' item' : ' items'})
+                                Proceed to buy ({totalItemCount}
+                                {totalItemCount === 1 ? ' item' : ' items'})
                                 <IoArrowForward className='text-lg'></IoArrowForward>
                             </button>
                         </Link>

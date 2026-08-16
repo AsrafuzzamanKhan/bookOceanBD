@@ -21,8 +21,9 @@ const Checkout = () => {
     const [axiosSecure] = useAxiosSecure()
     const { user } = useAuth()
     const [isSubmitting, setIsSubmitting] = useState(false)
-    const total = cart.reduce((sum, item) => parseInt(item.discountPrice) + sum, 0);
-    // const total = cart.reduce((sum, item) => parseInt(item.price) + sum, 0);
+    // per-line total, not just unit price - a cart line can be more than one
+    // copy of the same book (see CartItem's quantity stepper)
+    const total = cart.reduce((sum, item) => sum + parseInt(item.discountPrice) * (item.quantity || 1), 0);
 
 
     const { register, handleSubmit, reset, watch, formState: { errors } } = useForm();
@@ -44,7 +45,7 @@ const Checkout = () => {
         const date = format(currentDate, 'yyyy-MM-dd HH:mm:ss');
 
         const order = {
-            cart, orderQuantity: cart.length, total, deliveryCharge, totalAmount, data, date, email: user?.email,
+            cart, orderQuantity: cart.reduce((sum, item) => sum + (item.quantity || 1), 0), total, deliveryCharge, totalAmount, data, date, email: user?.email,
             cartItems: cart.map(item => item?._id),
             itemNames: cart.map(item => item?.name),
             bookItems: cart.map(item => item?.bookId),
@@ -253,7 +254,7 @@ const Checkout = () => {
                                                 <td className="!p-1">
 
                                                     <div className="flex gap-1">
-                                                        <span>&#x09F3;</span> <p>{book.discountPrice}</p>
+                                                        <span>&#x09F3;</span> <p>{book.discountPrice * (book.quantity || 1)}</p>
                                                     </div>
                                                 </td>
 
