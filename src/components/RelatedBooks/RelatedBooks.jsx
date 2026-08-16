@@ -6,9 +6,14 @@ import GoogleAds from "../GoogleAds/GoogleAds";
 const RelatedBooks = ({ categoryTitle }) => {
     const [booksData] = useBookData()
 
-    // get product by category title 
-    // Use the filter method to get products of the selected category
-    const filteredProducts = booksData.filter(item => item.category === categoryTitle);
+    // get product by category title
+    // Use the filter method to get products of the selected category, with
+    // in-stock books sorted first so a customer isn't shown a row of "Out
+    // of Stock" covers before ones they could actually buy (stable sort -
+    // relative order within each group is otherwise untouched)
+    const filteredProducts = booksData
+        .filter(item => item.category === categoryTitle)
+        .sort((a, b) => (a.available === 'true' ? 0 : 1) - (b.available === 'true' ? 0 : 1));
 
     const sliceData = filteredProducts.slice(0, 20)
 
