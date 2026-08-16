@@ -66,7 +66,7 @@ const SearchBook = () => {
             <div className=" container mx-auto">
                 <div className="flex gap-x-[30px] ">
                     {/* category nav  */}
-                    <CategoryNav></CategoryNav>
+                    <CategoryNav sticky></CategoryNav>
 
                     <div className='flex flex-col w-full '>
                         <div>

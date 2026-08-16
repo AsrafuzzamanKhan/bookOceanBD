@@ -271,7 +271,7 @@ const Book = () => {
                 <div className="flex gap-x-[30px] ">
 
                     {/* category nav  */}
-                    <CategoryNav />
+                    <CategoryNav sticky />
 
                     <div className="w-full px-1 lg:px-0">
                         <main className="">
