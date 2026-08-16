@@ -4,7 +4,8 @@ import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { endOfMonth, endOfWeek, isWithinInterval, parse, startOfMonth, startOfWeek } from 'date-fns';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
-import { FaBook, FaUsers, FaShoppingCart, FaMoneyBillWave, FaPlus, FaListUl, FaDownload } from 'react-icons/fa';
+import { showSuccessToast, showErrorToast } from '../../../utils/toast';
+import { FaBook, FaUsers, FaShoppingCart, FaMoneyBillWave, FaPlus, FaListUl, FaDownload, FaHourglassHalf } from 'react-icons/fa';
 import { MdManageHistory, MdOutlineDevicesOther } from 'react-icons/md';
 
 const salesPeriods = [
@@ -52,7 +53,7 @@ const AdminHome = () => {
         },
     });
 
-    const { data: orders = [], isLoading: ordersLoading } = useQuery({
+    const { data: orders = [], isLoading: ordersLoading, refetch: refetchOrders } = useQuery({
         queryKey: ['adminHomeRecentOrders'],
         queryFn: async () => {
             const res = await axiosSecure.get('/allOrders');
@@ -61,6 +62,35 @@ const AdminHome = () => {
     });
 
     const recentOrders = orders.slice().reverse().slice(0, 5);
+
+    // newest first, so whoever's checking the dashboard sees what just came
+    // in at the top
+    const pendingOrders = useMemo(
+        () => orders.filter((o) => o.status === 'pending').slice().reverse(),
+        [orders]
+    );
+
+    const [actioningId, setActioningId] = useState(null);
+    const handleApprove = (order) => {
+        setActioningId(order._id);
+        axiosSecure.patch(`/orders/approve-order/${order._id}`)
+            .then(() => {
+                showSuccessToast('Order approved');
+                refetchOrders();
+            })
+            .catch((err) => showErrorToast('Failed to approve', err.response?.data?.message || err.message))
+            .finally(() => setActioningId(null));
+    };
+    const handleCancel = (order) => {
+        setActioningId(order._id);
+        axiosSecure.patch(`/orders/cancel-order/${order._id}`)
+            .then(() => {
+                showSuccessToast('Order canceled');
+                refetchOrders();
+            })
+            .catch((err) => showErrorToast('Failed to cancel', err.response?.data?.message || err.message))
+            .finally(() => setActioningId(null));
+    };
 
     // Delivered orders only, everywhere on this page (COD - an order isn't
     // real revenue, and arguably isn't a completed "sale" at all, until it's
@@ -123,7 +153,16 @@ const AdminHome = () => {
                 </div>
 
                 {/* stat cards */}
-                <div className='grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8'>
+                <div className='grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8'>
+                    <div className='border dark:border-0 dark:bg-gray-800 rounded-[8px] p-5 shadow-sm hover:shadow-md duration-300'>
+                        <FaHourglassHalf size={26} className='text-yellow-500 mb-2' />
+                        <p className='text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400'>Pending Orders</p>
+                        <p className='text-2xl font-bold dark:text-white'>
+                            {ordersLoading
+                                ? <span className='loading loading-spinner loading-sm'></span>
+                                : pendingOrders.length.toLocaleString()}
+                        </p>
+                    </div>
                     {statMeta.map((meta) => {
                         const Icon = meta.icon;
                         return (
@@ -159,6 +198,71 @@ const AdminHome = () => {
                             );
                         })}
                     </div>
+                </div>
+
+                {/* pending orders - needs action */}
+                <div className='mb-8'>
+                    <div className='flex justify-between items-center mb-3'>
+                        <h2 className='text-lg font-semibold dark:text-white'>
+                            Pending Orders
+                            {pendingOrders.length > 0 && (
+                                <span className='ml-2 align-middle px-2 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300'>
+                                    {pendingOrders.length}
+                                </span>
+                            )}
+                        </h2>
+                        <Link to='/dashboard/allOrders' className='text-blue-500 hover:underline text-sm'>View all orders</Link>
+                    </div>
+
+                    {ordersLoading ? (
+                        <div className='text-center py-8'>
+                            <span className='loading loading-spinner loading-md'></span>
+                        </div>
+                    ) : pendingOrders.length === 0 ? (
+                        <p className='dark:text-white border dark:border-0 dark:bg-gray-800 rounded-[8px] p-5'>No pending orders right now - you&apos;re all caught up.</p>
+                    ) : (
+                        <div className='overflow-x-auto border dark:border-0 dark:bg-gray-800 rounded-[8px]'>
+                            <table className='table w-full'>
+                                <thead>
+                                    <tr className='dark:text-white'>
+                                        <th>Customer</th>
+                                        <th>Date</th>
+                                        <th>Items</th>
+                                        <th>Amount</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {pendingOrders.map((order) => (
+                                        <tr key={order._id} className='dark:text-white dark:hover:bg-gray-700 hover:bg-gray-100 duration-300'>
+                                            <td>{order.data?.name}</td>
+                                            <td>{order.date}</td>
+                                            <td>{order.orderQuantity}</td>
+                                            <td>৳{order.totalAmount}</td>
+                                            <td>
+                                                <div className='flex gap-2'>
+                                                    <button
+                                                        onClick={() => handleApprove(order)}
+                                                        disabled={actioningId === order._id}
+                                                        className='px-3 py-1 rounded text-xs font-semibold bg-green-600 text-white hover:bg-green-700 duration-200 disabled:opacity-50'
+                                                    >
+                                                        Approve
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleCancel(order)}
+                                                        disabled={actioningId === order._id}
+                                                        className='px-3 py-1 rounded text-xs font-semibold bg-red-600 text-white hover:bg-red-700 duration-200 disabled:opacity-50'
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
                 </div>
 
                 {/* sales filter */}

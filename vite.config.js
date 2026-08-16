@@ -2,7 +2,18 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
-  base: "./",
+  // Must be root-relative, not "./" - this is a client-side-routed SPA
+  // served with a catch-all rewrite to /index.html (see firebase.json), so
+  // any nested route (e.g. /dashboard/adminhome) can be hit directly via
+  // hard reload or a bookmark. With a relative base, that same index.html's
+  // "./assets/..." references resolve against the CURRENT url instead of
+  // the site root (e.g. "/dashboard/assets/..."), which doesn't exist -
+  // Firebase's rewrite then serves index.html's HTML in place of the JS
+  // file, the browser fails to parse it as a script, and the whole app
+  // fails to boot: a blank page on every direct/reload hit to any non-root
+  // route. Root-relative paths resolve correctly no matter how deep the
+  // current URL is.
+  base: "/",
 
   build: {
     rollupOptions: {

@@ -78,14 +78,10 @@ function buildPageFor(book, baseHtml) {
   const url = `${SITE_URL}/book/${slugifyName(book.name)}/${book._id}`;
 
   let html = baseHtml;
-  // vite.config.js sets base: "./", so every asset reference in the built
-  // index.html (script/link src/href) is relative - correct for a page at
-  // "/", but these generated pages live 3 directories deep
-  // (/book/<name>/<id>/index.html), where the same relative paths would
-  // resolve to the wrong location entirely and break the app for real
-  // visitors. <base href="/"> makes the browser resolve them against the
-  // site root regardless of how deep this document actually lives.
-  html = replaceMeta(html, /<head>/, `<head>\n    <base href="/" />`);
+  // vite.config.js uses base: "/" (root-relative), so every asset reference
+  // in the built index.html already resolves correctly regardless of how
+  // deep these generated pages live (/book/<name>/<id>/index.html) - no
+  // <base> tag shim needed here.
   html = replaceMeta(html, /<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(title)}</title>`);
   html = replaceMeta(html, metaTagRegex("property", "og:title"), `<meta property="og:title" content="${escapeHtml(title)}" />`);
   html = replaceMeta(html, metaTagRegex("property", "og:description"), `<meta property="og:description" content="${escapeHtml(description)}" />`);
