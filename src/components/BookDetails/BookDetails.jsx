@@ -1,4 +1,3 @@
-import './BookDetails.css'
 import { Link, useNavigate, useParams } from "react-router-dom";
 import useBookData from "../../hooks/useBookData";
 import RelatedBooks from "../RelatedBooks/RelatedBooks";
@@ -8,21 +7,22 @@ import useAuth from "../../hooks/useAuth";
 import useCart from "../../hooks/useCart";
 import { useContext, useEffect, useRef, useState } from "react";
 import { CartContext } from "../../providers/CartProvider/CartProvider";
-import { useAnimation } from "framer-motion"
-import { useInView } from "react-intersection-observer";
-import { MdEdit } from "react-icons/md";
+import { MdEdit, MdPayment, MdOutlineGppGood, MdClose, MdZoomIn } from "react-icons/md";
 import facebook from '../../assets/social/facebook.png'
 import instagram from '../../assets/social/instagram.png'
 import { TbTruckDelivery } from "react-icons/tb";
-import { MdPayment } from "react-icons/md";
-import { MdOutlineGppGood } from "react-icons/md";
 import { IoMdHome } from "react-icons/io";
-import { FaAmazon } from "react-icons/fa";
+import { FaAmazon, FaShoppingCart } from "react-icons/fa";
 
 import useAdmin from "../../hooks/useAdmin";
 import BookDescription from "../BookDescription/BookDescription";
-// import usePageSEO from "../../hooks/usePageSEO";
 import { Helmet } from "react-helmet";
+
+const coverLabels = {
+    hardcover: 'Hardcover',
+    paperback: 'Paperback',
+    'leather bound': 'Leather Bound',
+};
 
 const BookDetails = () => {
 
@@ -34,69 +34,31 @@ const BookDetails = () => {
     const [, refetch] = useCart()
     const { setIsOpen, isOpen } = useContext(CartContext)
 
+    // click-to-zoom lightbox for the cover image
     const [fullImg, setFullImg] = useState(false);
-
-    const sidebarRef = useRef(null);
+    const lightboxRef = useRef(null);
     useEffect(() => {
-        // Function to handle click outside of the sidebar
         const handleClickOutside = (event) => {
-            if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+            if (lightboxRef.current && !lightboxRef.current.contains(event.target)) {
                 setFullImg(false)
             }
         };
-
-        // Attach the event listener when the component mounts
         document.addEventListener('mousedown', handleClickOutside);
-
-        // Detach the event listener when the component unmounts
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [setFullImg]);
-
-    // animation 
-    const { ref, inView } = useInView({
-        threshold: 0.1
-    });
-    const animation = useAnimation()
-
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+    // Esc closes the lightbox too
     useEffect(() => {
-        console.log('isview', inView)
-        if (inView) {
-            animation.start({
-                y: 0,
-                transition: {
-                    type: 'spring', duration: 4, bounce: 0.3
-                }
-            })
-        }
-        if (!inView) {
-            animation.start({ y: '-100vw' })
-        }
-
-    }, [animation, inView])
-
+        const handleEscape = (event) => {
+            if (event.key === 'Escape') setFullImg(false)
+        };
+        document.addEventListener('keydown', handleEscape);
+        return () => document.removeEventListener('keydown', handleEscape);
+    }, []);
 
     const productDetails = booksData?.find(pd => pd._id === id)
     const discount = productDetails?.price * 0.05;
-    // const discount = productDetails?.price * 0.15;
     const discountPrice = parseInt(productDetails?.price - discount)
-    // usePageSEO(
-    //     {
-    //         title: `Buy ${productDetails?.name}`,
-    //         description: ` ${productDetails?.description}`,
-    //         keywords: ["Original Print Book", "Best Book shop in Bangladesh"],
-    //         ogTitle: `${productDetails?.name}`,
-    //         ogDescription: `${productDetails?.description}`,
-    //         ogImage: `${productDetails?.image}`,
-    //         ogUrl: "https://bookoceanbd.com/"
-    //     }
-    // )
-
-
-    // console.log('product details', typeof (productDetails._id))
-    // console.log('Id', typeof productDetails._id)
-    // console.log(productDetails)
+    const discountPercent = productDetails?.price ? Math.round((discount / productDetails.price) * 100) : 0;
 
     if (!productDetails) {
         return <div className="container mx-auto flex text-center justify-center">Loading...
@@ -106,11 +68,8 @@ const BookDetails = () => {
     const handleAddToCart = (item) => {
 
         const { category, name, image, _id, author } = item;
-        // const { category, name, image, price, _id, author } = item;
 
         const cartItem = { bookId: _id, category, name, author, image, discountPrice, email: user?.email, quantity: 1 }
-        console.log('cartItem', cartItem)
-        // console.log(id)
 
         if (user) {
             fetch('https://book-ocean-bd-server.vercel.app/carts', {
@@ -155,18 +114,11 @@ const BookDetails = () => {
         }
     }
 
-    // const handleImgClose = () => {
-    //     setFullImg(false)
-    //     console.log(fullImg);
-    // }
-    // const handleFullImg = () => {
-    //     setFullImg(true)
-    //     console.log(fullImg);
-    // }
+    const isAvailable = productDetails?.available === 'true';
 
     return (
-        <section className="mb-4 pt-[7rem] md:pt-32 lg:pt-[5rem] " >
-            <div className="container mx-auto min-h-screen " >
+        <section className="mb-4 pt-[7rem] md:pt-32 lg:pt-[5rem]" >
+            <div className="container mx-auto min-h-screen" >
                 <Helmet>
                     <title>Buy {productDetails?.name} by {productDetails?.author} | Book Ocean BD</title>
                     <meta name="description" content={productDetails?.description} />
@@ -189,256 +141,193 @@ const BookDetails = () => {
                     <meta name="twitter:description" content={productDetails?.description} />
                     <meta name="twitter:image" content={productDetails?.image || 'https://i.ibb.co/yhDbPYf/logo2.jpg'} />
                 </Helmet>
-                {/* TABS  */}
-                {/* /book/:name/:id */}
-                <div className="flex flex-wrap items-center justify-start gap-x-2 px-[2vw] py-0 md:py-2 md:px-0 mb-2">
-                    <Link to='/' className=" hover:text-blue-900  duration-300 flex"><IoMdHome size={20} />
 
+                {/* breadcrumb  */}
+                <div className="flex flex-wrap items-center justify-start gap-x-2 px-[2vw] py-0 md:py-2 md:px-0 mb-4 text-sm text-gray-500 dark:text-gray-400">
+                    <Link to='/' className="hover:text-blue-500 duration-200 flex">
+                        <IoMdHome size={18} />
                     </Link>
-                    <span> /</span>
+                    <span>/</span>
                     <Link to={`/books/${productDetails?.category}`}>
-                        <span className="text-blue-400 hover:text-blue-900 hover:underline duration-300 capitalize">
+                        <span className="text-blue-500 hover:text-blue-600 hover:underline duration-200 capitalize">
                             {productDetails?.category}
-
                         </span>
                     </Link>
-                    <span> /</span>
-                    <Link
-                        to={`/authorbooks/${productDetails?.author}`}
-                        author={productDetails?.author}>
-                        <span
-                            className="text-blue-400 hover:text-blue-900 hover:underline duration-300 ">
+                    <span>/</span>
+                    <Link to={`/authorbooks/${productDetails?.author}`}>
+                        <span className="text-blue-500 hover:text-blue-600 hover:underline duration-200">
                             {productDetails?.author}
                         </span>
                     </Link>
-                    <span> /</span>
-                    <span className="">
+                    <span>/</span>
+                    <span className="text-gray-700 dark:text-gray-300 line-clamp-1">
                         {productDetails?.name}
                     </span>
                 </div>
 
+                {/* main card  */}
+                <div className="flex flex-col md:flex-row bg-white dark:bg-gray-800 border border-gray-100 dark:border-0 rounded-2xl shadow-sm overflow-hidden">
 
-
-                {/* text  */}
-                <div ref={ref} >
-                    {/* <motion.div animate={animation} className="flex flex-col lg:flex-row lg:gap-[20px] gap-0 mb-[30px] items-center w-full bg-white dark:bg-[#1D232A] "> */}
-                    <div className="flex flex-col md:flex-row overflow-x-hidden rounded-lg">
-                        <div className="  flex-1  flex items-center justify-center ">
-                            <div className="  flex items-center justify-center w-full h-full overflow-hidden dark:bg-[#131624] bg-local bg-no-repeat  " style={{ backgroundImage: 'url(/bg.png)' }}>
-                                {/* 
-                                {
-                                    fullImg ? <div ref={sidebarRef} className='fullSlider absolute w-full h-full top-[56%] left-[50%] bg-gray-500 flex justify-center items-center bg-no-repeat ' >
-
-                                        <img
-                                            className="cursor-pointer w-[80%] h-[80%] object-contain"
-                                            src={productDetails?.image}
-                                            alt={productDetails?.name}
-                                            loading="lazy"
-
-                                        />
-
-                                    </div> : <img
-                                        className="w-48 lg:w-64 lg:p-0 p-4 cursor-pointer "
-                                        src={productDetails?.image}
-                                        alt={productDetails?.name}
-                                        loading="lazy"
-                                        onClick={handleFullImg}
-                                    />}
-
-
-                                {
-                                    fullImg && <div className="absolute top-28 lg:top-20 right-0 text-white text-2xl lg:text-3xl font-bold p-2 cursor-pointer  hover:bg-black m-2 border-0 transition duration-800 rounded" onClick={handleImgClose}>
-                                        X
-                                    </div>
-                                } */}
-
-
-
-
-                                <img
-                                    className="w-56 lg:w-72 shadow-2xl transition-transform hover:scale-105 duration-500"
-                                    src={productDetails?.image}
-                                    alt={productDetails?.name}
-                                    loading="eager"
-                                />
-
-
-                            </div>
-                        </div>
-
-                        {/* <div className="flex-1 w-full h-full rounded-[4px] flex justify-center items-center bg-red-400  " >
-                            <img src={productDetails?.image}
-                                className="w-48 lg:w-64 lg:p-0 p-4 " loading="lazy"
-                                alt={productDetails?.name} />
-                        </div> */}
-
-                        <div className="w-full flex-1 px-[2vw] lg:py-10 py-4 md:px-8   flex flex-col justify-center dark:bg-base-200 dark:text-white text-black  dark:border-none shadow-sm border md:rounded-r-2xl  ">
-                            {/* book details  */}
-                            <div className="flex flex-col gap-y-2">
-                                <h4 className="capitalize tracking-wide text-blue-400 text-lg font-medium ">
-                                    {productDetails?.category}
-                                </h4>
-
-                                {/* title  */}
-                                <h1 className="text-xl lg:text-2xl">
-                                    {productDetails?.name}
-                                </h1>
-                                <h2 className="">
-                                    by <span
-                                        className="text-blue-400">
-                                        {productDetails?.author}
-                                    </span>
-
-                                </h2>
-
-                            </div>
-
-
-
-                            {/* price and btn   */}
-                            <div className="flex items-center gap-x-8 my-2 lg:my-4">
-                                {/* price  */}
-
-
-                                <div className=" flex justify-center items-center gap-2 ">
-
-                                    <div className="border rounded-[4px] shadow-sm flex flex-col text-center gap-[2px] px-2 py-2">
-                                        < >
-                                            {
-                                                productDetails?.cover === 'hardcover' && <span className="text-[15px] font-medium tracking-wide"> Hardcover </span>
-                                            }
-                                            {
-                                                productDetails?.cover == 'paperback' && <span className="text-[15px] font-medium tracking-wide "> Paperback </span>
-                                            }
-                                            {
-                                                productDetails?.cover == 'leather bound' && <span className="text-[15px] font-medium tracking-wide "> Leather Bound </span>
-                                            }
-                                        </>
-
-                                        <>
-                                            {
-                                                productDetails?.available === 'false' ?
-                                                    <div className=" text-red-400"> --- </div>
-                                                    :
-                                                    <div className="flex gap-x-4">
-
-                                                        <p className="text-md lg:text-lg font-semibold text-orange-400 line-through flex"><span>&#x09F3;</span> {productDetails?.price}</p>
-                                                        <p className="text-md lg:text-lg font-semibold text-blue-400 flex"><span>&#x09F3;</span> {discountPrice}</p>
-
-
-                                                    </div>
-
-                                            }</>
-
-
-                                    </div>
-
-
-
-                                    {/* add to cart button  */}
-
-                                    <div className="">
-                                        {
-                                            productDetails?.available === 'false' ? <h2 className="text-xl text-red-600">Stock Out</h2> : <div className="">
-                                                <button
-                                                    onClick={() => handleAddToCart(productDetails)}
-                                                    className="px-2 py-2 font-semibold tracking-wide bg-blue-400 text-black hover:text-white hover:bg-black hover:duration-300 transition-all text-[12px] lg:text-[14px] border-0 rounded-[4px] uppercase">Add to cart
-                                                </button>
-
-                                            </div>
-
-                                        }
-                                    </div>
-
-                                    {
-                                        isAdmin && <div>
-                                            <Link to={`/dashboard/updateBook/${productDetails?._id}`}>
-
-                                                <div className="flex justify-center items-center gap-1 btn"><MdEdit></MdEdit><span>Edit</span></div>
-                                            </Link>
-
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-
-                            {/* stock quantity  */}
-                            {
-                                productDetails?.available === 'true' && typeof productDetails?.quantity === 'number' &&
-                                <p className={`text-sm font-medium mb-2 ${productDetails.quantity <= 5 ? 'text-orange-500' : 'text-gray-500 dark:text-gray-300'}`}>
-                                    {productDetails.quantity <= 5 ? `Only ${productDetails.quantity} left in stock` : `In stock: ${productDetails.quantity} available`}
-                                </p>
-                            }
-
-                            {/* pre order  */}
-
-                            <div className="flex">
-                                {
-                                    productDetails?.available === 'false' &&
-                                    <div className="flex items-center justify-center gap-2 mt-1 border  dark:text-white p-4 text-[18px] rounded font-semibold shadow-lg hover:scale-95 hover:duration-300 transition-all">
-                                        <FaAmazon />
-                                        <a href="https://m.me/bookoceanbd" target="_blank" rel="noreferrer" className="  text-[#FF9900]">Pre-order Now</a>
-
-                                    </div>
-
-                                }
-                            </div>
-
-
-
-
-                            {/* original  */}
-                            <div className="flex flex-col gap-y-2 my-4">
-                                <div className="flex gap-x-2 items-center">
-                                    <TbTruckDelivery className="w-7 h-7" />
-                                    <p className="text-[14px] md:text-[16px] tracking-wide">Fast Shipping</p>
-                                </div>
-                                <div className="flex gap-x-2  items-center">
-                                    <MdOutlineGppGood className="w-7 h-7" />
-                                    <p className="text-[14px] md:text-[16px] tracking-wide">Get Premium Quality Original Books</p>
-                                </div>
-                                <div className="flex gap-x-2 items-center">
-                                    <MdPayment className="w-7 h-7" />
-                                    <p className="text-[14px] md:text-[16px] tracking-wide">Cash On Delivery Service is Available</p>
-                                </div>
-                            </div>
-                            <hr />
-                            {/* social  */}
-                            <div>
-                                <h2 className='font-semibold my-4'>
-                                    Follow Our Social Medias:
-                                </h2>
-                                <div className=' flex max-w-max gap-x-4 text-lg mb-5'>
-
-                                    <a href="https://www.facebook.com/bookoceanbd/" target="_blank" rel="noreferrer" className="hover:scale-95 duration-500">
-                                        <img className='w-8' src={facebook} alt="" />
-                                    </a>
-
-                                    <a href="https://www.instagram.com/bookoceanbd/" target="_blank" rel="noreferrer" className="hover:scale-95 duration-500">
-                                        <img className='w-8' src={instagram} alt="" />
-                                    </a>
-                                </div>
-                            </div>
-
-
-                        </div>
+                    {/* cover  */}
+                    <div className="md:w-[42%] flex items-center justify-center p-6 md:p-10 bg-gray-50 dark:bg-gray-900/40 relative">
+                        {productDetails?.newBook === 'true' && (
+                            <span className="absolute top-4 left-4 md:top-6 md:left-6 bg-blue-500 text-white text-[11px] font-bold uppercase rounded-full px-2.5 py-1 shadow-sm">
+                                New
+                            </span>
+                        )}
+                        <button
+                            onClick={() => setFullImg(true)}
+                            className="group relative cursor-zoom-in"
+                            aria-label="Zoom into cover image">
+                            <img
+                                className="w-52 md:w-64 lg:w-72 shadow-xl rounded transition-transform duration-500 group-hover:scale-105"
+                                src={productDetails?.image}
+                                alt={productDetails?.name}
+                                loading="eager"
+                            />
+                            <span className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/10 duration-200 rounded">
+                                <MdZoomIn className="text-white text-3xl opacity-0 group-hover:opacity-100 duration-200 drop-shadow" />
+                            </span>
+                        </button>
                     </div>
 
-                    {/* </motion.div> */}
+                    {/* details  */}
+                    <div className="w-full md:w-[58%] px-6 md:px-8 py-6 md:py-10 flex flex-col justify-center text-black dark:text-white border-t md:border-t-0 md:border-l border-gray-100 dark:border-gray-700">
+
+                        <h4 className="capitalize tracking-wide text-blue-500 text-sm font-bold">
+                            {productDetails?.category}
+                        </h4>
+
+                        <h1 className="text-xl lg:text-2xl font-bold mt-1 leading-snug">
+                            {productDetails?.name}
+                        </h1>
+                        <p className="mt-1 text-gray-600 dark:text-gray-300">
+                            by <Link to={`/authorbooks/${productDetails?.author}`} className="text-blue-500 hover:underline">{productDetails?.author}</Link>
+                        </p>
+
+                        {coverLabels[productDetails?.cover] && (
+                            <span className="mt-3 inline-block w-fit text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-600 rounded-full px-3 py-1">
+                                {coverLabels[productDetails.cover]}
+                            </span>
+                        )}
+
+                        {/* price  */}
+                        <div className="mt-5">
+                            {isAvailable ? (
+                                <div className="flex items-baseline gap-3 flex-wrap">
+                                    <span className="text-3xl font-bold text-blue-600 dark:text-blue-400">৳{discountPrice}</span>
+                                    <span className="text-base line-through text-gray-400">৳{productDetails?.price}</span>
+                                    {discountPercent > 0 && (
+                                        <span className="text-xs font-bold text-white bg-orange-400 rounded px-2 py-0.5">
+                                            {discountPercent}% OFF
+                                        </span>
+                                    )}
+                                </div>
+                            ) : (
+                                <p className="text-xl font-bold text-red-500">Stock Out</p>
+                            )}
+
+                            {/* stock quantity  */}
+                            {isAvailable && typeof productDetails?.quantity === 'number' && (
+                                <p className={`text-sm font-medium mt-1 ${productDetails.quantity <= 5 ? 'text-orange-500' : 'text-gray-500 dark:text-gray-400'}`}>
+                                    {productDetails.quantity <= 5 ? `Only ${productDetails.quantity} left in stock` : `In stock: ${productDetails.quantity} available`}
+                                </p>
+                            )}
+                        </div>
+
+                        {/* CTA  */}
+                        <div className="flex items-center gap-3 mt-5 flex-wrap">
+                            {isAvailable ? (
+                                <button
+                                    onClick={() => handleAddToCart(productDetails)}
+                                    className="flex items-center gap-2 px-6 py-3 font-semibold tracking-wide bg-blue-500 hover:bg-blue-600 text-white transition-colors text-sm rounded-lg shadow-sm">
+                                    <FaShoppingCart /> Add to Cart
+                                </button>
+                            ) : (
+                                <div className="flex items-center gap-2 border dark:border-gray-600 px-5 py-3 text-sm rounded-lg font-semibold shadow-sm">
+                                    <FaAmazon className="text-[#FF9900]" />
+                                    <a href="https://m.me/bookoceanbd" target="_blank" rel="noreferrer" className="text-[#FF9900] hover:underline">Pre-order Now</a>
+                                </div>
+                            )}
+
+                            {isAdmin && (
+                                <Link to={`/dashboard/updateBook/${productDetails?._id}`}>
+                                    <div className="flex items-center gap-1.5 px-4 py-3 text-sm rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                        <MdEdit /> <span>Edit</span>
+                                    </div>
+                                </Link>
+                            )}
+                        </div>
+
+                        {/* trust badges  */}
+                        <div className="flex flex-col gap-y-3 mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
+                            <div className="flex gap-x-3 items-center">
+                                <span className="flex-shrink-0 w-9 h-9 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-500">
+                                    <TbTruckDelivery size={18} />
+                                </span>
+                                <p className="text-sm tracking-wide text-gray-700 dark:text-gray-300">Fast Shipping</p>
+                            </div>
+                            <div className="flex gap-x-3 items-center">
+                                <span className="flex-shrink-0 w-9 h-9 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-500">
+                                    <MdOutlineGppGood size={18} />
+                                </span>
+                                <p className="text-sm tracking-wide text-gray-700 dark:text-gray-300">Premium Quality Original Books</p>
+                            </div>
+                            <div className="flex gap-x-3 items-center">
+                                <span className="flex-shrink-0 w-9 h-9 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-500">
+                                    <MdPayment size={18} />
+                                </span>
+                                <p className="text-sm tracking-wide text-gray-700 dark:text-gray-300">Cash On Delivery Available</p>
+                            </div>
+                        </div>
+
+                        {/* social  */}
+                        <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
+                            <h2 className='font-semibold mb-3 text-sm text-gray-700 dark:text-gray-300'>
+                                Follow Our Social Medias:
+                            </h2>
+                            <div className='flex max-w-max gap-x-4'>
+                                <a href="https://www.facebook.com/bookoceanbd/" target="_blank" rel="noreferrer" className="hover:scale-95 duration-300">
+                                    <img className='w-8' src={facebook} alt="Book Ocean BD on Facebook" />
+                                </a>
+                                <a href="https://www.instagram.com/bookoceanbd/" target="_blank" rel="noreferrer" className="hover:scale-95 duration-300">
+                                    <img className='w-8' src={instagram} alt="Book Ocean BD on Instagram" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
                 {/* Description  */}
                 <section>
-                    {/* <FadeIn delay={0.4} direction='up' > */}
                     <BookDescription />
-                    {/* </FadeIn> */}
                 </section>
-                {/* relatged  product  */}
+                {/* related products  */}
                 <section>
                     <RelatedBooks
                         categoryTitle={productDetails?.category}
                     ></RelatedBooks>
                 </section>
-            </div >
+            </div>
+
+            {/* zoomed cover lightbox  */}
+            {fullImg && (
+                <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-6">
+                    <div ref={lightboxRef} className="relative max-w-[90vw] max-h-[85vh]">
+                        <button
+                            onClick={() => setFullImg(false)}
+                            aria-label="Close"
+                            className="absolute -top-10 right-0 md:-right-10 md:top-0 text-white text-3xl p-1 hover:text-gray-300 transition-colors">
+                            <MdClose />
+                        </button>
+                        <img
+                            src={productDetails?.image}
+                            alt={productDetails?.name}
+                            className="max-w-full max-h-[85vh] object-contain rounded shadow-2xl"
+                        />
+                    </div>
+                </div>
+            )}
         </section >
     );
 };

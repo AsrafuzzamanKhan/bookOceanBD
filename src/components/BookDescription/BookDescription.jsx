@@ -1,106 +1,55 @@
-import './BookDescription.css'
 import { useParams } from "react-router-dom"
 import useBookData from "../../hooks/useBookData";
-// import GoogleAds from '../GoogleAds/GoogleAds';
-// import AdSense from "react-adsense";
+
+const coverLabels = {
+    hardcover: 'Hardcover',
+    paperback: 'Paperback',
+    'leather bound': 'Leather Bound',
+};
 
 const BookDescription = () => {
     const { id } = useParams()
     const [booksData] = useBookData()
-    const bookDescription = booksData?.find(pd => pd._id === id)
-    return (
-        <section className='px-[2vw] lg:px-0'>
-            {/* description  */}
-            <div className=" dark:text-gray-300 my-8 lg:my-8">
-                <h3 className="text-xl font-medium my-2">Description</h3>
-                <hr className="mb-4" />
+    const book = booksData?.find(pd => pd._id === id)
 
-                <p className="indent-8 whitespace-normal mb-5 text-sm md:text-md tracking-wide leading-6">{bookDescription?.description}</p>
+    if (!book) return null;
+
+    const specs = [
+        ['Title', book.name],
+        ['Author', book.author],
+        ['Language', book.language],
+        ['Publisher', book.publisher],
+        ['Cover', coverLabels[book.cover] || book.cover],
+        ['Pages', book.page && `${book.page} Pages`],
+        ['ISBN-10', book.isbn10],
+        ['ISBN-13', book.isbn13],
+        ['Item Weight', book.itemWeight],
+        ['Dimensions', book.dimensions],
+    ].filter(([, value]) => value);
+
+    return (
+        <section className='px-[2vw] lg:px-0 mt-8'>
+            {/* description  */}
+            <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-0 rounded-2xl shadow-sm p-6 md:p-8 mb-6">
+                <h3 className="text-lg font-bold mb-3">Description</h3>
+                <p className="whitespace-normal text-sm md:text-[15px] tracking-wide leading-7 text-gray-600 dark:text-gray-300">
+                    {book.description}
+                </p>
             </div>
 
             {/* details  */}
-            <div>
-                <div className='py-4'>
-                    <h1 className='text-xl font-semibold dark:text-gray-300 tracking-wide'>Book Details</h1>
-                </div>
+            <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-0 rounded-2xl shadow-sm p-6 md:p-8">
+                <h1 className='text-lg font-bold mb-4'>Book Details</h1>
 
-
-
-                <div className='lg:w-[60%] w-full'>
-
-                    <table className="descriptionTable w-full ">
-
-                        <tr >
-                            <td className='border dark:border-slate-600 dark:text-gray-300'>Title</td>
-                            <td className='border dark:border-slate-600 dark:text-gray-300'>{bookDescription.name}</td>
-
-                        </tr>
-                        <tr>
-                            <td className='border dark:border-slate-600 dark:text-gray-300'>Author</td>
-                            <td className='border dark:border-slate-600 dark:text-gray-300'>{bookDescription.author}</td>
-
-                        </tr>
-                        <tr>
-                            <td className='border dark:border-slate-600 dark:text-gray-300 '>Language</td>
-                            <td className='border dark:border-slate-600 dark:text-gray-300 capitalize'>{bookDescription.language}</td>
-                        </tr>
-                        <tr>
-                            <td className='border dark:border-slate-600 dark:text-gray-300'>Publisher</td>
-                            <td className='border dark:border-slate-600 dark:text-gray-300'>{bookDescription.publisher}</td>
-                        </tr>
-                        <tr>
-                            <td className='border dark:border-slate-600 dark:text-gray-300'>
-                                {
-                                    bookDescription?.cover === 'hardcover' && <span className="text-[15px] "> Hardcover </span>
-                                }
-                                {
-                                    bookDescription?.cover == 'paperback' && <span className="text-[15px] "> Paperback </span>
-                                }
-                                {
-                                    bookDescription?.cover == 'leather bound' && <span className="text-[15px] "> Leather Bound </span>
-                                }
-                            </td>
-                            <td className='border dark:border-slate-600 dark:text-gray-300'>{bookDescription.page} Pages</td>
-
-                        </tr>
-                        <tr>
-                            <td className='border dark:border-slate-600 dark:text-gray-300'>ISBN-10</td>
-                            <td className='border dark:border-slate-600 dark:text-gray-300'>{bookDescription.isbn10}</td>
-
-                        </tr>
-                        <tr>
-                            <td className='border dark:border-slate-600 dark:text-gray-300'>ISBN-13</td>
-                            <td className='border dark:border-slate-600 dark:text-gray-300'>{bookDescription.isbn13}</td>
-
-                        </tr>
-
-                        <tr>
-                            <td className='border dark:border-slate-600 dark:text-gray-300'>Item Weight</td>
-                            <td className='border dark:border-slate-600 dark:text-gray-300'>{bookDescription.itemWeight}</td>
-                        </tr>
-                        <tr>
-                            <td className='border dark:border-slate-600 dark:text-gray-300'>Dimensions </td>
-                            <td className='border dark:border-slate-600 dark:text-gray-300'>{bookDescription.dimensions}</td>
-
-                        </tr>
-
-                    </table>
-                </div>
-                {/* <div className='flex-1 hidden lg:block  relative'>
-                        <div className=' w-[50%] h-full flex absolute right-0'>
-                            <AdSense.Google
-                                client='ca-pub-6281834095701895'
-                                slot='8714813241'
-                                style={{ display: "block" }}
-                                layout="in-article"
-                                format="fluid"
-                            />
+                <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+                    {specs.map(([label, value]) => (
+                        <div key={label} className="flex justify-between gap-4 py-2.5 border-b border-gray-100 dark:border-gray-700">
+                            <dt className="text-sm text-gray-500 dark:text-gray-400">{label}</dt>
+                            <dd className="text-sm font-medium text-right">{value}</dd>
                         </div>
-                    </div> */}
+                    ))}
+                </dl>
             </div>
-
-
-
         </section>
     )
 }
