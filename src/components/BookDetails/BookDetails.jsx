@@ -352,6 +352,15 @@ const BookDetails = () => {
                                     }
                                 </div>
                             </div>
+
+                            {/* stock quantity  */}
+                            {
+                                productDetails?.available === 'true' && typeof productDetails?.quantity === 'number' &&
+                                <p className={`text-sm font-medium mb-2 ${productDetails.quantity <= 5 ? 'text-orange-500' : 'text-gray-500 dark:text-gray-300'}`}>
+                                    {productDetails.quantity <= 5 ? `Only ${productDetails.quantity} left in stock` : `In stock: ${productDetails.quantity} available`}
+                                </p>
+                            }
+
                             {/* pre order  */}
 
                             <div className="flex">

@@ -12,7 +12,7 @@ import { useState } from "react";
 
 const ManageBooks = () => {
     const [booksData, , refetch] = useBookData()
-    const [filter, setFilter] = useState(booksData)
+    const [searchTerm, setSearchTerm] = useState('')
     const [axiosSecure] = useAxiosSecure()
     const [syncing, setSyncing] = useState(false)
     const [syncResult, setSyncResult] = useState(null)
@@ -43,8 +43,28 @@ const ManageBooks = () => {
 
     const filterBook = e => {
         e.preventDefault();
-        setFilter(booksData?.filter(item => item.name.toLowerCase().includes((e.target.value).toLowerCase()) || item.author.toLowerCase().includes((e.target.value).toLowerCase()) || item.category.toLowerCase().includes((e.target.value).toLowerCase())))
+        setSearchTerm(e.target.value)
     }
+
+    const term = searchTerm.toLowerCase()
+    const filteredBooks = booksData?.filter(item =>
+        item.name.toLowerCase().includes(term) ||
+        item.author.toLowerCase().includes(term) ||
+        item.category.toLowerCase().includes(term)
+    ) || []
+
+    // category-wise: group alphabetically by category, then by name within
+    // each category, with a header row between groups
+    const sortedBooks = [...filteredBooks].sort((a, b) => {
+        const catCompare = (a.category || '').localeCompare(b.category || '')
+        if (catCompare !== 0) return catCompare
+        return (a.name || '').localeCompare(b.name || '')
+    })
+    const categoryCounts = sortedBooks.reduce((acc, b) => {
+        const cat = b.category || 'uncategorized'
+        acc[cat] = (acc[cat] || 0) + 1
+        return acc
+    }, {})
 
 
     // console.log(booksData)
@@ -149,7 +169,6 @@ const ManageBooks = () => {
                                     <th>S/N</th>
                                     <th>Image</th>
                                     <th>Name</th>
-                                    <th>Category</th>
                                     <th>Quantity</th>
                                     <th>Available</th>
                                     <th>Price</th>
@@ -158,49 +177,65 @@ const ManageBooks = () => {
                                 </tr>
                             </thead>
                             <tbody>
+                                {(() => {
+                                    let lastCategory = null
+                                    let serial = 0
+                                    return sortedBooks.map(book => {
+                                        const rows = []
+                                        if (book.category !== lastCategory) {
+                                            lastCategory = book.category
+                                            rows.push(
+                                                <tr key={`cat-${book.category}-${book._id}`} className="bg-slate-200 dark:bg-gray-700">
+                                                    <td colSpan={8} className="font-semibold capitalize py-2 px-3">
+                                                        {book.category || 'Uncategorized'}
+                                                        <span className="font-normal text-xs text-gray-500 dark:text-gray-300"> ({categoryCounts[book.category || 'uncategorized']})</span>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }
+                                        serial++
+                                        rows.push(
+                                            <tr key={book._id}>
+                                                <th>
+                                                    <label>
+                                                        {serial}
+                                                    </label>
+                                                </th>
+                                                <td>
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className="avatar">
+                                                            <div className="mask mask-squircle w-12 h-12">
+                                                                <img src={book?.image} alt={book?.image} />
+                                                            </div>
+                                                        </div>
 
-                                {
-                                    filter?.map((book, i) => <tr key={i}>
-                                        <th>
-                                            <label>
-                                                {i + 1}
-                                            </label>
-                                        </th>
-                                        <td>
-                                            <div className="flex items-center space-x-3">
-                                                <div className="avatar">
-                                                    <div className="mask mask-squircle w-12 h-12">
-                                                        <img src={book?.image} alt={book?.image} />
                                                     </div>
-                                                </div>
+                                                </td>
+                                                <td>
+                                                    {book?.name}
+                                                    <br />
+                                                    <span className="badge badge-ghost ">{book?.author}</span>
+                                                </td>
+                                                <td>{book?.quantity ?? '—'}</td>
+                                                <td>{book?.available}</td>
+                                                <td>{book?.price}</td>
+                                                <td>
+                                                    <Link to={`/dashboard/updateBook/${book._id}`}>
 
-                                            </div>
-                                        </td>
-                                        <td>
-                                            {book?.name}
-                                            <br />
-                                            <span className="badge badge-ghost ">{book?.author}</span>
-                                        </td>
-                                        <td>{book?.category}</td>
-                                        <td>{book?.quantity ?? '—'}</td>
-                                        <td>{book?.available}</td>
-                                        <td>{book?.price}</td>
-                                        <td>
-                                            <Link to={`/dashboard/updateBook/${book._id}`}>
-
-                                                <button className="btn btn-ghost btn-xs">Edit</button>
-                                            </Link>
-                                        </td>
-                                        <th>
-                                            <button onClick={() => handleDeleteBook(book)} className="btn bg-red-600 text-white"> <AiFillDelete className='text-xl' /></button>
+                                                        <button className="btn btn-ghost btn-xs">Edit</button>
+                                                    </Link>
+                                                </td>
+                                                <th>
+                                                    <button onClick={() => handleDeleteBook(book)} className="btn bg-red-600 text-white"> <AiFillDelete className='text-xl' /></button>
 
 
-                                            {/* <BookDetails handleDeleteBook={handleDeleteBook}></BookDetails> */}
-                                        </th>
-                                    </tr>)}
-
-
-
+                                                    {/* <BookDetails handleDeleteBook={handleDeleteBook}></BookDetails> */}
+                                                </th>
+                                            </tr>
+                                        )
+                                        return rows
+                                    })
+                                })()}
                             </tbody>
 
 
