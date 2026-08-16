@@ -44,7 +44,14 @@ export const resizeImageFile = (file, maxDimension = 400) =>
                 const canvas = document.createElement('canvas');
                 canvas.width = width;
                 canvas.height = height;
-                canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                const ctx = canvas.getContext('2d');
+                // JPEG has no alpha channel - without this, transparent areas
+                // of a PNG/WebP source (e.g. a cover with a transparent
+                // background) get flattened to black by default instead of
+                // blending into the site's white cards.
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, width, height);
+                ctx.drawImage(img, 0, 0, width, height);
                 canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.85);
             };
             img.src = event.target.result;
