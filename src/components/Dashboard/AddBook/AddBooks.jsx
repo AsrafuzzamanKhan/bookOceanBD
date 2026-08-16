@@ -28,8 +28,11 @@ const AddBooks = () => {
             const imaURL = fullRes.data.display_url;
             const thumbURL = thumbRes.success ? thumbRes.data.display_url : imaURL;
 
-            const { name, price, category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, author, available, best, cover, new: newBook } = data;
-            const newBookItem = { name, price: parseFloat(price), category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, image: imaURL, thumbnail: thumbURL, author, available, best, cover, newBook }
+            const { name, price, category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, author, quantity, best, cover, new: newBook } = data;
+            const stockCount = parseInt(quantity, 10) || 0;
+            // available is derived from quantity - no stock means unavailable,
+            // regardless of what was typed here
+            const newBookItem = { name, price: parseFloat(price), category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, image: imaURL, thumbnail: thumbURL, author, quantity: stockCount, available: stockCount > 0 ? 'true' : 'false', best, cover, newBook }
             console.log(newBookItem)
             const res = await axiosSecure.post('/books', newBookItem)
             console.log('Post in database', res);
@@ -127,18 +130,13 @@ const AddBooks = () => {
                                     </select>
 
                                 </div>
-                                {/* available */}
+                                {/* quantity - stock count; available is derived from this */}
                                 <div className="form-control w-full ">
                                     <label className="label">
-                                        <span className="label-text font-semibold">Available*</span>
-
+                                        <span className="label-text font-semibold">Quantity*</span>
                                     </label>
-                                    <select defaultValue='Pick one' className="select select-bordered uppercase"  {...register("available", { required: true })}>
-                                        <option disabled >Pick one</option>
-                                        <option value="true">True</option>
-                                        <option value="false">False</option>
-                                    </select>
-
+                                    <input type="number" min="0" placeholder="0" className="input input-bordered w-full dark:text-white "
+                                        {...register("quantity", { required: true, min: 0 })} />
                                 </div>
                             </div>
                             {/* new best selling  */}

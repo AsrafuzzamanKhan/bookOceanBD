@@ -113,9 +113,9 @@ const ManageBooks = () => {
                         </div>
                     </div>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
-                        Only updates name/author/category/availability/price. Existing books are matched by name+author;
-                        anything not already in your catalog is added with a placeholder cover for you to finish manually.
-                        Also runs automatically once a day.
+                        Only updates name/author/category/quantity/price (availability is derived from quantity). Existing
+                        books are matched by name+author; anything not already in your catalog is added with a placeholder
+                        cover for you to finish manually. Also runs automatically once a day.
                     </p>
 
                     {syncResult && (
@@ -150,6 +150,7 @@ const ManageBooks = () => {
                                     <th>Image</th>
                                     <th>Name</th>
                                     <th>Category</th>
+                                    <th>Quantity</th>
                                     <th>Available</th>
                                     <th>Price</th>
                                     <th>Edit</th>
@@ -181,6 +182,7 @@ const ManageBooks = () => {
                                             <span className="badge badge-ghost ">{book?.author}</span>
                                         </td>
                                         <td>{book?.category}</td>
+                                        <td>{book?.quantity ?? '—'}</td>
                                         <td>{book?.available}</td>
                                         <td>{book?.price}</td>
                                         <td>
