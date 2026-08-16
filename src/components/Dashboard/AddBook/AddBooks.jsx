@@ -6,6 +6,11 @@ import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 import { resizeImageFile, uploadToImgbb } from '../../../utils/imgbb';
 
+// full cover image cap - plenty of resolution for a zoomed-in product view,
+// well below what an unedited phone/camera photo comes in at (often 3000px+
+// and several MB), so uploads are faster and the book detail page stays fast
+const FULL_IMAGE_MAX_DIMENSION = 1200;
+
 const AddBooks = () => {
     const [axiosSecure] = useAxiosSecure()
     const [addLoading, setAddLoading] = useState(false)
@@ -16,10 +21,13 @@ const AddBooks = () => {
         setAddLoading(true)
         try {
             const file = data.image[0];
-            const thumbBlob = await resizeImageFile(file);
+            const [fullBlob, thumbBlob] = await Promise.all([
+                resizeImageFile(file, FULL_IMAGE_MAX_DIMENSION),
+                resizeImageFile(file),
+            ]);
 
             const [fullRes, thumbRes] = await Promise.all([
-                uploadToImgbb(file),
+                uploadToImgbb(fullBlob),
                 uploadToImgbb(thumbBlob),
             ]);
 

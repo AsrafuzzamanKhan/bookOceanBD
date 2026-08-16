@@ -4,7 +4,11 @@ import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useState } from "react";
-const img_hosting_token = import.meta.env.VITE_image_Upload_token;
+import { resizeImageFile, uploadToImgbb } from "../../../utils/imgbb";
+import { showSuccessToast, showErrorToast } from "../../../utils/toast";
+
+// same cap as AddBooks.jsx - see comment there
+const FULL_IMAGE_MAX_DIMENSION = 1200;
 
 const UpdateBook = () => {
     const [updateLoading, setupdateLoadin] = useState(false)
@@ -15,87 +19,46 @@ const UpdateBook = () => {
 
     const { register, handleSubmit } = useForm();
     const navigate = useNavigate()
-    const img_hosting_url = `https://api.imgbb.com/1/upload?key=${img_hosting_token}`
-    console.log(img_hosting_url);
 
-    // const onSubmit = data => {
-    //     const formData = new FormData();
-    //     formData.append('image', data.image[0]);
-    //     fetch(img_hosting_url, {
-    //         method: "POST",
-    //         body: formData
-    //     })
-    //     console.log(data)
-
-    //     axiosSecure.put(`/books/${productDetails._id}`, data)
-
-    //         .then(res => {
-    //             if (res.data.modifiedCount > 0) {
-    //                 alert('Book updated ')
-    //                 console.log(res.data)
-    //                 navigate('/dashboard/manageBooks')
-
-    //             }
-    //         }
-    //         )
-    // }
-
-
-    const onSubmit = data => {
+    const onSubmit = async data => {
         console.log('update book data', data);
         setupdateLoadin(true)
 
+        try {
+            const { name, price, category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, author, quantity, best, cover, new: newBook, image } = data;
+            const stockCount = parseInt(quantity, 10) || 0;
+            // available is derived from quantity - no stock means unavailable,
+            // regardless of what was typed here
+            const updateBookItem = { name, price: parseFloat(price), category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, author, quantity: stockCount, available: stockCount > 0 ? 'true' : 'false', best, cover, newBook }
 
-        const { name, price, category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, author, quantity, best, cover, new: newBook } = data;
-        const stockCount = parseInt(quantity, 10) || 0;
-        // available is derived from quantity - no stock means unavailable,
-        // regardless of what was typed here
-        const updateBookItem = { name, price: parseFloat(price), category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, author, quantity: stockCount, available: stockCount > 0 ? 'true' : 'false', best, cover, newBook }
-        console.log(updateBookItem);
-
-        // axiosSecure.put(`/books/${productDetails._id}`, data)
-        axiosSecure.put(`/books/${productDetails._id}`, updateBookItem)
-
-            .then(res => {
-                if (res.data.modifiedCount > 0) {
-                    alert('Book updated ')
-                    console.log(res.data)
-                    navigate('/dashboard/manageBooks')
-
-                }
+            // image is optional here - only upload/replace it if a new file
+            // was actually picked, otherwise the book keeps its current cover
+            const file = image?.[0];
+            if (file) {
+                const [fullBlob, thumbBlob] = await Promise.all([
+                    resizeImageFile(file, FULL_IMAGE_MAX_DIMENSION),
+                    resizeImageFile(file),
+                ]);
+                const [fullRes, thumbRes] = await Promise.all([
+                    uploadToImgbb(fullBlob),
+                    uploadToImgbb(thumbBlob),
+                ]);
+                if (!fullRes.success) throw new Error('Cover image upload failed');
+                updateBookItem.image = fullRes.data.display_url;
+                updateBookItem.thumbnail = thumbRes.success ? thumbRes.data.display_url : updateBookItem.image;
             }
-            )
 
-
-        // const formData = new FormData();
-        // formData.append('image', data.image[0]);
-        // fetch(img_hosting_url, {
-        //     method: "POST",
-        //     body: formData
-        // })
-        //     .then(res => res.json())
-        //     .then(imgResponse => {
-        //         if (imgResponse.success) {
-        //             const imaURL = imgResponse.data.display_url;
-        //             const { name, price, category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, author, available, best, cover, new: newBook } = data;
-        //             const updateBookItem = { name, price: parseFloat(price), category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, image: imaURL, author, available, best, cover, newBook }
-        //             console.log(updateBookItem);
-
-        //             // axiosSecure.put(`/books/${productDetails._id}`, data)
-        //             axiosSecure.put(`/books/${productDetails._id}`, updateBookItem)
-
-        //                 .then(res => {
-        //                     if (res.data.modifiedCount > 0) {
-        //                         alert('Book updated ')
-        //                         console.log(res.data)
-        //                         navigate('/dashboard/manageBooks')
-
-        //                     }
-        //                 }
-        //                 )
-        //         }
-        //     })
-
+            const res = await axiosSecure.put(`/books/${productDetails._id}`, updateBookItem)
+            if (res.data.modifiedCount > 0) {
+                showSuccessToast('Book updated!')
+                navigate('/dashboard/manageBooks')
+            }
+        } catch (err) {
+            console.error(err);
+            showErrorToast('Failed to update book', err.message)
+        } finally {
+            setupdateLoadin(false)
+        }
     };
     return (
         <div className=" container mx-auto ">
@@ -295,40 +258,26 @@ const UpdateBook = () => {
                             </div>
                         </div>
 
-                        {/* fill upload  */}
-                        {/* <div className="form-control w-full">
+                        {/* cover image - optional, keeps the existing cover if left empty */}
+                        <div className="form-control w-full mt-4">
                             <label className="label">
-                                <span className="label-text">Item image</span>
-
+                                <span className="label-text font-semibold">Cover image</span>
                             </label>
-                            <input type="file" className="file-input file-input-bordered w-full "
-                                {...register("image", { required: true })} />
-
-
-                        </div> */}
-
-                        {/* details
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Description</span>
-
-                            </label>
-                            <textarea className="textarea textarea-bordered h-24 bg-white" defaultValue={productDetails?.description} placeholder="Description"
-                                {...register("description", { required: true })}></textarea>
-
-                        </div> */}
-                        {/* fill upload  */}
-                        {/* <div className="form-control w-full">
-                            <label className="label">
-                                <span className="label-text">Item image</span>
-
-                            </label>
-                            <input type="file" className="file-input file-input-bordered w-full "
-                                {...register("image", { required: true })} />
-
-                        </div> */}
-
-
+                            <div className="flex items-center gap-4">
+                                {productDetails?.image && (
+                                    <img
+                                        src={productDetails.image}
+                                        alt={productDetails?.name}
+                                        className="w-16 h-20 object-cover rounded border"
+                                    />
+                                )}
+                                <input type="file" accept="image/*" className="file-input file-input-bordered w-full bg-white text-black"
+                                    {...register("image")} />
+                            </div>
+                            <span className="label-text-alt text-gray-500 mt-1">
+                                Leave empty to keep the current cover shown above.
+                            </span>
+                        </div>
 
                         <div>
                             {
