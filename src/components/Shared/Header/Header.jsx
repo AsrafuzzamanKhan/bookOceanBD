@@ -149,7 +149,15 @@ const Header = () => {
                         </div>
 
                         {/* cart  */}
-                        <div className={`${isOpen ? 'right-0' : '-right-full'} bg-white dark:bg-gray-900 shadow-2xl fixed top-0 bottom-0 w-full h-screen z-10 md:max-w-[420px] transition-all duration-300`}>
+                        {/* no explicit height here on purpose - top-0 + bottom-0 on a
+                            fixed element already sizes it to the real visible
+                            viewport. h-screen (100vh) used to be set here too, but
+                            100vh doesn't shrink for mobile browser chrome (address
+                            bar, bottom nav) the way top/bottom-based sizing does, so
+                            on a real phone the drawer was taller than what's
+                            actually visible and pushed the Proceed button below the
+                            fold, out of reach. */}
+                        <div className={`${isOpen ? 'right-0' : '-right-full'} bg-white dark:bg-gray-900 shadow-2xl fixed top-0 bottom-0 w-full z-10 md:max-w-[420px] transition-all duration-300`}>
                             <Cart></Cart>
                         </div>
 
