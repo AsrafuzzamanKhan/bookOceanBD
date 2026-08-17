@@ -35,21 +35,20 @@ const SocialLogin = () => {
 
     }
     return (
-        <div>
-            <button
-                onClick={handleGoogleSigIn}
-                className="bg-white text-black p-2 w-full rounded-xl mt-5 flex justify-center items-center text-sm hover:bg-gray-200 duration-300 font-medium">
-
-                {
-                    googleLoading ? <>
-                        <span className="loading loading-ball loading-xs"></span>
-                        <span className="loading loading-ball loading-sm"></span>
-                        <span className="loading loading-ball loading-md"></span>
-                        <span className="loading loading-ball loading-lg"></span></>
-                        : <><FcGoogle className="text-3xl mr-3" />Login with Google</>
-                }
-            </button>
-        </div>
+        <button
+            type="button"
+            onClick={handleGoogleSigIn}
+            disabled={googleLoading}
+            className="flex h-12 w-full items-center justify-center gap-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700/40 text-sm font-semibold text-gray-700 dark:text-gray-200 transition hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-70">
+            {
+                googleLoading ? <>
+                    <span className="loading loading-ball loading-xs"></span>
+                    <span className="loading loading-ball loading-sm"></span>
+                    <span className="loading loading-ball loading-md"></span>
+                </>
+                    : <><FcGoogle size={20} />Continue with Google</>
+            }
+        </button>
     );
 };
 

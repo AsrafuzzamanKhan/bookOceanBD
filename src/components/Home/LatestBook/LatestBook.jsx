@@ -1,6 +1,7 @@
 import FadeIn from "../../../Animation/FadeIn";
 import useBookData from "../../../hooks/useBookData";
 import BookSlider from "../../BookSlider/BookSlider";
+import SectionHeader from "../../Shared/SectionHeader/SectionHeader";
 
 
 const LatestBook = () => {
@@ -12,13 +13,13 @@ const LatestBook = () => {
     // console.log(sliceData.length)
     return (
 
-        <section className='container mx-auto px-4 lg:px-0'>
-            <FadeIn delay={0.1} direction='down'  >
-                <div className="w-full">
-                    <h1 className='text-xl md:text-2xl tracking-wide text-center xl:text-left mb-5 font-semibold dark:text-white'>Latest Books</h1>
+        <section className='py-10'>
+            <div className='container mx-auto px-4 lg:px-0'>
+                <FadeIn delay={0.1} direction='down'  >
+                    <SectionHeader title="Latest Books" subtitle="Freshly added to the catalog" viewAllTo="/books" />
                     <BookSlider data={sliceData}></BookSlider>
-                </div>
-            </FadeIn>
+                </FadeIn>
+            </div>
         </section>
 
     );

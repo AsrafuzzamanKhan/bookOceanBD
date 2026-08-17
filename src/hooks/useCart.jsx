@@ -10,13 +10,15 @@ const useCart = () => {
     const [axiosSecure] = useAxiosSecure()
     const { data: cart = [], refetch, isLoading } = useQuery({
         queryKey: ['cart', user?.email],
-        enabled: !loading,
+        // also requires a real user, not just "auth finished loading" - a bare
+        // `!loading` would let this fire with user still null (logged-out, or
+        // right before login resolves), which throws on the unguarded
+        // `user.email` access below
+        enabled: !loading && !!user?.email,
 
         queryFn: async () => {
             const res = await axiosSecure(`/carts?email=${user.email}`)
-            // console.log('res from axios ', res)
             return res.data;
-            // return res.json();
         },
     })
     return [cart, refetch, isLoading]

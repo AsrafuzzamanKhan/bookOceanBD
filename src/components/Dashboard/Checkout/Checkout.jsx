@@ -9,7 +9,8 @@ import { showSuccessToast, showErrorToast } from "../../../utils/toast";
 import { format } from 'date-fns';
 import { Helmet } from "react-helmet-async";
 import { useState } from "react";
-import { FaMapMarkerAlt, FaPhone, FaReceipt, FaTruck, FaUser } from "react-icons/fa";
+import { FaMapMarkerAlt, FaPhone, FaTruck, FaUser } from "react-icons/fa";
+import { FiArrowRight, FiShoppingBag } from "react-icons/fi";
 
 const NORMAL_DELIVERY_CHARGE = { dhaka: 80, outside: 100 };
 const HEAVY_DELIVERY_CHARGE = { dhaka: 100, outside: 120 };
@@ -57,6 +58,7 @@ const Checkout = () => {
     // per-line total, not just unit price - a cart line can be more than one
     // copy of the same book (see CartItem's quantity stepper)
     const total = cart.reduce((sum, item) => sum + parseInt(item.discountPrice) * (item.quantity || 1), 0);
+    const totalItemCount = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
     // total order weight, looked up live from each book's current
     // itemWeight (not stored on the cart item) - used to decide whether the
@@ -115,41 +117,59 @@ const Checkout = () => {
             })
 
     };
-    console.log(errors);
 
     return (
-        <div className="mb-[30px] pt-32 md:32 lg:pt-24 ">
+        <div className="pt-32 md:pt-32 lg:pt-24 pb-16 bg-gray-50 dark:bg-gray-950/40 min-h-screen">
             <Helmet>
-                <title>Book Ocean BD || Checkout</title>
+                <title>Book Ocean BD | Checkout</title>
             </Helmet>
-            <div className="container mx-auto px-1 lg:px-2 dark:text-white">
-                <h1 className="uppercase text-lg md:text-2xl text-center font-semibold mb-6">
-                    check out
-                </h1>
-                <div className="w-full flex flex-col xl:flex-row lg:flex-row  gap-4">
+            <div className="container mx-auto px-4 lg:px-0">
+                <div className="mb-6 text-center">
+                    <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Checkout</h1>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Cash on delivery, nationwide.</p>
+                </div>
 
-                    {/* info  */}
-                    <div className=" lg:w-1/3 w-full ">
-                        <div className="py-8 lg:px-6  px-3 dark:bg-gray-800 rounded-lg shadow-xl">
-                            <form onSubmit={handleSubmit(onSubmit)}>
+                {cart.length === 0 ? (
+                    <div className="max-w-md mx-auto text-center bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm py-16 px-6">
+                        <FiShoppingBag className="text-6xl text-gray-200 dark:text-gray-700 mx-auto mb-4" />
+                        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Your cart is empty</h2>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">Add a few books before checking out.</p>
+                        <Link
+                            to="/"
+                            className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-colors duration-200"
+                        >
+                            Browse books <FiArrowRight size={16} />
+                        </Link>
+                    </div>
+                ) : (
+                    <form onSubmit={handleSubmit(onSubmit)} className="grid lg:grid-cols-5 gap-6 items-start">
+
+                        {/* shipping details  */}
+                        <div className="lg:col-span-3 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm p-5 sm:p-6">
+                            <h2 className="font-semibold text-lg text-gray-900 dark:text-white mb-5 flex items-center gap-2">
+                                <FaTruck className="text-blue-500" /> Shipping details
+                            </h2>
+
+                            <div className="flex flex-col gap-4">
                                 {/* name*/}
-                                <div className="form-control w-full">
-                                    <label className="label">
-                                        <span className="label-text font-semibold flex items-center gap-2"><FaUser className="text-blue-400" /> Name*</span>
+                                <div>
+                                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                                        <FaUser className="text-blue-400" size={13} /> Full name*
                                     </label>
-                                    <input type="text" placeholder="Type Name" className="input input-bordered w-full dark:bg-white"
+                                    <input type="text" placeholder="Type your name" className="input input-bordered w-full"
                                         {...register("name", { required: true })} />
+                                    {errors.name && <span className="text-red-600 text-xs font-medium mt-1 block">Name is required*</span>}
                                 </div>
-                                {errors.name && <span className="text-red-600 font-semibold">Name is required*</span>}
 
-                                <div className="form-control w-full">
-                                    <label className="label">
-                                        <span className="label-text font-semibold flex items-center gap-2"><FaPhone className="text-blue-400" /> Phone Number*</span>
+                                {/* phone */}
+                                <div>
+                                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                                        <FaPhone className="text-blue-400" size={13} /> Phone number*
                                     </label>
                                     <input
                                         type="tel"
                                         inputMode="numeric"
-                                        className="input input-bordered w-full dark:bg-white"
+                                        className="input input-bordered w-full"
                                         placeholder="e.g. 01712345678"
                                         {...register("phone", {
                                             required: true,
@@ -158,176 +178,117 @@ const Checkout = () => {
                                             pattern: /^01[3-9]\d{8}$/,
                                         })}
                                     />
-
+                                    {errors?.phone?.type === 'required' && <span className="text-red-600 text-xs font-medium mt-1 block">Phone number is required*</span>}
+                                    {errors?.phone?.type === 'pattern' && <span className="text-red-600 text-xs font-medium mt-1 block">Enter a valid Bangladeshi phone number, e.g. 01712345678</span>}
                                 </div>
-                                {errors?.phone?.type === 'required' && <span className="text-red-600 font-semibold">Phone number is required*</span>}
-                                {errors?.phone?.type === 'pattern' && <p className="text-red-600 font-semibold">
-                                    Enter a valid Bangladeshi phone number, e.g. 01712345678</p>}
+
                                 {/* Address  */}
-                                <div className="form-control w-full">
-                                    <label className="label">
-                                        <span className="label-text font-semibold flex items-center gap-2"><FaMapMarkerAlt className="text-blue-400" /> Address*</span>
+                                <div>
+                                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                                        <FaMapMarkerAlt className="text-blue-400" size={13} /> Address*
                                     </label>
-
-                                    <textarea className="input input-bordered w-full h-24 dark:bg-white" placeholder="Enter full address" {...register("address", { required: true })} />
+                                    <textarea className="input input-bordered w-full h-24 py-2" placeholder="Enter full address" {...register("address", { required: true })} />
+                                    {errors?.address && <span className="text-red-600 text-xs font-medium mt-1 block">Address is required*</span>}
                                 </div>
-                                {errors?.address && <span className="text-red-600 font-semibold">Address is required*</span>}
 
                                 {/* Zone  */}
-                                <div className="form-control w-full">
-                                    <label className="label">
-                                        <span className="label-text font-semibold flex items-center gap-2"><FaTruck className="text-blue-400" /> Delivery Area*</span>
+                                <div>
+                                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                                        <FaTruck className="text-blue-400" size={13} /> Delivery area*
                                     </label>
-
                                     <select
                                         defaultValue=""
-                                        className="select select-bordered w-full dark:bg-white"
+                                        className="select select-bordered w-full"
                                         {...register("area", { required: true })}
                                     >
                                         <option value="" disabled>Select delivery area</option>
                                         <option value="dhaka">Inside Dhaka - ৳{DELIVERY_CHARGE.dhaka}</option>
                                         <option value="outside">Outside Dhaka - ৳{DELIVERY_CHARGE.outside}</option>
                                     </select>
+                                    {errors?.area && <span className="text-red-600 text-xs font-medium mt-1 block">Please select a delivery area*</span>}
                                 </div>
-                                {errors?.area && <span className="text-red-600 font-semibold">Please select a delivery area*</span>}
+                            </div>
+                        </div>
 
-                                {/* order summery  */}
-                                <div className="my-6">
-                                    <div className="  border dark:border-0 dark:bg-gray-900 rounded-md shadow-2xl p-5 uppercase font-semibold  ">
-                                        <h2 className="text-lg lg:text-xl font-semibold mb-2 text-center flex items-center justify-center gap-2"><FaReceipt /> Order summary</h2>
-                                        <hr />
+                        {/* order summary - sticky so it stays visible while the
+                            form (which can get tall on mobile) scrolls past it */}
+                        <div className="lg:col-span-2 lg:sticky lg:top-24">
+                            <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm overflow-hidden">
+                                <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+                                    <h2 className="font-semibold text-gray-900 dark:text-white">
+                                        Your order <span className="text-gray-400 dark:text-gray-500 font-normal">({totalItemCount} {totalItemCount === 1 ? 'item' : 'items'})</span>
+                                    </h2>
+                                </div>
 
-                                        <div className="text-center text-md lg:text-xl my-4">
-                                            *** Cash on Delivery ***
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <h2>Sub Total:</h2>
-                                            <p><span>&#x09F3;</span> {total}</p>
-                                        </div>
-                                        <div className="flex justify-between items-center">
-                                            <h2>Delivery charge:</h2>
-                                            {
-                                                cart.length > 0 ? <div className="flex items-center gap-2">
-                                                    {selectedArea && <span className="normal-case text-xs text-gray-400 dark:text-gray-500">({selectedArea === 'outside' ? 'outside dhaka' : 'inside dhaka'})</span>}
-                                                    <span>&#x09F3;</span>  {deliveryCharge}
-                                                </div> : <div><span>&#x09F3;</span>  0
+                                <div className="max-h-72 overflow-y-auto divide-y divide-gray-100 dark:divide-gray-700 scrollbar-thin scrollbar-webkit">
+                                    {cart.map((book, i) => (
+                                        <div key={i} className="flex gap-3 p-4">
+                                            <Link
+                                                to={`/book/${book.name.replace(/\s/g, "_")}/${book.bookId}`}
+                                                className="w-12 h-16 shrink-0 rounded-md overflow-hidden bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-700"
+                                            >
+                                                <img className="w-full h-full object-cover" src={book.image} alt={book.name} />
+                                            </Link>
+                                            <div className="min-w-0 flex-1">
+                                                <Link
+                                                    to={`/book/${book.name.replace(/\s/g, "_")}/${book.bookId}`}
+                                                    className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-2 hover:text-blue-500 transition-colors"
+                                                >
+                                                    {book.name}
+                                                </Link>
+                                                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">by {book.author}</p>
+                                                <div className="flex items-center justify-between mt-1.5">
+                                                    <span className="text-xs text-gray-400 dark:text-gray-500">Qty {book.quantity || 1}</span>
+                                                    <span className="text-sm font-semibold text-gray-900 dark:text-white">৳{book.discountPrice * (book.quantity || 1)}</span>
                                                 </div>
-                                            }
+                                            </div>
                                         </div>
-                                        {cart.length > 0 && isHeavyOrder && (
-                                            <p className="normal-case text-xs text-orange-500 dark:text-orange-400 -mt-1 mb-1 text-right">
-                                                Heavier delivery rate applies - order weighs over 2kg
-                                            </p>
-                                        )}
-                                        <hr className="my-2" />
-                                        <div className="flex justify-between text-lg text-blue-500 dark:text-blue-400">
-                                            <h2>Total:</h2>
-                                            {
-                                                cart.length > 0 ? <div><span>&#x09F3;</span>  {totalAmount}
-                                                </div> : <div><span>&#x09F3;</span>  0
-                                                </div>
-                                            }
-                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className="p-5 space-y-2 bg-gray-50 dark:bg-gray-900/40 border-t border-gray-100 dark:border-gray-700">
+                                    <div className="flex justify-between text-sm text-gray-600 dark:text-gray-300">
+                                        <span>Subtotal</span>
+                                        <span>৳{total}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center text-sm text-gray-600 dark:text-gray-300">
+                                        <span>Delivery charge</span>
+                                        <span className="flex items-center gap-1.5">
+                                            {selectedArea && <span className="text-xs text-gray-400 dark:text-gray-500">({selectedArea === 'outside' ? 'outside dhaka' : 'inside dhaka'})</span>}
+                                            ৳{deliveryCharge}
+                                        </span>
+                                    </div>
+                                    {isHeavyOrder && (
+                                        <p className="text-xs text-orange-500 dark:text-orange-400 text-right">
+                                            Heavier delivery rate applies - order weighs over 2kg
+                                        </p>
+                                    )}
+                                    <div className="flex justify-between text-base font-bold text-gray-900 dark:text-white pt-2 border-t border-gray-200 dark:border-gray-700">
+                                        <span>Total</span>
+                                        <span className="text-blue-600 dark:text-blue-400">৳{totalAmount}</span>
                                     </div>
                                 </div>
 
-                                {
-                                    cart.length === 0
-                                        ? <p className="text-center text-sm text-gray-400">Your cart is empty. Add a book before checking out.</p>
-                                        : <input
-                                            className="mt-4 w-full py-4 rounded font-semibold bg-black dark:bg-gray-700 dark:text-green-400 text-white hover:scale-95 hover:text-green-600 duration-300 cursor-pointer uppercase leading-tight tracking-wider disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                                            type="submit"
-                                            disabled={isSubmitting}
-                                            value={isSubmitting ? 'Placing order...' : 'Confirm'}
-                                        />
-                                }
-                            </form>
-                        </div>
-                    </div>
-                    <div className="lg:w-2/3  w-full border dark:border-none dark:bg-gray-800 rounded-lg shadow-2xl">
-                        <h1 className="uppercase font-semibold text-lg md:text-2xl text-center mt-4 lg:mt-8 flex items-center justify-center gap-2">
-                            <FaReceipt /> Order Details
-                        </h1>
-                        <div className="flex flex-col items-center py-4 lg:py-6 ">
-                            <div className="overflow-x-auto w-full">
-                                <table className="table lg:table-lg table-xs table-pin-rows table-pin-cols ">
-                                    {/* head */}
-                                    <thead >
-                                        <tr className="dark:text-white" >
-                                            <th className="!p-1" >S/N</th>
-                                            <th className="!p-1">Image</th>
-                                            <th className="!p-1" >Book Info</th>
-                                            <th className="!p-1">Qty</th>
-                                            <th className="!p-1">Price</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody >
-
-                                        {cart?.map((book, i) =>
-
-
-
-                                            <tr key={i} className="dark:hover:bg-gray-700 hover:bg-gray-200 duration-300 transition-all" >
-                                                <th className="!p-4">
-                                                    {i + 1}
-                                                </th>
-                                                <td className="!p-1">
-                                                    <div className="w-12 object-cover overflow-hidden ">
-                                                        <Link
-                                                            to={`/book/${book.name.replace(/\s/g, "_")}/${book.bookId}`}
-                                                        >
-                                                            <img className="w-full " src={book.image} alt={book.image} />
-                                                        </Link>
-                                                    </div>
-                                                </td>
-                                                <td className="!px-1">
-                                                    <Link
-                                                        to={`/book/${book.name.replace(/\s/g, "_")}/${book.bookId}`}
-                                                    >
-                                                        <div className="flex flex-col gap-y-1 ">
-                                                            <h2>
-                                                                {book.name}
-                                                            </h2>
-                                                            <h2>
-                                                                Author - {book.author}
-                                                            </h2>
-                                                            <h2>Genre - {book.category}</h2>
-                                                        </div>
-                                                    </Link>
-                                                </td>
-
-                                                <td className="!p-1">
-                                                    {book.quantity}
-
-                                                </td>
-                                                <td className="!p-1">
-
-                                                    <div className="flex gap-1">
-                                                        <span>&#x09F3;</span> <p>{book.discountPrice * (book.quantity || 1)}</p>
-                                                    </div>
-                                                </td>
-
-                                            </tr>
-
-                                        )}
-
-
-
-                                    </tbody>
-
-
-                                </table>
-
-
+                                <div className="p-5 pt-0">
+                                    <div className="text-center text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-3">
+                                        *** Cash on Delivery ***
+                                    </div>
+                                    <button
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                        className="w-full h-12 flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+                                    >
+                                        {isSubmitting
+                                            ? <span className="loading loading-bars loading-md"></span>
+                                            : <>Confirm order <FiArrowRight size={16} /></>}
+                                    </button>
+                                </div>
                             </div>
-
                         </div>
-                    </div>
-                </div>
+                    </form>
+                )}
             </div>
-
-        </div >
+        </div>
     );
 };
 

@@ -1,6 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: "media",
+  // was "media" (OS preference only, no manual override). Now class-based so
+  // ThemeProvider (src/providers/ThemeProvider) can toggle Light/Dark/System
+  // by adding/removing "dark" on <html> - see index.html's inline script for
+  // the pre-hydration application of this that avoids a flash of wrong theme.
+  darkMode: "class",
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
@@ -60,4 +64,18 @@ export default {
       addUtilities(newUtilities, ["responsive", "hover"]);
     },
   ],
+
+  // daisyUI's own theme engine (drives .input/.select/.textarea/.btn/etc.)
+  // used to be completely disconnected from Tailwind's dark: classes - it
+  // always rendered its default "light" theme regardless of OS/manual dark
+  // mode, which is why so many form inputs across the dashboard either went
+  // unreadable (white text forced onto daisyUI's white input bg) or had to
+  // hardcode bg-white to opt out of dark mode entirely. ThemeProvider now
+  // sets data-theme="light"/"dark" on <html> to match the same state as the
+  // "dark" class, so both systems move together and none of those overrides
+  // are needed anymore.
+  daisyui: {
+    themes: ["light", "dark"],
+    darkTheme: "dark",
+  },
 };

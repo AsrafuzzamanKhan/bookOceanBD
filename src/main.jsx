@@ -42,6 +42,7 @@ const LazyMyProfile = React.lazy(() => import('./components/Dashboard/MyProfile/
 
 import Home from './components/Home/Home/Home';
 import AuthProvider from './providers/AuthProvider/AuthProvider';
+import ThemeProvider from './providers/ThemeProvider/ThemeProvider';
 import PrivateRoutes from './components/Routes/PrivateRoutes';
 import AdminRoute from './components/Routes/AdminRoute';
 import CartProvider from './providers/CartProvider/CartProvider';
@@ -164,15 +165,17 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')).render(
 
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <HelmetProvider>
-          <CartProvider>
-            <RouterProvider router={router} />
-          </CartProvider>
-        </HelmetProvider>
-      </AuthProvider>
-    </QueryClientProvider>
+    <ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <HelmetProvider>
+            <CartProvider>
+              <RouterProvider router={router} />
+            </CartProvider>
+          </HelmetProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
   </React.StrictMode>,
 
 )

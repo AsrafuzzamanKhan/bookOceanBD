@@ -36,6 +36,22 @@ body {
   scroll-behavior: smooth;
   @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100;
 }
+
+/* Tells the browser which palette to use for parts of form controls that
+   CSS can't reach - a <select>'s opened options popup, scrollbars, date/time
+   pickers, the default checkbox/radio tick. Without this, those stay in the
+   browser's light-UI chrome even with .dark and every daisyUI class applied
+   correctly (that's why e.g. Checkout's "Delivery Area" select box itself
+   looks right in dark mode, but its dropdown list still flashes white -
+   that popup is native OS/browser chrome, not something CSS renders). Keyed
+   to the same .dark class ThemeProvider toggles, so it tracks Light/Dark/
+   System exactly like everything else. */
+:root {
+  color-scheme: light;
+}
+:root.dark {
+  color-scheme: dark;
+}
 .active {
   color: #0b9fd4;
   background-color: rgb(230, 231, 231);
@@ -57,8 +73,17 @@ body {
     @apply bg-accent text-primary hover:bg-accent-hover transition-all;
   }
 
+  /* was `text-primary` (the brand's near-black #151618, no dark variant) -
+     this class name collides with daisyUI's own .input, and this fixed color
+     was silently overriding daisyUI's theme-aware text color on every
+     dark:bg-* input across the site, rendering typed text almost invisible
+     (near-black on a dark input background). That's also why so many inputs
+     elsewhere had a `dark:bg-white` override - not a design choice, a
+     workaround to keep this always-dark text readable by forcing the
+     background to stay light too. text-gray-900 dark:text-white matches the
+     rest of the app's actual theme instead. */
   .input {
-    @apply h-[50px] rounded-[8px] w-full outline-none px-6 text-primary;
+    @apply h-[50px] rounded-[8px] w-full outline-none px-6 text-gray-900 dark:text-white;
   }
 }
 /* In your CSS file */

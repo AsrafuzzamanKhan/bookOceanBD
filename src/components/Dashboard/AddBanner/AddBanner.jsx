@@ -57,7 +57,7 @@ const AddBanner = () => {
                                 <label className="label">
                                     <span className="label-text font-semibold ">Book name*</span>
                                 </label>
-                                <input type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                <input type="text" placeholder="Type here" className="input input-bordered w-full"
                                     {...register("name", { required: true })} />
                             </div>
                             {/* author  */}
@@ -65,7 +65,7 @@ const AddBanner = () => {
                                 <label className="label">
                                     <span className="label-text font-semibold ">Author name*</span>
                                 </label>
-                                <input type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                <input type="text" placeholder="Type here" className="input input-bordered w-full"
                                     {...register("author", { required: true })} />
                             </div>
 
@@ -75,7 +75,7 @@ const AddBanner = () => {
                                 <label className="label">
                                     <span className="label-text font-semibold ">Discount</span>
                                 </label>
-                                <input type="number" placeholder="Discount" className="input input-bordered w-full dark:text-white "
+                                <input type="number" placeholder="Discount" className="input input-bordered w-full"
                                     {...register("discount", { required: true })} />
                             </div>
                             {/*hero/promo */}

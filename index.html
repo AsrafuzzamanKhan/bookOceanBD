@@ -6,6 +6,28 @@
     <link rel="icon" type="image/svg+xml" href="/book.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- Applies the saved/system theme before anything paints, so the page
+         never flashes light-then-dark (or vice versa) on load. Kept in sync
+         with ThemeProvider.jsx (same storage key, same resolution logic) -
+         this only covers the very first paint; ThemeProvider takes over
+         after React mounts (including live OS-preference changes). -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("boc-theme");
+          var theme =
+            stored === "light" || stored === "dark"
+              ? stored
+              : window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+          var root = document.documentElement;
+          if (theme === "dark") root.classList.add("dark");
+          root.setAttribute("data-theme", theme);
+        } catch (e) {}
+      })();
+    </script>
+
     <meta
       name="title"
       content="Buy Original Print Book Online - Best Online Book Shop in Bangladesh | Bookoceanbd.com"
@@ -123,7 +145,7 @@
     <!-- End Meta Pixel Code -->
   </head>
 
-  <body class="dark" bg-gray-100 dark:bg-gray-900>
+  <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
 

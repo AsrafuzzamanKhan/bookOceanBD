@@ -87,13 +87,16 @@ const DashBoardLayout2 = () => {
                                     <span className={`${!open && 'hidden'} origin-left duration-200`}>Home</span>
                                 </NavLink> */}
 
-                                <NavLink to='/dashboard/orderHistory' className={`text-gray-300 text-xm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-600 rounded-md duration-300`}>
-                                    <RiFileHistoryFill size={30} />
-                                    <span className={`${!open && 'hidden'} origin-left duration-200`}>All Orders</span>
-                                </NavLink>
+                                {/* profile before order history - the account
+                                    overview is the natural landing point, orders
+                                    are a sub-page from there */}
                                 <NavLink to='/dashboard/myProfile' className={`text-gray-300 text-xm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-600 rounded-md duration-300`}>
                                     <FaUserCircle size={30} />
                                     <span className={`${!open && 'hidden'} origin-left duration-200`}>My Profile</span>
+                                </NavLink>
+                                <NavLink to='/dashboard/orderHistory' className={`text-gray-300 text-xm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-600 rounded-md duration-300`}>
+                                    <RiFileHistoryFill size={30} />
+                                    <span className={`${!open && 'hidden'} origin-left duration-200`}>Order History</span>
                                 </NavLink>
                             </>
                         }

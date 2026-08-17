@@ -1,15 +1,19 @@
 import { useForm } from 'react-hook-form';
-import loginImg from '../../assets/log.jpg'
 import { Link, useNavigate } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../../providers/AuthProvider/AuthProvider';
 import { showSuccessToast } from '../../utils/toast';
 import { Helmet } from 'react-helmet-async';
 import SocialLogin from '../SocialLogin/SocialLogin';
+import AuthLayout from '../Shared/AuthLayout/AuthLayout';
+import AuthInput from '../Shared/AuthInput/AuthInput';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { HiOutlineMail, HiOutlineLockClosed, HiOutlineUser } from 'react-icons/hi';
+
 const SignUp = () => {
     const { createUser, updateUserProfile, sendVerificationEmail } = useContext(AuthContext)
     const [showPassword, setShowPassword] = useState(false)
+    const [signupLoading, setSignupLoading] = useState(false)
     const {
         register,
         handleSubmit,
@@ -18,7 +22,7 @@ const SignUp = () => {
     } = useForm()
     const navigate = useNavigate()
     const onSubmit = (data) => {
-
+        setSignupLoading(true)
         console.log(data);
         createUser(data.email, data.password)
             .then(result => {
@@ -46,9 +50,17 @@ const SignUp = () => {
                                     showSuccessToast('Account Created Successfully', 'Check your email to verify your account.')
                                     navigate('/')
                                 }
+                                setSignupLoading(false)
                             })
                     })
-                    .catch(error => console.log(error))
+                    .catch(error => {
+                        console.log(error)
+                        setSignupLoading(false)
+                    })
+            })
+            .catch(error => {
+                console.log(error)
+                setSignupLoading(false)
             })
     }
 
@@ -58,172 +70,119 @@ const SignUp = () => {
             <Helmet>
                 <title>Book Ocean BD | Sign up</title>
             </Helmet>
-            <div className="bg-blue-200/40 dark:bg-gray-900">
-                <div className=" container mx-auto px-2">
-                    <div className="flex justify-center items-center min-h-screen text-black dark:text-white">
-                            <div className="bg-[#F4F5FF] dark:bg-gray-800 flex items-center rounded-2xl shadow-lg max-w-3xl p-5">
-                                {/* image  */}
-                                <div className="md:block hidden w-1/2 ">
-                                    <img className=" rounded-2xl" src={loginImg} alt="" />
-                                </div>
-                                {/* form  */}
-                                <div className="md:w-1/2 px-8">
-                                    <h2 className="font-bold text-2xl uppercase">Signup</h2>
-                                    <p className="text-sm mt-4">Create an acoount</p>
-                                    <form
-                                        className="flex flex-col gap-4"
-                                        onSubmit={handleSubmit(onSubmit)}>
+            <AuthLayout
+                title="Create your account"
+                subtitle="Join Book Ocean BD to start ordering original books."
+            >
+                <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
 
-                                        {/* name  */}
-                                        <input
-                                            className="p-2 mt-8 rounded-xl border text-black dark:bg-white"
-                                            type="text"
-                                            name="name"
-                                            placeholder="Name"
-                                            {...register("name", { required: true })}
-                                        />
-                                        {errors.name && <span className="text-red-600 dark:text-red-400">Name is required</span>}
-
-                                        {/* email  */}
-                                        <input
-                                            className="p-2 mt-2 rounded-xl border text-black dark:bg-white"
-                                            type="email"
-                                            name="email"
-                                            placeholder="Email"
-                                            {...register("email", { required: true })}
-                                        />
-                                        {errors.email && <span className="text-red-600 dark:text-red-400"> Email is required</span>}
-                                        {/* password  */}
-                                        <div className="relative">
-                                            <input
-                                                className="p-2 rounded-xl border w-full text-black dark:bg-white pr-10"
-                                                type={showPassword ? 'text' : 'password'}
-                                                name="password"
-                                                placeholder="Password"
-                                                {...register("password", {
-                                                    required: true,
-                                                    minLength: 6,
-                                                    maxLength: 20,
-                                                    pattern: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z].)/
-                                                })}
-                                            />
-                                            <button
-                                                type="button"
-                                                onClick={() => setShowPassword(!showPassword)}
-                                                className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                                                aria-label={showPassword ? 'Hide password' : 'Show password'}
-                                            >
-                                                {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
-                                            </button>
-                                        </div>
-                                        {errors.password?.type === "required" && (
-                                            <p role="alert" className="text-red-600 dark:text-red-400">password is required</p>
-                                        )}
-                                        {errors.password?.type === 'minLength' && <p className="text-red-600 dark:text-red-400">
-                                            Password must be in 6 charecters</p>}
-                                        {errors.password?.type === 'maxLength' && <p className="text-red-600 dark:text-red-400">
-                                            Password must be less then 20 charecters</p>}
-                                        {errors.password?.type === 'pattern' && <p className="text-red-600 dark:text-red-400">
-                                            Password must include one Lowercase, one uppercase one digit and one spacial charecter</p>}
-                                        <input type="submit" value="Sign Up" className="bg-blue-400 rounded-xl py-2 hover:scale-105 duration-300" />
-
-                                    </form>
-                                    <div className="mt-10 grid  grid-cols-3 items-center text-gray-500">
-                                        <hr className="border-gray-500" />
-                                        <p className="text-center text-sm">OR</p>
-                                        <hr className="border-gray-500" />
-                                    </div>
-                                    {/* social login  */}
-                                    <div>
-                                        <SocialLogin></SocialLogin>
-                                    </div>
-
-
-                                    <div className="text-sm flex justify-between items-center mt-3">
-                                        <p>
-                                            Already have an account?
-                                        </p>
-                                        <Link to='/login'>
-                                            <button className="py-2 bg-white text-black px-2 border rounded-md hover:bg-gray-200 duration-800 font-medium">Login</button></Link>
-                                    </div>
-                                </div>
-
-                            </div>
+                    {/* name  */}
+                    <div>
+                        <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Full name
+                        </label>
+                        <AuthInput
+                            icon={HiOutlineUser}
+                            id="name"
+                            type="text"
+                            placeholder="Your full name"
+                            autoComplete="name"
+                            error={!!errors.name}
+                            {...register("name", { required: true })}
+                        />
+                        {errors.name && <p className="mt-1.5 text-xs text-red-600 dark:text-red-400">Name is required</p>}
                     </div>
+
+                    {/* email  */}
+                    <div>
+                        <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Email
+                        </label>
+                        <AuthInput
+                            icon={HiOutlineMail}
+                            id="email"
+                            type="email"
+                            placeholder="you@example.com"
+                            autoComplete="email"
+                            error={!!errors.email}
+                            {...register("email", { required: true })}
+                        />
+                        {errors.email && <p className="mt-1.5 text-xs text-red-600 dark:text-red-400">Email is required</p>}
+                    </div>
+
+                    {/* password  */}
+                    <div>
+                        <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Password
+                        </label>
+                        <AuthInput
+                            icon={HiOutlineLockClosed}
+                            id="password"
+                            type={showPassword ? 'text' : 'password'}
+                            placeholder="••••••••"
+                            autoComplete="new-password"
+                            error={!!errors.password}
+                            rightElement={
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                                >
+                                    {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
+                                </button>
+                            }
+                            {...register("password", {
+                                required: true,
+                                minLength: 6,
+                                maxLength: 20,
+                                pattern: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z].)/
+                            })}
+                        />
+                        {errors.password?.type === "required" && (
+                            <p role="alert" className="mt-1.5 text-xs text-red-600 dark:text-red-400">Password is required</p>
+                        )}
+                        {errors.password?.type === 'minLength' && (
+                            <p className="mt-1.5 text-xs text-red-600 dark:text-red-400">Password must be at least 6 characters</p>
+                        )}
+                        {errors.password?.type === 'maxLength' && (
+                            <p className="mt-1.5 text-xs text-red-600 dark:text-red-400">Password must be under 20 characters</p>
+                        )}
+                        {errors.password?.type === 'pattern' && (
+                            <p className="mt-1.5 text-xs text-red-600 dark:text-red-400">
+                                Must include an uppercase letter, lowercase letter, number and special character
+                            </p>
+                        )}
+                    </div>
+
+                    <button
+                        type="submit"
+                        disabled={signupLoading}
+                        className="mt-1 flex h-12 w-full items-center justify-center rounded-xl bg-blue-600 font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:opacity-70"
+                    >
+                        {signupLoading
+                            ? <span className="loading loading-bars loading-md"></span>
+                            : 'Create account'}
+                    </button>
+                </form>
+
+                <div className="my-6 flex items-center gap-3 text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500">
+                    <hr className="flex-1 border-gray-200 dark:border-gray-700" />
+                    or continue with
+                    <hr className="flex-1 border-gray-200 dark:border-gray-700" />
                 </div>
-            </div>
+
+                <SocialLogin />
+
+                <p className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                    Already have an account?{' '}
+                    <Link to="/login" className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+                        Log in
+                    </Link>
+                </p>
+            </AuthLayout>
         </>
     );
 };
 
 export default SignUp;
-
-// <div className="bg-blue-200/40">
-//     <div className=" container mx-auto px-2">
-//         <div className="flex justify-center items-center h-[100vh] ">
-//             <div className=" w-full max-w-md shadow-2xl rounded-xl px-6 py-6 min-h-80 bg-white">
-//                 <div className="flex flex-col text-center border-4 border-orange-600 rounded-full w-[200px] h-[200px] mx-auto">
-//                     <div className="mx-auto w-32">
-//                         <img src={logo} alt="logo" className=" " />
-
-//                     </div>
-//                     <div>
-//                         <div className="text-xl font-bold ">Book Ocean BD</div>
-//                     </div>
-//                 </div>
-//                 <div className="text-3xl font-semibold text-center my-4 border-b-2 pb-2 text-blue-400 uppercase">
-//                     Register
-//                 </div>
-//                 <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
-//                     <div className="form-control">
-//                         <label className="label">
-//                             <span className="label-text">Name</span>
-//                         </label>
-//                         <input
-//                             name='name'
-//                             type="text"
-//                             {...register("name", { required: true })}
-//                             placeholder="Name"
-//                             className="input input-bordered" />
-//                         {errors.name && <span>Name is required</span>}
-//                     </div>
-//                     <div className="form-control">
-//                         <label className="label">
-//                             <span className="label-text">Email</span>
-//                         </label>
-//                         <input
-//                             name='email'
-//                             type="email"
-//                             {...register("email", { required: true })}
-//                             placeholder="email"
-//                             className="input input-bordered" />
-//                         {errors.email && <span> Email is required</span>}
-
-//                     </div>
-//                     <div className="form-control">
-//                         <label className="label">
-//                             <span className="label-text">Password</span>
-//                         </label>
-//                         <input
-//                             name='password'
-//                             type="password"
-//                             {...register("password", { required: true, minLength: 6, maxLength: 20 })}
-//                             placeholder="password"
-//                             className="input input-bordered" />
-//                         {errors.password?.type === "required" && (
-//                             <p role="alert">password is required</p>
-//                         )}
-//                         <label className="label">
-//                             <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
-//                         </label>
-//                     </div>
-//                     {errors.name && <span>Name is required</span>}
-//                     <div className="form-control mt-6">
-//                         <button className="btn btn-primary">Login</button>
-//                     </div>
-//                 </form>
-//                 <p className="text-xl"><small>New Here? <Link to='/login' className="text-blue-600">Create an account</Link></small></p>
-//             </div>
-//         </div>
-//     </div>
-// </div>

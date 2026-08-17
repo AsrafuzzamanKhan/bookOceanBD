@@ -30,16 +30,23 @@ const CategoryNavMobile = ({ setCatNavMobile }) => {
     }, [setCatNavMobile]);
 
     return (
-        <nav className="w-full h-full bg-primary p-8 " ref={sidebarRef} >
-            {/* close icon  */}
-            <div onClick={() => setCatNavMobile(false)}
-                className=" flex justify-end mb-6 cursor-pointer">
-                <FiX className="text-3xl" />
+        <nav className="w-full h-full bg-primary text-white flex flex-col" ref={sidebarRef} >
+            {/* header  */}
+            <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
+                <h2 className="font-bold uppercase tracking-wide text-sm text-white/70">All Categories</h2>
+                <button
+                    onClick={() => setCatNavMobile(false)}
+                    aria-label="Close categories"
+                    className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-white/10 transition-colors"
+                >
+                    <FiX className="text-xl" />
+                </button>
             </div>
-            <div className="flex flex-col gap-y-4 pb-12 overflow-x-hidden h-[80vh] " >
+            <div className="flex flex-col px-2 py-3 overflow-y-auto scrollbar-webkit scrollbar-thin" >
                 {
                     uniqueCategories?.map((category, i) => {
-                        return <NavLink key={i} to={`/books/${category}`} className='capitalize font-medium hover:text-green-600 duration-300 px-2 rounded tracking-wide'
+                        return <NavLink key={i} to={`/books/${category}`}
+                            className={({ isActive }) => `capitalize font-medium duration-200 px-4 py-2.5 rounded-lg tracking-wide ${isActive ? 'bg-blue-500 text-white' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
                             onClick={() => setCatNavMobile(false)}
                         >  {category} Books
                         </NavLink>

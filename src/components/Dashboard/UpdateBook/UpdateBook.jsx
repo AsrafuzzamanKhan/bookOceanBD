@@ -69,14 +69,14 @@ const UpdateBook = () => {
                 <p className=' bg-slate-800 text-white px-8 py-3 rounded'>Update Book</p>
             </div>
             <div className='w-full flex items-center justify-center'>
-                <div className="w-full lg:w-1/2 border dark:border-none dark:bg-slate-900 p-4 shadow-2xl rounded-[4px] text-black">
+                <div className="w-full lg:w-1/2 border dark:border-none dark:bg-slate-900 p-4 shadow-2xl rounded-[4px] text-black dark:text-white">
                     <form onSubmit={handleSubmit(onSubmit)} >
                         {/* name  */}
                         <div className="form-control w-full">
                             <label className="label">
                                 <span className="label-text font-semibold ">Book name*</span>
                             </label>
-                            <input type="text" placeholder="Type here" defaultValue={productDetails?.name} className="input input-bordered w-full bg-white"
+                            <input type="text" placeholder="Type here" defaultValue={productDetails?.name} className="input input-bordered w-full"
                                 {...register("name", { required: true })} />
                         </div>
                         {/* author  */}
@@ -84,7 +84,7 @@ const UpdateBook = () => {
                             <label className="label">
                                 <span className="label-text font-semibold  ">Author name*</span>
                             </label>
-                            <input type="text" placeholder="Type here" defaultValue={productDetails?.author} className="input input-bordered w-full bg-white"
+                            <input type="text" placeholder="Type here" defaultValue={productDetails?.author} className="input input-bordered w-full"
                                 {...register("author", { required: true })} />
                         </div>
                         {/* category  */}
@@ -95,7 +95,7 @@ const UpdateBook = () => {
                                 </label>
                                 <select
                                     defaultValue={productDetails?.category}
-                                    className="select select-bordered capitalize  bg-white"  {...register("category", { required: true })}>
+                                    className="select select-bordered capitalize"  {...register("category", { required: true })}>
                                     <option disabled >Pick one</option>
                                     <option value='barnes & noble'>barnes & noble</option>
                                     <option value='biography'>biography</option>
@@ -124,7 +124,7 @@ const UpdateBook = () => {
                                 <label className="label">
                                     <span className="label-text font-semibold ">Price*</span>
                                 </label>
-                                <input type="number" placeholder="Type here" defaultValue={productDetails?.price} className="input input-bordered w-full bg-white"
+                                <input type="number" placeholder="Type here" defaultValue={productDetails?.price} className="input input-bordered w-full"
                                     {...register("price", { required: true })} />
                             </div>
                         </div>
@@ -135,7 +135,7 @@ const UpdateBook = () => {
                                     <span className="label-text font-semibold">cover*</span>
 
                                 </label>
-                                <select defaultValue={productDetails?.cover} className="select select-bordered capitalize bg-white text-black"  {...register("cover", { required: true })}>
+                                <select defaultValue={productDetails?.cover} className="select select-bordered capitalize"  {...register("cover", { required: true })}>
                                     <option disabled >Pick one</option>
                                     <option value="hardcover">Hardcover</option>
                                     <option value="paperback">Paperback</option>
@@ -148,7 +148,7 @@ const UpdateBook = () => {
                                 <label className="label">
                                     <span className="label-text font-semibold">Quantity*</span>
                                 </label>
-                                <input type="number" min="0" defaultValue={productDetails?.quantity ?? 0} placeholder="0" className="input input-bordered w-full bg-white"
+                                <input type="number" min="0" defaultValue={productDetails?.quantity ?? 0} placeholder="0" className="input input-bordered w-full"
                                     {...register("quantity", { required: true, min: 0 })} />
                             </div>
                         </div>
@@ -160,7 +160,7 @@ const UpdateBook = () => {
                                     <span className="label-text font-semibold">New*</span>
 
                                 </label>
-                                <select defaultValue={productDetails?.new} className="select select-bordered uppercase bg-white"  {...register("new", { required: true })}>
+                                <select defaultValue={productDetails?.new} className="select select-bordered uppercase"  {...register("new", { required: true })}>
                                     <option disabled >Pick one</option>
                                     <option value="true">True</option>
                                     <option value="false">False</option>
@@ -173,7 +173,7 @@ const UpdateBook = () => {
                                     <span className="label-text font-semibold">Best Selling*</span>
 
                                 </label>
-                                <select defaultValue={productDetails?.best} className="select select-bordered uppercase bg-white"  {...register("best", { required: true })}>
+                                <select defaultValue={productDetails?.best} className="select select-bordered uppercase"  {...register("best", { required: true })}>
                                     <option disabled >Pick one</option>
                                     <option value="true">True</option>
                                     <option value="false">False</option>
@@ -191,7 +191,7 @@ const UpdateBook = () => {
                                     <span className="label-text">Description</span>
 
                                 </label>
-                                <textarea defaultValue={productDetails?.description} className="textarea textarea-bordered h-24 bg-white text-black" placeholder="Description"
+                                <textarea defaultValue={productDetails?.description} className="textarea textarea-bordered h-24" placeholder="Description"
                                     {...register("description", { required: true })}></textarea>
 
                             </div>
@@ -200,7 +200,7 @@ const UpdateBook = () => {
                                 <label className="label">
                                     <span className="label-text font-semibold ">Publisher*</span>
                                 </label>
-                                <input defaultValue={productDetails?.publisher} type="text" placeholder="Type here" className="input input-bordered w-full bg-white text-black "
+                                <input defaultValue={productDetails?.publisher} type="text" placeholder="Type here" className="input input-bordered w-full"
                                     {...register("publisher", { required: true })} />
                             </div>
                             {/* Language  */}
@@ -209,7 +209,7 @@ const UpdateBook = () => {
                                     <span className="label-text font-semibold">Language*</span>
 
                                 </label>
-                                <select defaultValue={productDetails?.language} className="select select-bordered uppercase bg-white text-black"  {...register("language", { required: true })}>
+                                <select defaultValue={productDetails?.language} className="select select-bordered uppercase"  {...register("language", { required: true })}>
                                     <option disabled >Pick one</option>
                                     <option>english</option>
                                     <option>bangla</option>
@@ -221,7 +221,7 @@ const UpdateBook = () => {
                                 <label className="label">
                                     <span className="label-text font-semibold ">Page*</span>
                                 </label>
-                                <input defaultValue={productDetails?.page} type="number" placeholder="Type here" className="input input-bordered w-full bg-white text-black "
+                                <input defaultValue={productDetails?.page} type="number" placeholder="Type here" className="input input-bordered w-full"
                                     {...register("page", { required: true })} />
                             </div>
                             {/* ISBN-10  */}
@@ -229,7 +229,7 @@ const UpdateBook = () => {
                                 <label className="label">
                                     <span className="label-text font-semibold ">ISBN-10*</span>
                                 </label>
-                                <input defaultValue={productDetails?.isbn10} type="text" placeholder="Type here" className="input input-bordered w-full bg-white text-black "
+                                <input defaultValue={productDetails?.isbn10} type="text" placeholder="Type here" className="input input-bordered w-full"
                                     {...register("isbn10", { required: true })} />
                             </div>
                             {/* isbn-13  */}
@@ -237,7 +237,7 @@ const UpdateBook = () => {
                                 <label className="label">
                                     <span className="label-text font-semibold ">ISBN-13*</span>
                                 </label>
-                                <input defaultValue={productDetails?.isbn13} type="text" placeholder="Type here" className="input input-bordered w-full bg-white text-black "
+                                <input defaultValue={productDetails?.isbn13} type="text" placeholder="Type here" className="input input-bordered w-full"
                                     {...register("isbn13", { required: true })} />
                             </div>
                             {/* Item Weight  */}
@@ -245,7 +245,7 @@ const UpdateBook = () => {
                                 <label className="label">
                                     <span className="label-text font-semibold ">Item Weight*</span>
                                 </label>
-                                <input defaultValue={productDetails?.itemWeight} type="text" placeholder="Type here" className="input input-bordered w-full bg-white text-black "
+                                <input defaultValue={productDetails?.itemWeight} type="text" placeholder="Type here" className="input input-bordered w-full"
                                     {...register("itemWeight", { required: true })} />
                             </div>
                             {/* Dimensions   */}
@@ -253,7 +253,7 @@ const UpdateBook = () => {
                                 <label className="label">
                                     <span className="label-text font-semibold ">Dimensions*</span>
                                 </label>
-                                <input defaultValue={productDetails?.dimensions} type="text" placeholder="Type here" className="input input-bordered w-full bg-white text-black "
+                                <input defaultValue={productDetails?.dimensions} type="text" placeholder="Type here" className="input input-bordered w-full"
                                     {...register("dimensions", { required: true })} />
                             </div>
                         </div>
@@ -271,7 +271,7 @@ const UpdateBook = () => {
                                         className="w-16 h-20 object-cover rounded border"
                                     />
                                 )}
-                                <input type="file" accept="image/*" className="file-input file-input-bordered w-full bg-white text-black"
+                                <input type="file" accept="image/*" className="file-input file-input-bordered w-full"
                                     {...register("image")} />
                             </div>
                             <span className="label-text-alt text-gray-500 mt-1">

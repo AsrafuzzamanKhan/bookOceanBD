@@ -107,9 +107,9 @@ const ManageBooks = () => {
 
                 </div>
                 {/* filter  */}
-                <div className="flex items-center justify-center bg-slate-300 py-4 rounded gap-4 ">
-                    <label htmlFor="" className="text-md font-semibold">Filter: </label>
-                    <input type="text" className="p-2  rounded-xl border dark:bg-white w-1/2 " onChange={filterBook} placeholder="Name / Author name/ Category" name="" id="" /></div>
+                <div className="flex items-center justify-center bg-slate-300 dark:bg-gray-800 py-4 rounded gap-4 ">
+                    <label htmlFor="" className="text-md font-semibold dark:text-white">Filter: </label>
+                    <input type="text" className="p-2 rounded-xl border w-1/2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400" onChange={filterBook} placeholder="Name / Author name/ Category" name="" id="" /></div>
 
                 {/* google sheet sync */}
                 <div className="my-6 border dark:border-0 dark:bg-gray-800 rounded-[8px] p-4">

@@ -12,6 +12,8 @@ import { CartContext } from "../../../providers/CartProvider/CartProvider";
 import useAdmin from "../../../hooks/useAdmin";
 import logoSvg from '../../../assets/logo/navlogo.png'
 import { showSuccessToast } from "../../../utils/toast";
+import NotificationBell from "../NotificationBell/NotificationBell";
+import ThemeToggle from "../ThemeToggle/ThemeToggle";
 
 
 const Header = () => {
@@ -37,16 +39,17 @@ const Header = () => {
             });
     }
     return (
-        <header className="bg-black text-white py-2 lg:py-4 px-[2vw] fixed  w-full top-0 z-40  ">
+        <header className="bg-black text-white py-2 lg:py-4 px-[2vw] fixed w-full top-0 z-40 border-b border-white/10">
             <div className="container mx-auto">
-                <div className="flex flex-row gap-4 items-center justify-between  mb-2 lg:mb-0">
+                <div className="flex flex-row gap-3 md:gap-5 items-center justify-between mb-2 lg:mb-0">
                     {/* menu  */}
-                    <div
+                    <button
                         onClick={() => setCatNavMobile(true)}
-                        className="text-3xl lg:hidden cursor-pointer"
+                        aria-label="Open categories"
+                        className="flex items-center justify-center w-9 h-9 rounded-full text-2xl lg:hidden cursor-pointer hover:bg-white/10 transition-colors -ml-1.5"
                     >
                         <FiMenu></FiMenu>
-                    </div>
+                    </button>
                     {/* category mobile nav  */}
                     <div className={`${catNavMobile ? 'left-0' : '-left-full'} fixed top-0 bottom-0 z-30 bg-slate-700 lg:w-1/3 w-3/4 transition-all duration-700  overflow-y-auto overflow-x-hidden `}>
                         <CategoryNavMobile
@@ -55,29 +58,29 @@ const Header = () => {
                     </div>
 
                     {/* logo  */}
-                    <Link to={'/'} className="w-[200px] md:w-[250px]" >
+                    <Link to={'/'} className="w-[150px] md:w-[210px] shrink-0" >
                         <img className="" src={logoSvg} alt="Book Ocean BD" />
                     </Link>
 
                     {/* search in dextop  */}
-                    <div className="hidden lg:flex lg:max-w-[700px] rounded-lg w-full ">
+                    <div className="hidden lg:flex lg:max-w-[600px] xl:max-w-[700px] w-full mx-auto">
                         <SearchForm></SearchForm>
                     </div>
 
 
-                    {/* phone and cart 
+                    {/* phone and cart
                      */}
 
-                    <div className="flex items-center justify-center gap-x-[10px] ">
+                    <div className="flex items-center justify-center gap-x-0.5 md:gap-x-1 shrink-0">
 
                         {/* drop down  */}
                         <div className="dropdown dropdown-hover dropdown-bottom dropdown-end cursor-pointer ">
-                            <label tabIndex={0} >
+                            <label tabIndex={0} className="flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-full cursor-pointer hover:bg-white/10 transition-colors">
                                 <div className="avatar online placeholder">
-                                    <div className="bg-gray-700 dark:bg-gray-600 text-white rounded-full w-7 md:w-10 ring-2 ring-transparent hover:ring-blue-400 duration-300 flex items-center justify-center overflow-hidden">
+                                    <div className="bg-gray-700 dark:bg-gray-600 text-white rounded-full w-6 md:w-7 ring-2 ring-transparent hover:ring-blue-400 duration-300 flex items-center justify-center overflow-hidden">
                                         {user?.photoURL
                                             ? <img src={user.photoURL} alt={user?.displayName} referrerPolicy="no-referrer" />
-                                            : <FaRegUserCircle className="text-xl md:text-2xl" />
+                                            : <FaRegUserCircle className="text-lg md:text-xl" />
                                         }
                                     </div>
                                 </div>
@@ -137,16 +140,38 @@ const Header = () => {
                             </div>
                         </div>
 
+                        {/* theme switch - a device/browser preference, so it's
+                            shown to everyone, not just logged-in users */}
+                        <ThemeToggle />
+
+                        {/* notification bell - only for logged-in users */}
+                        {user?.email && <NotificationBell />}
 
                         {/* cart icon  */}
-                        <div onClick={() => setIsOpen(!isOpen)} className="relative cursor-pointer">
-                            <FiShoppingBag className="text-2xl md:text-3xl"></FiShoppingBag>
+                        <button
+                            onClick={() => setIsOpen(!isOpen)}
+                            aria-label="Open cart"
+                            className="relative flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-full cursor-pointer hover:bg-white/10 transition-colors"
+                        >
+                            <FiShoppingBag className="text-lg md:text-xl"></FiShoppingBag>
 
                             {/* amount - total copies across all lines, not just distinct books */}
-                            <div className="flex justify-center items-center bg-blue-500 text-white absolute w-[18px] h-[18px] rounded-full top-3 -right-1 text-[11px] font-semibold ">
+                            <div className="flex justify-center items-center bg-blue-500 text-white absolute w-[18px] h-[18px] rounded-full top-0.5 right-0.5 text-[11px] font-semibold ring-2 ring-black">
                                 {cart?.reduce((sum, item) => sum + (item.quantity || 1), 0) || 0}
                             </div>
-                        </div>
+                        </button>
+
+                        {/* backdrop - dims the rest of the page while the cart is
+                            open, so the panel reads as the one focused thing on
+                            screen instead of just floating over an unchanged page.
+                            Also closes the cart on click; pointer-events-none while
+                            closed so it never sits invisibly on top of the page
+                            intercepting clicks. */}
+                        <div
+                            onClick={() => setIsOpen(false)}
+                            aria-hidden="true"
+                            className={`${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'} fixed inset-0 bg-black/50 z-10 transition-opacity duration-300`}
+                        ></div>
 
                         {/* cart  */}
                         {/* no explicit height here on purpose - top-0 + bottom-0 on a
@@ -156,8 +181,11 @@ const Header = () => {
                             bar, bottom nav) the way top/bottom-based sizing does, so
                             on a real phone the drawer was taller than what's
                             actually visible and pushed the Proceed button below the
-                            fold, out of reach. */}
-                        <div className={`${isOpen ? 'right-0' : '-right-full'} bg-white dark:bg-gray-900 shadow-2xl fixed top-0 bottom-0 w-full z-10 md:max-w-[420px] transition-all duration-300`}>
+                            fold, out of reach.
+                            width is capped at every breakpoint (not just md: and up)
+                            so it reads as a focused side panel instead of taking over
+                            the full screen on narrower windows/phones. */}
+                        <div className={`${isOpen ? 'right-0' : '-right-full'} bg-white dark:bg-gray-900 shadow-2xl fixed top-0 bottom-0 w-full max-w-[420px] z-20 transition-all duration-300`}>
                             <Cart></Cart>
                         </div>
 

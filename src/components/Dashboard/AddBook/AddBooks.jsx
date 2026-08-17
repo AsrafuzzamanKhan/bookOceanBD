@@ -72,7 +72,7 @@ const AddBooks = () => {
                                 <label className="label">
                                     <span className="label-text font-semibold ">Book name*</span>
                                 </label>
-                                <input type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                <input type="text" placeholder="Type here" className="input input-bordered w-full"
                                     {...register("name", { required: true })} />
                             </div>
                             {/* author  */}
@@ -80,7 +80,7 @@ const AddBooks = () => {
                                 <label className="label">
                                     <span className="label-text font-semibold ">Author name*</span>
                                 </label>
-                                <input type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                <input type="text" placeholder="Type here" className="input input-bordered w-full"
                                     {...register("author", { required: true })} />
                             </div>
                             {/* category  */}
@@ -119,7 +119,7 @@ const AddBooks = () => {
                                     <label className="label">
                                         <span className="label-text font-semibold ">Price*</span>
                                     </label>
-                                    <input type="number" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                    <input type="number" placeholder="Type here" className="input input-bordered w-full"
                                         {...register("price", { required: true })} />
                                 </div>
                             </div>
@@ -143,7 +143,7 @@ const AddBooks = () => {
                                     <label className="label">
                                         <span className="label-text font-semibold">Quantity*</span>
                                     </label>
-                                    <input type="number" min="0" placeholder="0" className="input input-bordered w-full dark:text-white "
+                                    <input type="number" min="0" placeholder="0" className="input input-bordered w-full"
                                         {...register("quantity", { required: true, min: 0 })} />
                                 </div>
                             </div>
@@ -198,7 +198,7 @@ const AddBooks = () => {
                                     <label className="label">
                                         <span className="label-text font-semibold ">Publisher*</span>
                                     </label>
-                                    <input type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                    <input type="text" placeholder="Type here" className="input input-bordered w-full"
                                         {...register("publisher", { required: true })} />
                                 </div>
                                 {/* Language  */}
@@ -219,7 +219,7 @@ const AddBooks = () => {
                                     <label className="label">
                                         <span className="label-text font-semibold ">Page*</span>
                                     </label>
-                                    <input type="number" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                    <input type="number" placeholder="Type here" className="input input-bordered w-full"
                                         {...register("page", { required: true })} />
                                 </div>
                                 {/* ISBN-10  */}
@@ -227,7 +227,7 @@ const AddBooks = () => {
                                     <label className="label">
                                         <span className="label-text font-semibold ">ISBN-10*</span>
                                     </label>
-                                    <input type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                    <input type="text" placeholder="Type here" className="input input-bordered w-full"
                                         {...register("isbn10", { required: true })} />
                                 </div>
                                 {/* isbn-13  */}
@@ -235,7 +235,7 @@ const AddBooks = () => {
                                     <label className="label">
                                         <span className="label-text font-semibold ">ISBN-13*</span>
                                     </label>
-                                    <input type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                    <input type="text" placeholder="Type here" className="input input-bordered w-full"
                                         {...register("isbn13", { required: true })} />
                                 </div>
                                 {/* Item Weight  */}
@@ -243,7 +243,7 @@ const AddBooks = () => {
                                     <label className="label">
                                         <span className="label-text font-semibold ">Item Weight*</span>
                                     </label>
-                                    <input type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                    <input type="text" placeholder="Type here" className="input input-bordered w-full"
                                         {...register("itemWeight", { required: true })} />
                                 </div>
                                 {/* Dimensions   */}
@@ -251,7 +251,7 @@ const AddBooks = () => {
                                     <label className="label">
                                         <span className="label-text font-semibold ">Dimensions*</span>
                                     </label>
-                                    <input type="text" placeholder="Type here" className="input input-bordered w-full dark:text-white "
+                                    <input type="text" placeholder="Type here" className="input input-bordered w-full"
                                         {...register("dimensions", { required: true })} />
                                 </div>
                             </div>

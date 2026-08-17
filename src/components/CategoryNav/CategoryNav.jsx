@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { FiGrid } from "react-icons/fi";
 import useBookData from "../../hooks/useBookData";
 import PropTypes from "prop-types";
 
@@ -13,14 +14,19 @@ const CategoryNav = ({ sticky = false }) => {
     const uniqueCategories = [...new Set(booksData.map(item => item.category))];
     // console.log(uniqueCategories)
     return (
-        <aside className={`hidden lg:block ${sticky ? 'lg:sticky lg:top-24 lg:self-start' : ''}`}>
-            <nav className="flex flex-col w-[200px] h-[450px] rounded-[4px] overflow-hidden bg-slate-300 dark:bg-gray-800 dark:text-white ">
-                <h1 className="py-4 font-semibold flex items-center justify-center capitalize bg-black text-white tracking-wide">All Categories</h1>
-                <div className="flex flex-col gap-y-2 pt-3 px-4 font-medium overflow-y-scroll scrollbar-webkit scrollbar-thin pb-12">
+        <aside className={`hidden lg:block w-[220px] shrink-0 ${sticky ? 'lg:sticky lg:top-24 lg:self-start' : ''}`}>
+            <nav className="flex flex-col h-[450px] rounded-xl overflow-hidden bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm">
+                <h1 className="py-4 px-5 font-bold flex items-center gap-2 bg-black text-white tracking-wide text-xs uppercase">
+                    <FiGrid size={15} /> All Categories
+                </h1>
+                <div className="flex flex-col gap-y-0.5 py-2 px-2 overflow-y-auto scrollbar-webkit scrollbar-thin">
                     {
                         uniqueCategories.map((category, i) =>
 
-                            <NavLink className="dark:hover:text-gray-400 hover:text-blue-500 rounded capitalize px-2 tracking-wide"
+                            <NavLink
+                                className={({ isActive }) => `capitalize text-sm px-3 py-2 rounded-lg tracking-wide duration-200 ${isActive
+                                    ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-semibold'
+                                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'}`}
                                 to={`/books/${category}`}
                                 key={i}>
                                 {category} Books
