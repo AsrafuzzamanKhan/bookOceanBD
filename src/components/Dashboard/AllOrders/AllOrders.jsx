@@ -1,16 +1,20 @@
+import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { showSuccessToast } from "../../../utils/toast";
 import { Helmet } from "react-helmet-async";
+import { STATUS_META, orderDateValue } from "../../../utils/orderStatus";
 
-// import { AiFillDelete } from "react-icons/ai";
 import { IoMdPricetags } from "react-icons/io";
-import { IoCalendar } from "react-icons/io5";
-import { FaMapMarkerAlt, FaPhone, FaUser } from "react-icons/fa";
+import { FaEnvelope, FaMapMarkerAlt, FaPhone, FaUser } from "react-icons/fa";
+import { FiCalendar, FiClock, FiSearch } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
 const AllOrders = () => {
     const [axiosSecure] = useAxiosSecure();
+    const [statusFilter, setStatusFilter] = useState('all');
+    const [search, setSearch] = useState('');
+
     const { data: orders = [], refetch } = useQuery({
         queryKey: ['orders'],
         queryFn: async () => {
@@ -19,158 +23,212 @@ const AllOrders = () => {
 
         }
     });
-    // show data in reverse 
-    const reversedOrderData = orders.slice().reverse();
-    // approve 
+
     const handleApproved = order => {
-        console.log(order._id)
         axiosSecure.patch(`/orders/approve-order/${order._id}`)
             .then(res => {
-                console.log(res.data)
                 if (res.data.modifiedCount > 0) {
                     refetch();
-                    showSuccessToast(`order is Approved`)
+                    showSuccessToast(`Order approved`)
                 }
             })
     }
-    // cancel 
     const handleCanceled = order => {
-        console.log(order._id)
         axiosSecure.patch(`/orders/cancel-order/${order._id}`)
             .then(res => {
-                console.log(res.data)
                 if (res.data.modifiedCount > 0) {
                     refetch();
-                    showSuccessToast(`order is Canceled`)
+                    showSuccessToast(`Order canceled`)
                 }
             })
     }
-    // Delievery 
     const handleDelivery = order => {
-        console.log(order._id)
         axiosSecure.patch(`/orders/delivery-order/${order._id}`)
             .then(res => {
-                console.log(res.data)
                 if (res.data.modifiedCount > 0) {
                     refetch();
-                    showSuccessToast(`Delivered`)
+                    showSuccessToast(`Marked as delivered`)
                 }
             })
     }
 
+    // newest first - was `.slice().reverse()`, which only happened to work
+    // because Mongo's natural find() order is usually (not guaranteedly)
+    // insertion order. Sorting by the order's own date is actually correct.
+    const sortedOrders = useMemo(
+        () => [...orders].sort((a, b) => orderDateValue(b) - orderDateValue(a)),
+        [orders]
+    );
 
-    // const handleDelete = order => {
-    //     console.log(order._id)
-    // }
+    const counts = useMemo(() => ({
+        pending: orders.filter(o => o.status === 'pending').length,
+        approve: orders.filter(o => o.status === 'approve').length,
+        delivered: orders.filter(o => o.status === 'delivered').length,
+        canceled: orders.filter(o => o.status === 'canceled').length,
+    }), [orders]);
+
+    const filters = [
+        { key: 'all', label: 'All', count: orders.length },
+        { key: 'pending', label: 'Pending', count: counts.pending },
+        { key: 'approve', label: 'Approved', count: counts.approve },
+        { key: 'delivered', label: 'Delivered', count: counts.delivered },
+        { key: 'canceled', label: 'Canceled', count: counts.canceled },
+    ];
+
+    const searchTerm = search.trim().toLowerCase();
+    const visibleOrders = sortedOrders
+        .filter(o => statusFilter === 'all' || o.status === statusFilter)
+        .filter(o => {
+            if (!searchTerm) return true;
+            const haystack = [o.data?.name, o.email, o.data?.phone, o._id].filter(Boolean).join(' ').toLowerCase();
+            return haystack.includes(searchTerm);
+        });
+
     return (
-        <div className='container mx-auto'>
+        <div className="pt-32 md:pt-32 lg:pt-24 pb-16 bg-gray-50 dark:bg-gray-950/40 min-h-screen">
             <Helmet>
-                <title>Book Ocean BD || All Orders</title>
+                <title>Book Ocean BD | All Orders</title>
             </Helmet>
-            <div className="mb-[30px] pt-28 md:pt-28 lg:pt-0 xl:pt-24 min-h-screen">
-                <div className='items-center  mb-8 flex flex-col'>
-                    <h1 className=' bg-slate-800 text-white px-8 py-3 rounded'>Total Order: {orders?.length}</h1>
+            <div className="container mx-auto px-4 lg:px-0">
+                <div className="mb-6 text-center">
+                    <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">All Orders</h1>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{orders.length} total &middot; manage and fulfill every order placed on the site.</p>
                 </div>
 
-                {/* mobile responsive  */}
-                <div className="px-1 lg:px-0 dark:text-white pb-12 ">
-                    {
-                        reversedOrderData?.map((order, i) =>
-                            <div key={i} className=" border dark:border-none dark:bg-gray-800  rounded-[8px] my-4 hover:bg-gray-100 dark:hover:bg-slate-700 duration-300">
+                {/* status filter  */}
+                <div className="flex flex-wrap items-center justify-center gap-2 mb-4">
+                    {filters.map(({ key, label, count }) => {
+                        const isActive = statusFilter === key;
+                        return (
+                            <button
+                                key={key}
+                                type="button"
+                                onClick={() => setStatusFilter(key)}
+                                className={`inline-flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-full border transition-colors duration-200 ${isActive
+                                    ? 'bg-blue-600 border-blue-600 text-white'
+                                    : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-blue-300 dark:hover:border-blue-400'}`}
+                            >
+                                {label}
+                                <span className={`text-xs px-1.5 py-0.5 rounded-full ${isActive ? 'bg-white/20' : 'bg-gray-100 dark:bg-gray-700'}`}>{count}</span>
+                            </button>
+                        );
+                    })}
+                </div>
 
-                                <div className="card-body">
-                                    <div className="flex justify-between items-center">
-                                        <div className="dropdown">
-                                            <div tabIndex={0} role="button" className="btn m-1">{order.status}</div>
-                                            <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-                                                {order.status === 'pending' ?
+                {/* search  */}
+                <div className="max-w-sm mx-auto mb-8 relative">
+                    <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                    <input
+                        type="text"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        placeholder="Search by customer, email, phone, or order id..."
+                        className="w-full h-11 pl-10 pr-4 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    />
+                </div>
 
-                                                    <li>
-                                                        <a >{order.status === 'approve' ? 'Approved' : <button onClick={() => handleApproved(order)} className="btn bg-green-600 text-white">{order.status}-Aprrove</button>}
-                                                        </a>
-                                                    </li> : <>{order.status === 'canceled' ||
-                                                        < li >
-                                                            <a> {order.status === 'delivered' ? 'Delivered' : <button onClick={() => handleDelivery(order)} className="btn bg-blue-600 text-white">Delivery-{order.status}</button>}</a>
-                                                        </li>
-                                                    }</>
-
-                                                }
-                                                {(order.status === 'approve' || order.status === 'delivered') ||
-
-                                                    <li>
-                                                        <a> {order.status === 'canceled' ? 'Canceled' : <button onClick={() => handleCanceled(order)} className="btn bg-orange-600 text-white">{order.status}--Cancel</button>}
-                                                        </a>
-                                                    </li>}
-
-                                                {/* <li>
-                                                <a> {order.status === 'canceled' ? 'Canceled' : <button onClick={() => handleCanceled(order)} className="btn bg-orange-600 text-white">{order.status}</button>}
-                                                </a>
-                                            </li> */}
-
-                                            </ul>
-                                        </div>
-
-                                        <div className="flex font-semibold bg-gray-100 dark:bg-slate-950  rounded px-4 py-2 ">
-                                            <span>&#x09F3; </span>
-
-                                            <p className="mx-1 "> {order.totalAmount}</p>
-                                        </div>
-
+                {/* orders  */}
+                {orders.length === 0 ? (
+                    <div className="max-w-md mx-auto text-center bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm py-16 px-6">
+                        <FiClock className="text-6xl text-gray-200 dark:text-gray-700 mx-auto mb-4" />
+                        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">No orders yet</h2>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Placed orders will show up here.</p>
+                    </div>
+                ) : visibleOrders.length === 0 ? (
+                    <div className="max-w-md mx-auto text-center bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm py-16 px-6">
+                        <FiSearch className="text-6xl text-gray-200 dark:text-gray-700 mx-auto mb-4" />
+                        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">No matching orders</h2>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">Try a different filter or search term.</p>
+                        <button
+                            type="button"
+                            onClick={() => { setStatusFilter('all'); setSearch(''); }}
+                            className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-colors duration-200"
+                        >
+                            Clear filters
+                        </button>
+                    </div>
+                ) : (
+                    <div className="max-w-4xl mx-auto flex flex-col gap-4">
+                        {visibleOrders.map((order) => {
+                            const meta = STATUS_META[order.status] || STATUS_META.pending;
+                            const StatusIcon = meta.icon;
+                            return (
+                                <div key={order._id} className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm overflow-hidden">
+                                    {/* header  */}
+                                    <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+                                        <span className={`inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide px-3 py-1.5 rounded-full ${meta.badge}`}>
+                                            <StatusIcon size={13} /> {meta.label}
+                                        </span>
+                                        <span className="text-sm font-bold text-gray-900 dark:text-white">৳{order.totalAmount}</span>
                                     </div>
 
-                                    {/* <div>
+                                    <div className="p-5 flex flex-col md:flex-row gap-5">
+                                        {/* customer + delivery info  */}
+                                        <div className="md:w-64 shrink-0 flex flex-col gap-2 text-sm text-gray-600 dark:text-gray-300">
+                                            <div className="flex items-center gap-2"><FiCalendar className="text-blue-400 shrink-0" size={14} /> {order.date}</div>
+                                            <div className="flex items-center gap-2"><FaUser className="text-blue-400 shrink-0" size={13} /> {order.data?.name}</div>
+                                            <div className="flex items-center gap-2"><FaEnvelope className="text-blue-400 shrink-0" size={13} /> <span className="truncate">{order.email}</span></div>
+                                            <div className="flex items-center gap-2"><FaPhone className="text-blue-400 shrink-0" size={13} /> {order.data?.phone}</div>
+                                            <div className="flex items-start gap-2"><FaMapMarkerAlt className="text-blue-400 shrink-0 mt-0.5" size={13} /> <span>{order.data?.address}</span></div>
 
-                                    {
-                                        (order.status === 'pending') &&
-                                        <button onClick={() => handleCancelOrder(order)} className="btn bg-red-200 dark:bg-white"> Cancel</button>
-
-                                    }
-                                    {
-                                        (order.status === 'canceled') && <span className="text-sm text-red-400">Limited Stock... </span>
-                                    }
-                                    {
-
-                                        (order.status === 'approve') && <span className="text-sm text-green-600">The Parcel is ready for delivery.</span>
-
-                                    }
-                                    {
-
-                                        (order.status === 'delivered') && <span className="text-sm text-green-600">Thank you for purchasing.</span>
-
-                                    }
-
-                                </div> */}
-                                    <div className="flex lg:flex-row md:flex-col flex-col">
-                                        <div className="flex-1 leading-loose">
-                                            <div className="flex items-center "><IoCalendar className="mr-2" /> {order.date}</div>
-                                            <div className="flex items-center "><FaUser className="mr-2" />{order.data.name}</div>
-                                            <div className="flex items-center "><FaUser className="mr-2" />{order.email}</div>
-                                            <div className="flex items-center"><FaPhone className="mr-2" />{order.data.phone}</div>
-                                            <div className="flex items-center"> <FaMapMarkerAlt className="mr-2" />{order.data.address}</div>
+                                            {/* actions - matches the previous permission rules exactly:
+                                                pending -> approve or cancel; approve -> mark delivered;
+                                                delivered/canceled are terminal, no action */}
+                                            <div className="flex flex-wrap gap-2 mt-2">
+                                                {order.status === 'pending' && (
+                                                    <>
+                                                        <button
+                                                            onClick={() => handleApproved(order)}
+                                                            className="text-xs font-semibold px-3 py-1.5 rounded-full bg-blue-50 hover:bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 dark:text-blue-300 transition-colors duration-200"
+                                                        >
+                                                            Approve
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleCanceled(order)}
+                                                            className="text-xs font-semibold px-3 py-1.5 rounded-full bg-red-50 hover:bg-red-100 text-red-600 dark:bg-red-900/30 dark:hover:bg-red-900/50 dark:text-red-300 transition-colors duration-200"
+                                                        >
+                                                            Cancel
+                                                        </button>
+                                                    </>
+                                                )}
+                                                {order.status === 'approve' && (
+                                                    <button
+                                                        onClick={() => handleDelivery(order)}
+                                                        className="text-xs font-semibold px-3 py-1.5 rounded-full bg-green-50 hover:bg-green-100 text-green-700 dark:bg-green-900/30 dark:hover:bg-green-900/50 dark:text-green-300 transition-colors duration-200"
+                                                    >
+                                                        Mark delivered
+                                                    </button>
+                                                )}
+                                            </div>
                                         </div>
 
-                                        <div className="flex-1 mt-4 lg:mt-0">
-                                            {order.cart.map((book, i) => <div key={i} >
-
-                                                <Link to={`/book/${book.name.replace(/\s/g, "_")}/${book.bookId}`} className="flex mb-4 hover:scale-95 duration-500">
-                                                    <div className="w-1/4">
-                                                        <img className="w-12" src={book.image} alt={book.image} />
+                                        {/* books  */}
+                                        <div className="flex-1 min-w-0 flex flex-col divide-y divide-gray-100 dark:divide-gray-700">
+                                            {order.cart.map((book, i) => (
+                                                <Link
+                                                    key={i}
+                                                    to={`/book/${book.name.replace(/\s/g, "_")}/${book.bookId}`}
+                                                    className="flex gap-3 py-3 first:pt-0 last:pb-0 hover:opacity-80 transition-opacity"
+                                                >
+                                                    <div className="w-10 h-14 shrink-0 rounded-md overflow-hidden bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-700">
+                                                        <img className="w-full h-full object-cover" src={book.image} alt={book.name} />
                                                     </div>
-                                                    <div className="w-3/4">
-                                                        <span className="text-blue-600">  {i + 1} </span> - {book.name} - by <span className="text-blue-400">{book.author}</span>
-                                                        <div className="flex items-center"> <IoMdPricetags className="me-2" /><span className="me-1">&#x09F3; </span> {book.discountPrice} {book.price}  </div>
+                                                    <div className="min-w-0 flex-1">
+                                                        <p className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-1">{book.name}</p>
+                                                        <p className="text-xs text-gray-500 dark:text-gray-400">by {book.author}</p>
+                                                    </div>
+                                                    <div className="flex items-center gap-1 text-sm font-semibold text-gray-900 dark:text-white shrink-0">
+                                                        <IoMdPricetags className="text-gray-400" size={13} />৳{book.discountPrice}
                                                     </div>
                                                 </Link>
-                                            </div>)}
-
+                                            ))}
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        )
-                    }
-                </div>
-
+                            );
+                        })}
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -53,11 +53,14 @@ const ManageBooks = () => {
         item.category.toLowerCase().includes(term)
     ) || []
 
-    // category-wise: group alphabetically by category, then by name within
-    // each category, with a header row between groups
+    // category-wise: group alphabetically by category, then available books
+    // before out-of-stock ones (same idiom as RelatedBooks.jsx), then by
+    // name within each of those, with a header row between category groups
     const sortedBooks = [...filteredBooks].sort((a, b) => {
         const catCompare = (a.category || '').localeCompare(b.category || '')
         if (catCompare !== 0) return catCompare
+        const availableCompare = (a.available === 'true' ? 0 : 1) - (b.available === 'true' ? 0 : 1)
+        if (availableCompare !== 0) return availableCompare
         return (a.name || '').localeCompare(b.name || '')
     })
     const categoryCounts = sortedBooks.reduce((acc, b) => {
@@ -65,6 +68,25 @@ const ManageBooks = () => {
         acc[cat] = (acc[cat] || 0) + 1
         return acc
     }, {})
+
+    // flattened once, then rendered two ways below: a dense table for
+    // desktop (lg:block) and a stacked card list for phones (lg:hidden) -
+    // the table's Price/Edit/Delete columns used to be pushed off-screen on
+    // small viewports with no visible scroll affordance, effectively
+    // unreachable on mobile
+    const groupedRows = []
+    {
+        let lastCategory = null
+        let serial = 0
+        sortedBooks.forEach(book => {
+            if (book.category !== lastCategory) {
+                lastCategory = book.category
+                groupedRows.push({ type: 'category', key: `cat-${book.category}-${book._id}`, category: book.category })
+            }
+            serial++
+            groupedRows.push({ type: 'book', key: book._id, book, serial })
+        })
+    }
 
 
     // console.log(booksData)
@@ -107,9 +129,16 @@ const ManageBooks = () => {
 
                 </div>
                 {/* filter  */}
-                <div className="flex items-center justify-center bg-slate-300 dark:bg-gray-800 py-4 rounded gap-4 ">
-                    <label htmlFor="" className="text-md font-semibold dark:text-white">Filter: </label>
-                    <input type="text" className="p-2 rounded-xl border w-1/2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400" onChange={filterBook} placeholder="Name / Author name/ Category" name="" id="" /></div>
+                <div className="flex flex-col sm:flex-row items-center justify-center bg-slate-300 dark:bg-gray-800 py-4 px-4 rounded gap-2 sm:gap-4">
+                    <label htmlFor="book-filter" className="text-md font-semibold dark:text-white shrink-0">Filter:</label>
+                    <input
+                        id="book-filter"
+                        type="text"
+                        className="p-2 rounded-xl border w-full sm:w-1/2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
+                        onChange={filterBook}
+                        placeholder="Name / Author name / Category"
+                    />
+                </div>
 
                 {/* google sheet sync */}
                 <div className="my-6 border dark:border-0 dark:bg-gray-800 rounded-[8px] p-4">
@@ -160,10 +189,11 @@ const ManageBooks = () => {
                         </div>
                     )}
                 </div>
-                <div className="">
-                    <div className="overflow-x-auto border">
-                        <table className="table table-xs lg:text-[16px] lg:table-lg"  >
-                            {/* head */}
+                {/* desktop: dense table - good for scanning/bulk-editing a
+                    large catalog at a glance */}
+                <div className="hidden lg:block">
+                    <div className="overflow-x-auto border dark:border-gray-700">
+                        <table className="table table-xs lg:text-[16px] lg:table-lg">
                             <thead>
                                 <tr>
                                     <th>S/N</th>
@@ -177,70 +207,96 @@ const ManageBooks = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {(() => {
-                                    let lastCategory = null
-                                    let serial = 0
-                                    return sortedBooks.map(book => {
-                                        const rows = []
-                                        if (book.category !== lastCategory) {
-                                            lastCategory = book.category
-                                            rows.push(
-                                                <tr key={`cat-${book.category}-${book._id}`} className="bg-slate-200 dark:bg-gray-700">
-                                                    <td colSpan={8} className="font-semibold capitalize py-2 px-3">
-                                                        {book.category || 'Uncategorized'}
-                                                        <span className="font-normal text-xs text-gray-500 dark:text-gray-300"> ({categoryCounts[book.category || 'uncategorized']})</span>
-                                                    </td>
-                                                </tr>
-                                            )
-                                        }
-                                        serial++
-                                        rows.push(
-                                            <tr key={book._id}>
-                                                <th>
-                                                    <label>
-                                                        {serial}
-                                                    </label>
-                                                </th>
-                                                <td>
-                                                    <div className="flex items-center space-x-3">
-                                                        <div className="avatar">
-                                                            <div className="mask mask-squircle w-12 h-12">
-                                                                <img src={book?.image} alt={book?.image} />
-                                                            </div>
-                                                        </div>
-
+                                {groupedRows.map(row => row.type === 'category' ? (
+                                    <tr key={row.key} className="bg-slate-200 dark:bg-gray-700">
+                                        <td colSpan={8} className="font-semibold capitalize py-2 px-3">
+                                            {row.category || 'Uncategorized'}
+                                            <span className="font-normal text-xs text-gray-500 dark:text-gray-300"> ({categoryCounts[row.category || 'uncategorized']})</span>
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    <tr key={row.key}>
+                                        <th><label>{row.serial}</label></th>
+                                        <td>
+                                            <div className="flex items-center space-x-3">
+                                                <div className="avatar">
+                                                    <div className="mask mask-squircle w-12 h-12">
+                                                        <img src={row.book?.image} alt={row.book?.image} />
                                                     </div>
-                                                </td>
-                                                <td>
-                                                    {book?.name}
-                                                    <br />
-                                                    <span className="badge badge-ghost ">{book?.author}</span>
-                                                </td>
-                                                <td>{book?.quantity ?? '—'}</td>
-                                                <td>{book?.available}</td>
-                                                <td>{book?.price}</td>
-                                                <td>
-                                                    <Link to={`/dashboard/updateBook/${book._id}`}>
-
-                                                        <button className="btn btn-ghost btn-xs">Edit</button>
-                                                    </Link>
-                                                </td>
-                                                <th>
-                                                    <button onClick={() => handleDeleteBook(book)} className="btn bg-red-600 text-white"> <AiFillDelete className='text-xl' /></button>
-
-
-                                                    {/* <BookDetails handleDeleteBook={handleDeleteBook}></BookDetails> */}
-                                                </th>
-                                            </tr>
-                                        )
-                                        return rows
-                                    })
-                                })()}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {row.book?.name}
+                                            <br />
+                                            <span className="badge badge-ghost">{row.book?.author}</span>
+                                        </td>
+                                        <td>{row.book?.quantity ?? '—'}</td>
+                                        <td>
+                                            <span className={`text-xs font-semibold px-2 py-1 rounded-full ${row.book?.available === 'true'
+                                                ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                                                : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'}`}>
+                                                {row.book?.available === 'true' ? 'In stock' : 'Out of stock'}
+                                            </span>
+                                        </td>
+                                        <td>{row.book?.price}</td>
+                                        <td>
+                                            <Link to={`/dashboard/updateBook/${row.book._id}`}>
+                                                <button className="btn btn-ghost btn-xs">Edit</button>
+                                            </Link>
+                                        </td>
+                                        <th>
+                                            <button onClick={() => handleDeleteBook(row.book)} className="btn bg-red-600 text-white"> <AiFillDelete className='text-xl' /></button>
+                                        </th>
+                                    </tr>
+                                ))}
                             </tbody>
-
-
                         </table>
                     </div>
+                </div>
+
+                {/* mobile: stacked cards - the table's Price/Edit/Delete
+                    columns used to be pushed off the right edge of the
+                    screen here with no visible way to reach them */}
+                <div className="lg:hidden flex flex-col gap-3">
+                    {groupedRows.map(row => row.type === 'category' ? (
+                        <div key={row.key} className="bg-slate-200 dark:bg-gray-700 rounded-lg px-4 py-2 font-semibold capitalize text-gray-900 dark:text-white">
+                            {row.category || 'Uncategorized'}
+                            <span className="font-normal text-xs text-gray-500 dark:text-gray-300"> ({categoryCounts[row.category || 'uncategorized']})</span>
+                        </div>
+                    ) : (
+                        <div key={row.key} className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-4 flex gap-3">
+                            <img src={row.book?.image} alt={row.book?.image} className="w-14 h-20 object-cover rounded-md shrink-0 bg-gray-50 dark:bg-gray-900" />
+                            <div className="min-w-0 flex-1">
+                                <p className="font-semibold text-gray-900 dark:text-white line-clamp-2">{row.book?.name}</p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{row.book?.author}</p>
+
+                                <div className="flex flex-wrap items-center gap-2 mt-2">
+                                    <span className={`text-xs font-semibold px-2 py-1 rounded-full ${row.book?.available === 'true'
+                                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                                        : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'}`}>
+                                        {row.book?.available === 'true' ? 'In stock' : 'Out of stock'}
+                                    </span>
+                                    <span className="text-xs text-gray-500 dark:text-gray-400">Qty {row.book?.quantity ?? '—'}</span>
+                                    <span className="text-sm font-bold text-gray-900 dark:text-white ml-auto">৳{row.book?.price}</span>
+                                </div>
+
+                                <div className="flex gap-2 mt-3">
+                                    <Link to={`/dashboard/updateBook/${row.book._id}`} className="flex-1">
+                                        <button className="w-full text-xs font-semibold px-3 py-1.5 rounded-full bg-blue-50 hover:bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 dark:text-blue-300 transition-colors duration-200">
+                                            Edit
+                                        </button>
+                                    </Link>
+                                    <button
+                                        onClick={() => handleDeleteBook(row.book)}
+                                        className="text-xs font-semibold px-3 py-1.5 rounded-full bg-red-50 hover:bg-red-100 text-red-600 dark:bg-red-900/30 dark:hover:bg-red-900/50 dark:text-red-300 transition-colors duration-200"
+                                    >
+                                        <AiFillDelete size={14} />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>

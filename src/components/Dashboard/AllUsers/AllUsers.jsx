@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { Helmet } from "react-helmet-async";
-import { showSuccessToast } from "../../../utils/toast";
+import { showSuccessToast, showErrorToast } from "../../../utils/toast";
 import { AiFillDelete } from "react-icons/ai";
 import { FaUserShield } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const UserTable = ({ title, users, showMakeAdmin, onMakeAdmin, onDelete }) => (
     <div className='mb-10'>
@@ -66,20 +67,36 @@ const AllUsers = () => {
             })
     }
 
+    // deleting a user is permanent and unrecoverable - confirm first, same
+    // pattern used for order cancellation elsewhere in the dashboard
     const handleDelete = user => {
-        console.log(user)
-        fetch(`https://book-ocean-bd-server.vercel.app/users/${user._id}`, {
-            method: "DELETE"
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (data.deletedCount > 0) {
+        Swal.fire({
+            title: `Delete ${user.name || user.email}?`,
+            text: "This permanently removes their account. This can't be undone.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#dc2626",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete",
+        }).then((result) => {
+            if (!result.isConfirmed) return;
 
-                    refetch()
-                    showSuccessToast("Removed!", "User has removed")
-                }
-
-            })
+            // was a bare fetch() with no auth header - the server's
+            // DELETE /users/:id requires a JWT, so every delete silently
+            // 401'd and did nothing. axiosSecure attaches the token like
+            // every other request on this page already does.
+            axiosSecure.delete(`/users/${user._id}`)
+                .then(res => {
+                    if (res.data.deletedCount > 0) {
+                        refetch()
+                        showSuccessToast("Removed!", `${user.name || user.email} has been removed.`)
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    showErrorToast("Could not delete user", "Please try again.")
+                })
+        });
     }
 
     const admins = users.filter(u => u.role === 'admin');

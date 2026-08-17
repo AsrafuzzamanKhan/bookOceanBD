@@ -4,24 +4,12 @@ import useAuth from "../../../hooks/useAuth";
 import useUserOrder from "../../../hooks/useUserOrder";
 
 import { FaMapMarkerAlt, FaPhone, FaUser } from "react-icons/fa";
-import { FiCalendar, FiCheckCircle, FiClock, FiTruck, FiXCircle } from "react-icons/fi";
+import { FiCalendar, FiClock } from "react-icons/fi";
 
 import Swal from "sweetalert2";
 import { showSuccessToast } from "../../../utils/toast";
 import { Link } from "react-router-dom";
-import { parse } from "date-fns";
-
-// order.date is stored as 'yyyy-MM-dd HH:mm:ss' (see Checkout.jsx) - parsed
-// explicitly with that exact format rather than `new Date(str)`, which some
-// browsers parse inconsistently for a non-ISO string like this.
-const orderDateValue = (order) => parse(order.date, 'yyyy-MM-dd HH:mm:ss', new Date()).getTime();
-
-const STATUS_META = {
-    pending: { label: 'Pending', badge: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400', icon: FiClock },
-    approve: { label: 'Approved', badge: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400', icon: FiCheckCircle },
-    delivered: { label: 'Delivered', badge: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400', icon: FiTruck },
-    canceled: { label: 'Canceled', badge: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400', icon: FiXCircle },
-};
+import { STATUS_META, orderDateValue } from "../../../utils/orderStatus";
 
 const OrderHistory = () => {
     const { user } = useAuth()
