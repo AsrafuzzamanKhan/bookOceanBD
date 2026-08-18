@@ -28,8 +28,12 @@ const useAxiosSecure = () => {
     axiosSecure.interceptors.response.use(function (response) {
         return response;
     }, async (error) => {
-        const status = error.response.status;
-        // console.log('status error in the interceptor', status);
+        // error.response is undefined for anything that never got an HTTP
+        // response at all (offline, timeout, CORS, DNS failure, a cold
+        // server) - reading .status off it unconditionally threw a fresh
+        // TypeError in exactly those cases, masking the real error and
+        // breaking the promise chain for every caller of axiosSecure
+        const status = error.response?.status;
         // for 401 or 403 logout the user and move the user to the login
         if (status === 401 || status === 403) {
             await logOut();

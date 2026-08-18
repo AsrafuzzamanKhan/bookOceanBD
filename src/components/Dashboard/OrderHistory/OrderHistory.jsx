@@ -7,13 +7,15 @@ import { FaMapMarkerAlt, FaPhone, FaUser } from "react-icons/fa";
 import { FiCalendar, FiClock } from "react-icons/fi";
 
 import Swal from "sweetalert2";
-import { showSuccessToast } from "../../../utils/toast";
+import { showSuccessToast, showErrorToast } from "../../../utils/toast";
 import { Link } from "react-router-dom";
 import { STATUS_META, orderDateValue } from "../../../utils/orderStatus";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const OrderHistory = () => {
     const { user } = useAuth()
     const [order, refetch] = useUserOrder()
+    const [axiosSecure] = useAxiosSecure()
     const [statusFilter, setStatusFilter] = useState('all')
 
     const approve = order.filter(pd => pd.status === 'approve');
@@ -48,17 +50,16 @@ const OrderHistory = () => {
             confirmButtonText: "Yes, cancel it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`https://book-ocean-bd-server.vercel.app/orders/${item._id}`, {
-                    method: "DELETE"
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.deletedCount > 0) {
+                // was a bare fetch() with no auth header; the server route
+                // now requires login + that the order actually belongs to you
+                axiosSecure.delete(`/orders/${item._id}`)
+                    .then(res => {
+                        if (res.data.deletedCount > 0) {
                             refetch()
                             showSuccessToast("Canceled!", "Your Order has been Canceled and Removed from History.")
                         }
-                        // setIsOpen(false)
                     })
+                    .catch(err => showErrorToast('Could not cancel order', err.response?.data?.message || err.message))
             }
         });
     }

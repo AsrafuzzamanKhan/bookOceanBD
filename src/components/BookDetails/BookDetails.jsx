@@ -2,9 +2,10 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import useBookData from "../../hooks/useBookData";
 import RelatedBooks from "../RelatedBooks/RelatedBooks";
 import Swal from "sweetalert2";
-import { showSuccessToast } from "../../utils/toast";
+import { showSuccessToast, showErrorToast } from "../../utils/toast";
 import useAuth from "../../hooks/useAuth";
 import useCart from "../../hooks/useCart";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useContext, useEffect, useRef, useState } from "react";
 import { CartContext } from "../../providers/CartProvider/CartProvider";
 import { MdEdit, MdPayment, MdOutlineGppGood, MdClose, MdZoomIn } from "react-icons/md";
@@ -32,6 +33,7 @@ const BookDetails = () => {
     const [booksData] = useBookData()
     const navigate = useNavigate()
     const [, refetch] = useCart()
+    const [axiosSecure] = useAxiosSecure()
     const { setIsOpen, isOpen } = useContext(CartContext)
 
     // click-to-zoom lightbox for the cover image
@@ -72,15 +74,12 @@ const BookDetails = () => {
         const cartItem = { bookId: _id, category, name, author, image, discountPrice, email: user?.email, quantity: 1 }
 
         if (user) {
-            fetch('https://book-ocean-bd-server.vercel.app/carts', {
-                method: "POST",
-                headers: {
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify(cartItem)
-            })
-                .then(res => res.json())
-                .then(data => {
+            // was a bare fetch() with no auth header; the server route now
+            // requires login and always files the item under the caller's
+            // own email (the `email` sent here is now ignored server-side)
+            axiosSecure.post('/carts', cartItem)
+                .then(res => {
+                    const data = res.data
                     if (data.insertedId || data.modifiedCount > 0 || data.matchedCount > 0) {
                         refetch()
                         setIsOpen(!isOpen)
@@ -96,6 +95,7 @@ const BookDetails = () => {
                         }
                     }
                 })
+                .catch(err => showErrorToast('Could not add to cart', err.response?.data?.message || err.message))
         } else {
             Swal.fire({
                 title: "Please Login",

@@ -23,19 +23,18 @@ const CartItem = ({ item }) => {
     const stock = book?.quantity ?? 1;
     const qty = item.quantity || 1;
 
-    // remove from cart
+    // remove from cart - was a bare fetch() with no auth header; the server
+    // route now requires login + ownership, matching updateQuantity below
     const handleCartRemove = item => {
         setRemoving(true);
-        fetch(`https://book-ocean-bd-server.vercel.app/carts/${item._id}`, {
-            method: "DELETE"
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (data.deletedCount > 0) {
+        axiosSecure.delete(`/carts/${item._id}`)
+            .then(res => {
+                if (res.data.deletedCount > 0) {
                     refetch();
                     showSuccessToast("Removed!", "Book has been removed from cart.")
                 }
             })
+            .catch(err => showErrorToast('Failed to remove item', err.response?.data?.message || err.message))
             .finally(() => setRemoving(false))
     }
 

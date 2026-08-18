@@ -221,7 +221,7 @@ const ManageBooks = () => {
                                             <div className="flex items-center space-x-3">
                                                 <div className="avatar">
                                                     <div className="mask mask-squircle w-12 h-12">
-                                                        <img src={row.book?.image} alt={row.book?.image} />
+                                                        <img src={row.book?.image} alt={row.book?.name} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -266,7 +266,7 @@ const ManageBooks = () => {
                         </div>
                     ) : (
                         <div key={row.key} className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-4 flex gap-3">
-                            <img src={row.book?.image} alt={row.book?.image} className="w-14 h-20 object-cover rounded-md shrink-0 bg-gray-50 dark:bg-gray-900" />
+                            <img src={row.book?.image} alt={row.book?.name} className="w-14 h-20 object-cover rounded-md shrink-0 bg-gray-50 dark:bg-gray-900" />
                             <div className="min-w-0 flex-1">
                                 <p className="font-semibold text-gray-900 dark:text-white line-clamp-2">{row.book?.name}</p>
                                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{row.book?.author}</p>

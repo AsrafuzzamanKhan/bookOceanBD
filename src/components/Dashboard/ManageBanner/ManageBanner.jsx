@@ -71,7 +71,7 @@ const ManageBanner = () => {
                                     </th>
                                     <td>
                                         <div className=" w-16 ">
-                                            <img className=" w-full object-fit" src={book.image} alt={book.image} />
+                                            <img className=" w-full object-fit" src={book.image} alt={book.name} />
                                         </div>
                                     </td>
                                     <td>

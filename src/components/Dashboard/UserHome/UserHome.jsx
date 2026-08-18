@@ -3,12 +3,10 @@ import useUserOrder from "../../../hooks/useUserOrder";
 
 const UserHome = () => {
     const [order] = useUserOrder()
-    console.log(order);
     const approve = order.filter(pd => pd.status === 'approve');
     const pending = order.filter(pd => pd.status === 'pending');
     const cancel = order.filter(pd => pd.status === 'canceled');
     const deliver = order.filter(pd => pd.status === 'delivered');
-    console.log('approve', approve.lenght)
     return (
         <div className="flex flex-col">
             <Helmet>
