@@ -64,7 +64,7 @@ const CartItem = ({ item }) => {
             <div className="flex-1 min-w-0 flex flex-col">
                 <div className="flex justify-between gap-x-2">
                     <div className="flex flex-col min-w-0">
-                        <Link className="text-sm sm:text-base font-semibold line-clamp-2 break-words hover:text-blue-500 transition-colors"
+                        <Link className="text-sm sm:text-base font-semibold line-clamp-2 break-words capitalize hover:text-blue-500 transition-colors"
                             to={bookLink}
                         >{item.name}</Link>
                         <Link

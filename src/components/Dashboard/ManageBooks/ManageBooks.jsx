@@ -6,16 +6,28 @@ import { showSuccessToast, showErrorToast } from "../../../utils/toast";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Pagination from "../../Pagination/Pagination";
 // import { useQueryClient } from '@tanstack/react-query';
 // import BookDetails from "../../BookDetails/BookDetails";
+
+const BOOKS_PER_PAGE = 30;
 
 const ManageBooks = () => {
     const [booksData, , refetch] = useBookData()
     const [searchTerm, setSearchTerm] = useState('')
+    const [categoryFilter, setCategoryFilter] = useState('all')
+    const [availabilityFilter, setAvailabilityFilter] = useState('all')
+    const [currentPage, setCurrentPage] = useState(1)
     const [axiosSecure] = useAxiosSecure()
     const [syncing, setSyncing] = useState(false)
     const [syncResult, setSyncResult] = useState(null)
+
+    // any filter/search change invalidates the current page - e.g. page 3
+    // of "All" may not exist at all once narrowed down to one category
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [searchTerm, categoryFilter, availabilityFilter])
 
     // dryRun: true previews the sync (updated/created counts, category
     // breakdown) without writing anything - only pulls name/author/category/
@@ -47,27 +59,54 @@ const ManageBooks = () => {
     }
 
     const term = searchTerm.toLowerCase()
-    const filteredBooks = booksData?.filter(item =>
+    const searchedBooks = booksData?.filter(item =>
         item.name.toLowerCase().includes(term) ||
         item.author.toLowerCase().includes(term) ||
         item.category.toLowerCase().includes(term)
     ) || []
 
-    // category-wise: group alphabetically by category, then available books
-    // before out-of-stock ones (same idiom as RelatedBooks.jsx), then by
-    // name within each of those, with a header row between category groups
+    // tab/pill counts reflect search + the OTHER active filter, so clicking
+    // any tab shows how many results it would actually give - not a static
+    // count of the whole catalog
+    const availabilityMatches = (book) =>
+        availabilityFilter === 'all' ||
+        (availabilityFilter === 'available' ? book.available === 'true' : book.available !== 'true')
+
+    const categories = [...new Set(booksData?.map(b => b.category).filter(Boolean))].sort()
+    const categoryCounts = categories.reduce((acc, cat) => {
+        acc[cat] = searchedBooks.filter(b => b.category === cat && availabilityMatches(b)).length
+        return acc
+    }, {})
+    const availabilityCounts = {
+        available: searchedBooks.filter(b => (categoryFilter === 'all' || b.category === categoryFilter) && b.available === 'true').length,
+        unavailable: searchedBooks.filter(b => (categoryFilter === 'all' || b.category === categoryFilter) && b.available !== 'true').length,
+    }
+
+    const filteredBooks = searchedBooks.filter(b =>
+        (categoryFilter === 'all' || b.category === categoryFilter) && availabilityMatches(b)
+    )
+
+    // available books before out-of-stock ones (same idiom as
+    // RelatedBooks.jsx), then alphabetically within each of those; category
+    // sort only matters while "All" is selected - a single category tab is
+    // already narrowed, so a category-only sort key would be a no-op there
     const sortedBooks = [...filteredBooks].sort((a, b) => {
-        const catCompare = (a.category || '').localeCompare(b.category || '')
-        if (catCompare !== 0) return catCompare
+        if (categoryFilter === 'all') {
+            const catCompare = (a.category || '').localeCompare(b.category || '')
+            if (catCompare !== 0) return catCompare
+        }
         const availableCompare = (a.available === 'true' ? 0 : 1) - (b.available === 'true' ? 0 : 1)
         if (availableCompare !== 0) return availableCompare
         return (a.name || '').localeCompare(b.name || '')
     })
-    const categoryCounts = sortedBooks.reduce((acc, b) => {
-        const cat = b.category || 'uncategorized'
-        acc[cat] = (acc[cat] || 0) + 1
-        return acc
-    }, {})
+
+    // only ever render one page's worth of rows (~30 books) instead of the
+    // entire filtered result - with 2000+ books in the catalog, mounting
+    // every single one (in BOTH the desktop table and the mobile card list
+    // below, simultaneously - only hidden from view via CSS, not unmounted)
+    // was the main thing making this page heavy/laggy, especially on phones
+    const pageStart = (currentPage - 1) * BOOKS_PER_PAGE
+    const pageBooks = sortedBooks.slice(pageStart, pageStart + BOOKS_PER_PAGE)
 
     // flattened once, then rendered two ways below: a dense table for
     // desktop (lg:block) and a stacked card list for phones (lg:hidden) -
@@ -76,10 +115,12 @@ const ManageBooks = () => {
     // unreachable on mobile
     const groupedRows = []
     {
+        // a category header only makes sense while browsing "All" - a
+        // single-category tab is already fully described by the tab itself
         let lastCategory = null
-        let serial = 0
-        sortedBooks.forEach(book => {
-            if (book.category !== lastCategory) {
+        let serial = pageStart
+        pageBooks.forEach(book => {
+            if (categoryFilter === 'all' && book.category !== lastCategory) {
                 lastCategory = book.category
                 groupedRows.push({ type: 'category', key: `cat-${book.category}-${book._id}`, category: book.category })
             }
@@ -125,19 +166,66 @@ const ManageBooks = () => {
 
             <div className="mb-[30px] pt-24 md:pt-28 lg:pt-0 xl:pt-24 min-h-screen">
                 <div className='flex flex-col items-center  mb-8 '>
-                    <p className=' bg-slate-800 text-white px-8 py-3 rounded'>Manage Books: {booksData.length}</p>
+                    <p className=' bg-slate-800 text-white px-8 py-3 rounded'>
+                        Manage Books: {sortedBooks.length}{sortedBooks.length !== booksData.length ? ` of ${booksData.length}` : ''}
+                    </p>
 
                 </div>
-                {/* filter  */}
+                {/* search  */}
                 <div className="flex flex-col sm:flex-row items-center justify-center bg-slate-300 dark:bg-gray-800 py-4 px-4 rounded gap-2 sm:gap-4">
-                    <label htmlFor="book-filter" className="text-md font-semibold dark:text-white shrink-0">Filter:</label>
+                    <label htmlFor="book-filter" className="text-md font-semibold dark:text-white shrink-0">Search:</label>
                     <input
                         id="book-filter"
                         type="text"
+                        value={searchTerm}
                         className="p-2 rounded-xl border w-full sm:w-1/2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:placeholder-gray-400"
                         onChange={filterBook}
                         placeholder="Name / Author name / Category"
                     />
+                </div>
+
+                {/* category tabs - flex-wrap (not horizontal scroll) so on
+                    phones every category drops to its own line and stays
+                    reachable, instead of being scrolled off-screen */}
+                <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
+                    <button
+                        onClick={() => setCategoryFilter('all')}
+                        className={`text-xs sm:text-sm font-semibold px-3 py-1.5 rounded-full duration-200 ${categoryFilter === 'all'
+                            ? 'bg-slate-800 text-white'
+                            : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+                    >
+                        All ({searchedBooks.filter(availabilityMatches).length})
+                    </button>
+                    {categories.map(cat => (
+                        <button
+                            key={cat}
+                            onClick={() => setCategoryFilter(cat)}
+                            className={`text-xs sm:text-sm font-semibold capitalize px-3 py-1.5 rounded-full duration-200 ${categoryFilter === cat
+                                ? 'bg-slate-800 text-white'
+                                : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+                        >
+                            {cat} ({categoryCounts[cat] ?? 0})
+                        </button>
+                    ))}
+                </div>
+
+                {/* availability tabs */}
+                <div className="flex flex-wrap items-center justify-center gap-2 mt-3">
+                    {[
+                        { key: 'all', label: `All stock (${searchedBooks.filter(b => categoryFilter === 'all' || b.category === categoryFilter).length})` },
+                        { key: 'available', label: `In stock (${availabilityCounts.available})` },
+                        { key: 'unavailable', label: `Out of stock (${availabilityCounts.unavailable})` },
+                    ].map(({ key, label }) => (
+                        <button
+                            key={key}
+                            onClick={() => setAvailabilityFilter(key)}
+                            className={`text-xs sm:text-sm font-medium px-3 py-1.5 rounded-full duration-200 ${availabilityFilter === key
+                                ? 'bg-blue-500 text-white'
+                                : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+                        >
+                            {label}
+                        </button>
+                    ))}
                 </div>
 
                 {/* google sheet sync */}
@@ -181,7 +269,7 @@ const ManageBooks = () => {
                                     </p>
                                     <ul className="text-xs space-y-1">
                                         {syncResult.newlyCreated.map((b, i) => (
-                                            <li key={i}>{b.name} — <span className="text-gray-400">{b.author} · {b.category}{b.price ? ` · ৳${b.price}` : ''}</span></li>
+                                            <li key={i}><span className="capitalize">{b.name}</span> — <span className="text-gray-400">{b.author} · {b.category}{b.price ? ` · ৳${b.price}` : ''}</span></li>
                                         ))}
                                     </ul>
                                 </div>
@@ -211,7 +299,7 @@ const ManageBooks = () => {
                                     <tr key={row.key} className="bg-slate-200 dark:bg-gray-700">
                                         <td colSpan={8} className="font-semibold capitalize py-2 px-3">
                                             {row.category || 'Uncategorized'}
-                                            <span className="font-normal text-xs text-gray-500 dark:text-gray-300"> ({categoryCounts[row.category || 'uncategorized']})</span>
+                                            <span className="font-normal text-xs text-gray-500 dark:text-gray-300"> ({categoryCounts[row.category] ?? 0})</span>
                                         </td>
                                     </tr>
                                 ) : (
@@ -226,7 +314,7 @@ const ManageBooks = () => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>
+                                        <td className="capitalize">
                                             {row.book?.name}
                                             <br />
                                             <span className="badge badge-ghost">{row.book?.author}</span>
@@ -262,13 +350,13 @@ const ManageBooks = () => {
                     {groupedRows.map(row => row.type === 'category' ? (
                         <div key={row.key} className="bg-slate-200 dark:bg-gray-700 rounded-lg px-4 py-2 font-semibold capitalize text-gray-900 dark:text-white">
                             {row.category || 'Uncategorized'}
-                            <span className="font-normal text-xs text-gray-500 dark:text-gray-300"> ({categoryCounts[row.category || 'uncategorized']})</span>
+                            <span className="font-normal text-xs text-gray-500 dark:text-gray-300"> ({categoryCounts[row.category] ?? 0})</span>
                         </div>
                     ) : (
                         <div key={row.key} className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-4 flex gap-3">
                             <img src={row.book?.image} alt={row.book?.name} className="w-14 h-20 object-cover rounded-md shrink-0 bg-gray-50 dark:bg-gray-900" />
                             <div className="min-w-0 flex-1">
-                                <p className="font-semibold text-gray-900 dark:text-white line-clamp-2">{row.book?.name}</p>
+                                <p className="font-semibold text-gray-900 dark:text-white line-clamp-2 capitalize">{row.book?.name}</p>
                                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{row.book?.author}</p>
 
                                 <div className="flex flex-wrap items-center gap-2 mt-2">
@@ -298,6 +386,27 @@ const ManageBooks = () => {
                         </div>
                     ))}
                 </div>
+
+                {sortedBooks.length === 0 && (
+                    <div className="max-w-md mx-auto text-center bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm py-16 px-6 mt-4">
+                        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">No books found</h2>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">Try a different search term, category, or stock filter.</p>
+                        <button
+                            type="button"
+                            onClick={() => { setSearchTerm(''); setCategoryFilter('all'); setAvailabilityFilter('all'); }}
+                            className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-colors duration-200"
+                        >
+                            Clear filters
+                        </button>
+                    </div>
+                )}
+
+                <Pagination
+                    totalPosts={sortedBooks.length}
+                    postsPerPage={BOOKS_PER_PAGE}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                />
             </div>
         </div>
     );

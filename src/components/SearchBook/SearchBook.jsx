@@ -4,8 +4,9 @@ import Fuse from 'fuse.js';
 import useBookData from '../../hooks/useBookData';
 import BookCard from '../BookCard/BookCard';
 import CategoryNav from '../CategoryNav/CategoryNav';
-import { FaAmazon } from 'react-icons/fa';
+import { FaAmazon, FaFacebookMessenger, FaInstagram } from 'react-icons/fa';
 import Pagination from '../Pagination/Pagination';
+import { trackPixelEvent } from '../../utils/fbPixel';
 
 // import Loading from '../../Loading/Loading';
 
@@ -58,6 +59,13 @@ const SearchBook = () => {
         setCurrentPage(1)
     }, [searchTerm]);
 
+    // real Search event - fired once per distinct query actually run,
+    // instead of on every page load site-wide (see src/utils/fbPixel.js)
+    useEffect(() => {
+        if (!searchTerm) return;
+        trackPixelEvent('Search', { search_string: searchTerm, content_category: 'book' });
+    }, [searchTerm]);
+
     const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
     const currentResults = allResults.slice(startIndex, startIndex + RESULTS_PER_PAGE);
 
@@ -84,12 +92,33 @@ const SearchBook = () => {
                                 {/* pre order  */}
                                 {
                                     allResults.length > 0 ? `` : <div className='flex'>
-                                        <div className="flex flex-col mx-auto items-center justify-center gap-2  border  dark:text-white p-8 text-[18px] rounded font-semibold shadow-lg hover:scale-105 hover:duration-300 transition-all">
-                                            <FaAmazon size={50} />
-                                            <a href="https://m.me/bookoceanbd" target="_blank" rel="noreferrer" className="  text-[#FF9900] hover:text-[#946b2d] duration-500 flex items-center gap-2">
-                                                <span className='text-black dark:text-white'>Inbox us.</span>
-                                                Pre-order any book from amazon through us.
-                                            </a>
+                                        <div className="flex flex-col mx-auto items-center justify-center gap-4 border dark:border-gray-700 dark:text-white p-8 text-[18px] rounded font-semibold shadow-lg hover:scale-105 hover:duration-300 transition-all">
+                                            <FaAmazon size={50} className="text-[#FF9900]" />
+                                            <p className="text-black dark:text-white text-center">
+                                                Can&apos;t find it? Pre-order any book from Amazon through us.
+                                            </p>
+                                            <div className="flex flex-wrap items-center justify-center gap-3">
+                                                <a
+                                                    href="https://m.me/bookoceanbd"
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="flex items-center gap-2 bg-[#0084FF] hover:bg-[#006fd6] text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-colors duration-200"
+                                                    onClick={() => trackPixelEvent('Lead', { content_name: searchTerm, content_category: 'pre-order-search-fallback' })}
+                                                >
+                                                    <FaFacebookMessenger size={16} />
+                                                    Message on Facebook
+                                                </a>
+                                                <a
+                                                    href="https://www.instagram.com/bookoceanbd/"
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="flex items-center gap-2 bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] hover:opacity-90 text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-opacity duration-200"
+                                                    onClick={() => trackPixelEvent('Lead', { content_name: searchTerm, content_category: 'pre-order-search-fallback' })}
+                                                >
+                                                    <FaInstagram size={16} />
+                                                    Message on Instagram
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 }

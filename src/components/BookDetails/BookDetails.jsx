@@ -18,6 +18,7 @@ import { FaAmazon, FaShoppingCart } from "react-icons/fa";
 import useAdmin from "../../hooks/useAdmin";
 import BookDescription from "../BookDescription/BookDescription";
 import { Helmet } from "react-helmet";
+import { trackPixelEvent } from "../../utils/fbPixel";
 
 const coverLabels = {
     hardcover: 'Hardcover',
@@ -61,6 +62,20 @@ const BookDetails = () => {
     const discount = productDetails?.price * 0.05;
     const discountPrice = parseInt(productDetails?.price - discount)
     const discountPercent = productDetails?.price ? Math.round((discount / productDetails.price) * 100) : 0;
+
+    // real ViewContent - fired once per book actually viewed, not on every
+    // page load site-wide (see src/utils/fbPixel.js)
+    useEffect(() => {
+        if (!productDetails) return;
+        trackPixelEvent('ViewContent', {
+            content_ids: [productDetails._id],
+            content_name: productDetails.name,
+            content_type: 'product',
+            value: productDetails.price,
+            currency: 'BDT',
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [productDetails?._id]);
 
     if (!productDetails) {
         return <div className="container mx-auto flex text-center justify-center">Loading...
@@ -160,7 +175,7 @@ const BookDetails = () => {
                         </span>
                     </Link>
                     <span>/</span>
-                    <span className="text-gray-700 dark:text-gray-300 line-clamp-1">
+                    <span className="text-gray-700 dark:text-gray-300 line-clamp-1 capitalize">
                         {productDetails?.name}
                     </span>
                 </div>
@@ -198,7 +213,7 @@ const BookDetails = () => {
                             {productDetails?.category}
                         </h4>
 
-                        <h1 className="text-xl lg:text-2xl font-bold mt-1 leading-snug">
+                        <h1 className="text-xl lg:text-2xl font-bold mt-1 leading-snug capitalize">
                             {productDetails?.name}
                         </h1>
                         <p className="mt-1 text-gray-600 dark:text-gray-300">
@@ -246,7 +261,13 @@ const BookDetails = () => {
                             ) : (
                                 <div className="flex items-center gap-2 border dark:border-gray-600 px-5 py-3 text-sm rounded-lg font-semibold shadow-sm">
                                     <FaAmazon className="text-[#FF9900]" />
-                                    <a href="https://m.me/bookoceanbd" target="_blank" rel="noreferrer" className="text-[#FF9900] hover:underline">Pre-order Now</a>
+                                    <a
+                                        href="https://m.me/bookoceanbd"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="text-[#FF9900] hover:underline"
+                                        onClick={() => trackPixelEvent('Lead', { content_name: productDetails.name, content_category: 'pre-order' })}
+                                    >Pre-order Now</a>
                                 </div>
                             )}
 

@@ -1,86 +1,41 @@
-import './Loading.css'
+// Shown as the Suspense fallback for every lazy-loaded route (see main.jsx) -
+// which is exactly what's on screen for that first flash after a hard
+// reload/deep link, before the route's JS chunk finishes loading. A content
+// shaped skeleton reads as "the page is arriving" far better than a bare
+// spinner, and settles the perceived-blank-flash complaint reloads had.
+//
+// Kept generic (no page-specific shape) since this same component is reused
+// both for whole-app first paint (nothing else on screen yet) and for
+// nested route swaps inside an already-visible layout (e.g. admin dashboard
+// pages) - a book-grid-shaped skeleton reads fine as a neutral "loading"
+// placeholder in either context.
+const SkeletonCard = () => (
+    <div className="rounded-xl border border-gray-100 dark:border-gray-700 overflow-hidden animate-pulse">
+        <div className="h-[200px] bg-gray-200 dark:bg-gray-700" />
+        <div className="p-4 flex flex-col gap-2">
+            <div className="h-2.5 w-1/3 rounded bg-gray-200 dark:bg-gray-700" />
+            <div className="h-3 w-5/6 rounded bg-gray-200 dark:bg-gray-700" />
+            <div className="h-3 w-2/3 rounded bg-gray-200 dark:bg-gray-700" />
+            <div className="h-4 w-1/2 rounded bg-gray-200 dark:bg-gray-700 mt-2" />
+        </div>
+    </div>
+);
 
 const Loading = () => {
     return (
-        <div className='flex justify-center items-center min-h-screen'>
-            <div className="loader">
-                <div className="book-wrapper">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="white"
-                        viewBox="0 0 126 75"
-                        className="book"
-                    >
-                        <rect
-                            strokeWidth="5"
-                            stroke="#e05452"
-                            rx="7.5"
-                            height="70"
-                            width="121"
-                            y="2.5"
-                            x="2.5"
-                        ></rect>
-                        <line
-                            strokeWidth="5"
-                            stroke="#e05452"
-                            y2="75"
-                            x2="63.5"
-                            x1="63.5"
-                        ></line>
-                        <path
-                            strokeLinecap="round"
-                            strokeWidth="4"
-                            stroke="#c18949"
-                            d="M25 20H50"
-                        ></path>
-                        <path
-                            strokeLinecap="round"
-                            strokeWidth="4"
-                            stroke="#c18949"
-                            d="M101 20H76"
-                        ></path>
-                        <path
-                            strokeLinecap="round"
-                            strokeWidth="4"
-                            stroke="#c18949"
-                            d="M16 30L50 30"
-                        ></path>
-                        <path
-                            strokeLinecap="round"
-                            strokeWidth="4"
-                            stroke="#c18949"
-                            d="M110 30L76 30"
-                        ></path>
-                    </svg>
+        <div className="min-h-screen pt-24 md:pt-28 pb-16 bg-white dark:bg-gray-950">
+            <div className="container mx-auto px-[2vw] md:px-4">
+                {/* title bar placeholder */}
+                <div className="h-6 w-40 sm:w-56 rounded bg-gray-200 dark:bg-gray-700 animate-pulse mb-6" />
 
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="#ffffff74"
-                        viewBox="0 0 65 75"
-                        className="book-page"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeWidth="4"
-                            stroke="#c18949"
-                            d="M40 20H15"
-                        ></path>
-                        <path
-                            strokeLinecap="round"
-                            strokeWidth="4"
-                            stroke="#c18949"
-                            d="M49 30L15 30"
-                        ></path>
-                        <path
-                            strokeWidth="5"
-                            stroke="#e05452"
-                            d="M2.5 2.5H55C59.1421 2.5 62.5 5.85786 62.5 10V65C62.5 69.1421 59.1421 72.5 55 72.5H2.5V2.5Z"
-                        ></path>
-                    </svg>
+                {/* card grid placeholder */}
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-[30px]">
+                    {Array.from({ length: 8 }).map((_, i) => (
+                        <SkeletonCard key={i} />
+                    ))}
                 </div>
             </div>
         </div>
-
     );
 };
 

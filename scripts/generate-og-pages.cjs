@@ -1,4 +1,4 @@
-// Two things, both driven by the same book list fetched once:
+// Three things, all driven by the same book list fetched once:
 //
 // 1. A static HTML snapshot per book at dist/book/<name>/<id>/index.html
 //    with that book's real Open Graph / Twitter Card meta tags baked
@@ -20,7 +20,11 @@
 //    and renders the actual BookDetails page. Only what a crawler sees
 //    differs.
 //
-// 2. dist/sitemap.xml, overwriting the stale ~24-URL one that was manually
+// 2. A plain, unmodified copy of dist/index.html at every other client-side
+//    route the SPA defines (dist/books/index.html, dist/dashboard/allOrders/
+//    index.html, etc) - see buildShellPages() below for exactly why.
+//
+// 3. dist/sitemap.xml, overwriting the stale ~24-URL one that was manually
 //    generated once (Sept 2024) and never touched again - it had zero of
 //    the actual book pages in it, so search engines could only discover
 //    them by crawling links, which doesn't work here either: book listing
@@ -100,6 +104,59 @@ const STATIC_ROUTES = [
   { path: "/signup", priority: "0.3", changefreq: "yearly" },
 ];
 
+// Routes that need a physical index.html on disk purely so a hard
+// reload/deep link/bookmark doesn't 404 - NOT meant for search engines
+// (dashboard pages are behind client-side auth, checkout has no content
+// worth indexing), so these are deliberately kept out of the sitemap.
+//
+// Why this is needed at all: the site's .htaccess has a standard SPA
+// catch-all rewrite (any unmatched path -> /index.html), which is correct
+// and is exactly what makes /book/<name>/<id>/ work when that literal file
+// doesn't exist. But Hostinger's "hcdn" edge layer in front of this hosting
+// account was found to serve its own canned 404 for any path that isn't a
+// literal file on disk, WITHOUT ever invoking Apache/.htaccess to run that
+// rewrite - confirmed by every non-root, non-pre-generated route 404ing on
+// direct load (e.g. reloading /dashboard/allOrders) while a literal file
+// path like /book/women/<id>/ works fine. Since hcdn only serves what
+// physically exists, the fix is the same one already used for book pages:
+// put a real file at each of these URLs. It's the exact same built SPA
+// shell - React Router boots normally and renders whatever route matches
+// the current URL, same as if index.html rewrite had worked.
+const SHELL_ROUTES = [
+  "/books",
+  "/search",
+  "/login",
+  "/signup",
+  "/checkout",
+  "/dashboard/adminhome",
+  "/dashboard/addBook",
+  "/dashboard/addBanner",
+  "/dashboard/manageBanner",
+  "/dashboard/manageBooks",
+  "/dashboard/allUsers",
+  "/dashboard/allOrders",
+  "/dashboard/userhome",
+  "/dashboard/orderHistory",
+  "/dashboard/myProfile",
+];
+
+function buildShellPages(baseHtml, categories) {
+  const routes = [
+    ...SHELL_ROUTES,
+    // /books/:category is also dynamic but fully enumerable from the live
+    // category list, same idea as the per-book pages above
+    ...categories.map((category) => `/books/${category}`),
+  ];
+  let count = 0;
+  for (const route of routes) {
+    const dir = path.join(DIST_DIR, ...route.split("/").filter(Boolean));
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(path.join(dir, "index.html"), baseHtml);
+    count++;
+  }
+  return count;
+}
+
 function xmlEscape(str = "") {
   return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
@@ -175,6 +232,10 @@ async function main() {
     ok++;
   }
   console.log(`[generate-og-pages] done - ${ok} pages generated${skipped ? `, ${skipped} skipped (missing id/name)` : ""}.`);
+
+  const categories = [...new Set(books.map((b) => b.category).filter(Boolean))];
+  const shellCount = buildShellPages(baseHtml, categories);
+  console.log(`[generate-og-pages] wrote ${shellCount} SPA shell pages (fixes hard-reload 404s on routes with no matching literal file).`);
 
   const sitemapPath = path.join(DIST_DIR, "sitemap.xml");
   fs.writeFileSync(sitemapPath, buildSitemap(books));

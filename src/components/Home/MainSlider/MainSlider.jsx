@@ -43,7 +43,7 @@ const MainSlider = () => {
                                     </span>
                                     <div className='flex flex-col gap-y-1.5'>
                                         <div className='uppercase text-sm font-bold text-orange-500'>{slide.discount}% Discount</div>
-                                        <div className='capitalize text-xl lg:text-3xl font-bold leading-tight text-gray-900 dark:text-white'>
+                                        <div className='text-xl lg:text-3xl font-bold leading-tight capitalize text-gray-900 dark:text-white'>
                                             {slide.name}
                                         </div>
                                         <div className='text-sm lg:text-base text-gray-500 dark:text-gray-400'>

@@ -2,6 +2,13 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { HelmetProvider } from 'react-helmet-async';
 
+// cache-bust marker: an actual statement (comments get stripped by the
+// minifier and don't affect the output's content hash) so the built JS
+// bundle gets a brand-new filename - the CDN previously cached a stale,
+// broken response under the old hash's exact filename on some edge nodes;
+// a filename it has never seen can't have that problem.
+window.__BOC_BUILD__ = 'force-new-hash-2026-08-19';
+
 import './index.css'
 import {
   createBrowserRouter,

@@ -74,7 +74,7 @@ const ManageBanner = () => {
                                             <img className=" w-full object-fit" src={book.image} alt={book.name} />
                                         </div>
                                     </td>
-                                    <td>
+                                    <td className="capitalize">
                                         {book.name}
                                         <br />
                                         <span className="badge">by - {book.author}</span>

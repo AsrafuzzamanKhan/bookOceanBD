@@ -58,7 +58,7 @@ const BookCard = ({ book }) => {
                     <div className="flex flex-col flex-grow gap-y-2 p-4">
                         <div className="flex-grow">
                             <h4 className="text-[11px] font-bold text-blue-400 uppercase tracking-wider">{category}</h4>
-                            <h1 className="text-sm font-semibold line-clamp-2 mt-1 leading-snug group-hover:text-blue-500 transition-colors" title={name}>
+                            <h1 className="text-sm font-semibold line-clamp-2 mt-1 leading-snug capitalize group-hover:text-blue-500 transition-colors" title={name}>
                                 {name}
                             </h1>
                             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 italic">

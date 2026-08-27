@@ -10,10 +10,20 @@ import { FaEnvelope, FaMapMarkerAlt, FaPhone, FaUser } from "react-icons/fa";
 import { FiCalendar, FiClock, FiSearch } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
+// today's date as 'yyyy-MM-dd' in the browser's local timezone - used for
+// the "Today" quick filter and as the max on the date pickers
+const todayLocal = () => {
+    const d = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+};
+
 const AllOrders = () => {
     const [axiosSecure] = useAxiosSecure();
     const [statusFilter, setStatusFilter] = useState('all');
     const [search, setSearch] = useState('');
+    const [dateFrom, setDateFrom] = useState('');
+    const [dateTo, setDateTo] = useState('');
 
     const { data: orders = [], refetch } = useQuery({
         queryKey: ['orders'],
@@ -82,7 +92,25 @@ const AllOrders = () => {
             if (!searchTerm) return true;
             const haystack = [o.data?.name, o.email, o.data?.phone, o._id].filter(Boolean).join(' ').toLowerCase();
             return haystack.includes(searchTerm);
+        })
+        .filter(o => {
+            if (!dateFrom && !dateTo) return true;
+            // order.date is 'yyyy-MM-dd HH:mm:ss' (see Checkout.jsx) - that
+            // format sorts/compares correctly as a plain string, so no need
+            // to parse it just to bound it against two 'yyyy-MM-dd' inputs
+            const orderDay = (o.date || '').slice(0, 10);
+            if (dateFrom && orderDay < dateFrom) return false;
+            if (dateTo && orderDay > dateTo) return false;
+            return true;
         });
+
+    const hasActiveFilters = statusFilter !== 'all' || !!search || !!dateFrom || !!dateTo;
+    const clearAllFilters = () => {
+        setStatusFilter('all');
+        setSearch('');
+        setDateFrom('');
+        setDateTo('');
+    };
 
     return (
         <div className="pt-32 md:pt-32 lg:pt-24 pb-16 bg-gray-50 dark:bg-gray-950/40 min-h-screen">
@@ -116,7 +144,7 @@ const AllOrders = () => {
                 </div>
 
                 {/* search  */}
-                <div className="max-w-sm mx-auto mb-8 relative">
+                <div className="max-w-sm mx-auto mb-4 relative">
                     <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
                     <input
                         type="text"
@@ -125,6 +153,57 @@ const AllOrders = () => {
                         placeholder="Search by customer, email, phone, or order id..."
                         className="w-full h-11 pl-10 pr-4 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
                     />
+                </div>
+
+                {/* date range  */}
+                <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
+                    <label className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                        <FiCalendar size={14} />
+                        From
+                        <input
+                            type="date"
+                            value={dateFrom}
+                            max={dateTo || todayLocal()}
+                            onChange={(e) => setDateFrom(e.target.value)}
+                            className="h-9 px-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        />
+                    </label>
+                    <label className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                        To
+                        <input
+                            type="date"
+                            value={dateTo}
+                            min={dateFrom}
+                            max={todayLocal()}
+                            onChange={(e) => setDateTo(e.target.value)}
+                            className="h-9 px-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        />
+                    </label>
+                    <button
+                        type="button"
+                        onClick={() => { setDateFrom(todayLocal()); setDateTo(todayLocal()); }}
+                        className="h-9 px-3 rounded-lg text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200"
+                    >
+                        Today
+                    </button>
+                    {(dateFrom || dateTo) && (
+                        <button
+                            type="button"
+                            onClick={() => { setDateFrom(''); setDateTo(''); }}
+                            className="text-sm font-medium text-blue-500 hover:underline"
+                        >
+                            Clear dates
+                        </button>
+                    )}
+                    {hasActiveFilters && (
+                        <button
+                            type="button"
+                            onClick={clearAllFilters}
+                            className="text-sm font-medium text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:underline"
+                        >
+                            Clear all filters
+                        </button>
+                    )}
                 </div>
 
                 {/* orders  */}
@@ -141,7 +220,7 @@ const AllOrders = () => {
                         <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">Try a different filter or search term.</p>
                         <button
                             type="button"
-                            onClick={() => { setStatusFilter('all'); setSearch(''); }}
+                            onClick={clearAllFilters}
                             className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-colors duration-200"
                         >
                             Clear filters
@@ -214,7 +293,7 @@ const AllOrders = () => {
                                                         <img className="w-full h-full object-cover" src={book.image} alt={book.name} />
                                                     </div>
                                                     <div className="min-w-0 flex-1">
-                                                        <p className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-1">{book.name}</p>
+                                                        <p className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-1 capitalize">{book.name}</p>
                                                         <p className="text-xs text-gray-500 dark:text-gray-400">by {book.author}</p>
                                                     </div>
                                                     <div className="flex items-center gap-1 text-sm font-semibold text-gray-900 dark:text-white shrink-0">

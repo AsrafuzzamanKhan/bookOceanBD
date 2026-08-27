@@ -11,6 +11,7 @@ import { Helmet } from "react-helmet-async";
 import { useState } from "react";
 import { FaMapMarkerAlt, FaPhone, FaTruck, FaUser } from "react-icons/fa";
 import { FiArrowRight, FiShoppingBag } from "react-icons/fi";
+import { trackPixelEvent } from "../../../utils/fbPixel";
 
 const NORMAL_DELIVERY_CHARGE = { dhaka: 80, outside: 100 };
 const HEAVY_DELIVERY_CHARGE = { dhaka: 100, outside: 120 };
@@ -102,6 +103,17 @@ const Checkout = () => {
             .then(res => {
                 console.log(res.data);
                 if (res.data.insertResult.insertedId) {
+                    // real Purchase event - the single most valuable signal
+                    // for Meta ad optimization, fired only on an actually
+                    // confirmed order (see src/utils/fbPixel.js)
+                    trackPixelEvent('Purchase', {
+                        value: totalAmount,
+                        currency: 'BDT',
+                        content_ids: cart.map(item => item?._id),
+                        content_type: 'product',
+                        num_items: totalItemCount,
+                    });
+
                     reset();
                     refetch();
                     navigate('/dashboard/orderHistory')
@@ -232,7 +244,7 @@ const Checkout = () => {
                                             <div className="min-w-0 flex-1">
                                                 <Link
                                                     to={`/book/${book.name.replace(/\s/g, "_")}/${book.bookId}`}
-                                                    className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-2 hover:text-blue-500 transition-colors"
+                                                    className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-2 capitalize hover:text-blue-500 transition-colors"
                                                 >
                                                     {book.name}
                                                 </Link>

@@ -137,9 +137,11 @@
       );
       fbq("init", "493274806783307");
       fbq("track", "PageView");
-      fbq("track", "Lead");
-      fbq("track", "ViewContent");
-      fbq("track", "Search");
+      // ViewContent / Search / Lead / Purchase are fired from the app itself,
+      // only when they actually happen (see src/utils/fbPixel.js) - firing
+      // them all here unconditionally made every single page load count as
+      // a Lead + Search + ViewContent, which gave Meta's ad optimizer
+      // nothing but noise to learn from.
     </script>
 
     <!-- End Meta Pixel Code -->

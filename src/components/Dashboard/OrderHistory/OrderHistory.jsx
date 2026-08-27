@@ -175,7 +175,7 @@ const OrderHistory = () => {
                                                         <img className="w-full h-full object-cover" src={book.image} alt={book.name} />
                                                     </div>
                                                     <div className="min-w-0 flex-1">
-                                                        <p className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-1">{book.name}</p>
+                                                        <p className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-1 capitalize">{book.name}</p>
                                                         <p className="text-xs text-gray-500 dark:text-gray-400">by {book.author}</p>
                                                     </div>
                                                     <div className="text-sm font-semibold text-gray-900 dark:text-white shrink-0">৳{book.discountPrice}</div>
