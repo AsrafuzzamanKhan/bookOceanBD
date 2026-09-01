@@ -1,5 +1,5 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import useBookData from "../../hooks/useBookData";
+import { useQuery } from "@tanstack/react-query";
 import RelatedBooks from "../RelatedBooks/RelatedBooks";
 import Swal from "sweetalert2";
 import { showSuccessToast, showErrorToast } from "../../utils/toast";
@@ -13,7 +13,7 @@ import facebook from '../../assets/social/facebook.png'
 import instagram from '../../assets/social/instagram.png'
 import { TbTruckDelivery } from "react-icons/tb";
 import { IoMdHome } from "react-icons/io";
-import { FaAmazon, FaShoppingCart } from "react-icons/fa";
+import { FaAmazon, FaShoppingCart, FaShareAlt, FaRegCheckCircle } from "react-icons/fa";
 
 import useAdmin from "../../hooks/useAdmin";
 import BookDescription from "../BookDescription/BookDescription";
@@ -26,12 +26,17 @@ const coverLabels = {
     'leather bound': 'Leather Bound',
 };
 
+const trustBadges = [
+    { icon: TbTruckDelivery, label: 'Fast Shipping' },
+    { icon: MdOutlineGppGood, label: 'Premium Quality Original Books' },
+    { icon: MdPayment, label: 'Cash On Delivery Available' },
+];
+
 const BookDetails = () => {
 
     const { id } = useParams()
     const { user } = useAuth()
     const [isAdmin] = useAdmin()
-    const [booksData] = useBookData()
     const navigate = useNavigate()
     const [, refetch] = useCart()
     const [axiosSecure] = useAxiosSecure()
@@ -58,10 +63,44 @@ const BookDetails = () => {
         return () => document.removeEventListener('keydown', handleEscape);
     }, []);
 
-    const productDetails = booksData?.find(pd => pd._id === id)
+    // Fetched by id directly (full document, description included) rather
+    // than filtered out of the shared all-books list - that list deliberately
+    // excludes description now (see GET /books on the server) since it's
+    // the single largest field on every book and isn't used anywhere else
+    // that list feeds; only this page needs it.
+    const { data: productDetails } = useQuery({
+        queryKey: ['book', id],
+        queryFn: async () => {
+            const res = await fetch(`https://book-ocean-bd-server.vercel.app/books/${id}`)
+            if (!res.ok) return null
+            return res.json()
+        },
+        enabled: !!id,
+    })
     const discount = productDetails?.price * 0.05;
     const discountPrice = parseInt(productDetails?.price - discount)
     const discountPercent = productDetails?.price ? Math.round((discount / productDetails.price) * 100) : 0;
+
+    // sticky mobile add-to-cart bar - only shows once the main card (with
+    // its own, already-visible Add to Cart button) has scrolled out of view,
+    // so it's never showing two of the same button on screen at once
+    const [showStickyBar, setShowStickyBar] = useState(false);
+    const mainCardRef = useRef(null);
+    useEffect(() => {
+        const node = mainCardRef.current;
+        if (!node) return;
+        const observer = new IntersectionObserver(
+            ([entry]) => setShowStickyBar(!entry.isIntersecting),
+            { rootMargin: '-64px 0px 0px 0px' }
+        );
+        observer.observe(node);
+        return () => observer.disconnect();
+        // productDetails is the real dependency: this component returns an
+        // early "Loading..." placeholder (see below) until it arrives, so
+        // mainCardRef.current is still null on the very first mount - an
+        // empty dependency array here would attach to nothing and never
+        // run again once the real, ref'd card actually exists
+    }, [productDetails]);
 
     // real ViewContent - fired once per book actually viewed, not on every
     // page load site-wide (see src/utils/fbPixel.js)
@@ -129,6 +168,23 @@ const BookDetails = () => {
         }
     }
 
+    // share THIS book specifically - distinct from the static Facebook/
+    // Instagram icons further down, which link to the store's own pages
+    const handleShare = async () => {
+        const url = `https://bookoceanbd.com/book/${productDetails.name.replace(/\s/g, "_")}/${productDetails._id}`;
+        const shareData = { title: productDetails.name, text: `${productDetails.name} by ${productDetails.author} - Book Ocean BD`, url };
+        if (navigator.share) {
+            try { await navigator.share(shareData); } catch { /* user canceled the share sheet - not an error */ }
+            return;
+        }
+        try {
+            await navigator.clipboard.writeText(url);
+            showSuccessToast('Link copied', 'Paste it anywhere to share this book.');
+        } catch {
+            showErrorToast('Could not copy link', 'Please copy the page URL manually.');
+        }
+    }
+
     const isAvailable = productDetails?.available === 'true';
 
     return (
@@ -181,13 +237,18 @@ const BookDetails = () => {
                 </div>
 
                 {/* main card  */}
-                <div className="flex flex-col md:flex-row bg-white dark:bg-gray-800 border border-gray-100 dark:border-0 rounded-2xl shadow-sm overflow-hidden">
+                <div ref={mainCardRef} className="flex flex-col md:flex-row bg-white dark:bg-gray-800 border border-gray-100 dark:border-0 rounded-2xl shadow-sm overflow-hidden">
 
                     {/* cover  */}
-                    <div className="md:w-[42%] flex items-center justify-center p-6 md:p-10 bg-gray-50 dark:bg-gray-900/40 relative">
+                    <div className="md:w-[42%] flex items-center justify-center p-8 md:p-12 bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900/40 dark:to-gray-900/60 relative">
                         {productDetails?.newBook === 'true' && (
-                            <span className="absolute top-4 left-4 md:top-6 md:left-6 bg-blue-500 text-white text-[11px] font-bold uppercase rounded-full px-2.5 py-1 shadow-sm">
+                            <span className="absolute top-4 left-4 md:top-6 md:left-6 bg-blue-500 text-white text-[11px] font-bold uppercase rounded-full px-2.5 py-1 shadow-sm z-10">
                                 New
+                            </span>
+                        )}
+                        {isAvailable && discountPercent > 0 && (
+                            <span className="absolute top-4 right-4 md:top-6 md:right-6 bg-orange-400 text-white text-[11px] font-bold uppercase rounded-full px-2.5 py-1 shadow-sm z-10">
+                                {discountPercent}% off
                             </span>
                         )}
                         <button
@@ -195,7 +256,7 @@ const BookDetails = () => {
                             className="group relative cursor-zoom-in"
                             aria-label="Zoom into cover image">
                             <img
-                                className="w-52 md:w-64 lg:w-72 shadow-xl rounded transition-transform duration-500 group-hover:scale-105"
+                                className="w-56 md:w-72 lg:w-80 shadow-2xl rounded transition-transform duration-500 group-hover:scale-105"
                                 src={productDetails?.image}
                                 alt={productDetails?.name}
                                 loading="eager"
@@ -209,15 +270,24 @@ const BookDetails = () => {
                     {/* details  */}
                     <div className="w-full md:w-[58%] px-6 md:px-8 py-6 md:py-10 flex flex-col justify-center text-black dark:text-white border-t md:border-t-0 md:border-l border-gray-100 dark:border-gray-700">
 
-                        <h4 className="capitalize tracking-wide text-blue-500 text-sm font-bold">
-                            {productDetails?.category}
-                        </h4>
+                        <div className="flex items-start justify-between gap-3">
+                            <h4 className="capitalize tracking-wide text-blue-500 text-sm font-bold">
+                                {productDetails?.category}
+                            </h4>
+                            <button
+                                onClick={handleShare}
+                                className="shrink-0 flex items-center gap-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors duration-200"
+                                aria-label="Share this book"
+                            >
+                                <FaShareAlt size={12} /> Share
+                            </button>
+                        </div>
 
-                        <h1 className="text-xl lg:text-2xl font-bold mt-1 leading-snug capitalize">
+                        <h1 className="text-2xl lg:text-3xl font-bold mt-1 leading-snug capitalize">
                             {productDetails?.name}
                         </h1>
-                        <p className="mt-1 text-gray-600 dark:text-gray-300">
-                            by <Link to={`/authorbooks/${productDetails?.author}`} className="text-blue-500 hover:underline">{productDetails?.author}</Link>
+                        <p className="mt-1.5 text-gray-600 dark:text-gray-300">
+                            by <Link to={`/authorbooks/${productDetails?.author}`} className="text-blue-500 hover:underline font-medium">{productDetails?.author}</Link>
                         </p>
 
                         {coverLabels[productDetails?.cover] && (
@@ -227,10 +297,10 @@ const BookDetails = () => {
                         )}
 
                         {/* price  */}
-                        <div className="mt-5">
+                        <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
                             {isAvailable ? (
                                 <div className="flex items-baseline gap-3 flex-wrap">
-                                    <span className="text-3xl font-bold text-blue-600 dark:text-blue-400">৳{discountPrice}</span>
+                                    <span className="text-3xl lg:text-4xl font-bold text-blue-600 dark:text-blue-400">৳{discountPrice}</span>
                                     <span className="text-base line-through text-gray-400">৳{productDetails?.price}</span>
                                     {discountPercent > 0 && (
                                         <span className="text-xs font-bold text-white bg-orange-400 rounded px-2 py-0.5">
@@ -244,8 +314,9 @@ const BookDetails = () => {
 
                             {/* stock quantity  */}
                             {isAvailable && typeof productDetails?.quantity === 'number' && (
-                                <p className={`text-sm font-medium mt-1 ${productDetails.quantity <= 5 ? 'text-orange-500' : 'text-gray-500 dark:text-gray-400'}`}>
-                                    {productDetails.quantity <= 5 ? `Only ${productDetails.quantity} left in stock` : `In stock: ${productDetails.quantity} available`}
+                                <p className={`flex items-center gap-1.5 text-sm font-medium mt-2 ${productDetails.quantity <= 5 ? 'text-orange-500' : 'text-green-600 dark:text-green-400'}`}>
+                                    <FaRegCheckCircle size={13} />
+                                    {productDetails.quantity <= 5 ? `Only ${productDetails.quantity} left in stock - order soon` : `In stock: ${productDetails.quantity} available`}
                                 </p>
                             )}
                         </div>
@@ -281,25 +352,15 @@ const BookDetails = () => {
                         </div>
 
                         {/* trust badges  */}
-                        <div className="flex flex-col gap-y-3 mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
-                            <div className="flex gap-x-3 items-center">
-                                <span className="flex-shrink-0 w-9 h-9 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-500">
-                                    <TbTruckDelivery size={18} />
-                                </span>
-                                <p className="text-sm tracking-wide text-gray-700 dark:text-gray-300">Fast Shipping</p>
-                            </div>
-                            <div className="flex gap-x-3 items-center">
-                                <span className="flex-shrink-0 w-9 h-9 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-500">
-                                    <MdOutlineGppGood size={18} />
-                                </span>
-                                <p className="text-sm tracking-wide text-gray-700 dark:text-gray-300">Premium Quality Original Books</p>
-                            </div>
-                            <div className="flex gap-x-3 items-center">
-                                <span className="flex-shrink-0 w-9 h-9 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-500">
-                                    <MdPayment size={18} />
-                                </span>
-                                <p className="text-sm tracking-wide text-gray-700 dark:text-gray-300">Cash On Delivery Available</p>
-                            </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
+                            {trustBadges.map(({ icon: Icon, label }) => (
+                                <div key={label} className="flex sm:flex-col items-center sm:text-center gap-x-3 gap-y-2">
+                                    <span className="flex-shrink-0 w-9 h-9 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-500">
+                                        <Icon size={18} />
+                                    </span>
+                                    <p className="text-sm tracking-wide text-gray-700 dark:text-gray-300">{label}</p>
+                                </div>
+                            ))}
                         </div>
 
                         {/* social  */}
@@ -321,7 +382,7 @@ const BookDetails = () => {
 
                 {/* Description  */}
                 <section>
-                    <BookDescription />
+                    <BookDescription book={productDetails} />
                 </section>
                 {/* related products  */}
                 <section>
@@ -330,6 +391,41 @@ const BookDetails = () => {
                     ></RelatedBooks>
                 </section>
             </div>
+
+            {/* sticky mobile add-to-cart bar - appears once the main card
+                (which already has its own Add to Cart button) scrolls out
+                of view, so the CTA stays reachable while reading the
+                description/related books further down */}
+            {showStickyBar && (
+                <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 shadow-[0_-4px_12px_rgba(0,0,0,0.06)] px-4 py-3 flex items-center gap-3">
+                    <img src={productDetails?.image} alt="" className="w-10 h-14 object-contain rounded shrink-0" />
+                    <div className="min-w-0 flex-1">
+                        <p className="text-xs font-semibold text-gray-900 dark:text-white truncate capitalize">{productDetails?.name}</p>
+                        {isAvailable ? (
+                            <p className="text-sm font-bold text-blue-600 dark:text-blue-400">৳{discountPrice}</p>
+                        ) : (
+                            <p className="text-sm font-bold text-red-500">Stock Out</p>
+                        )}
+                    </div>
+                    {isAvailable ? (
+                        <button
+                            onClick={() => handleAddToCart(productDetails)}
+                            className="shrink-0 flex items-center gap-1.5 px-4 py-2.5 font-semibold bg-blue-500 hover:bg-blue-600 text-white transition-colors text-sm rounded-lg shadow-sm">
+                            <FaShoppingCart size={14} /> Add
+                        </button>
+                    ) : (
+                        <a
+                            href="https://m.me/bookoceanbd"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="shrink-0 px-4 py-2.5 font-semibold text-white bg-[#FF9900] rounded-lg text-sm"
+                            onClick={() => trackPixelEvent('Lead', { content_name: productDetails.name, content_category: 'pre-order' })}
+                        >
+                            Pre-order
+                        </a>
+                    )}
+                </div>
+            )}
 
             {/* zoomed cover lightbox  */}
             {fullImg && (

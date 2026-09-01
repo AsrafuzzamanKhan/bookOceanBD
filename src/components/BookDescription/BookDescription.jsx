@@ -1,5 +1,4 @@
-import { useParams } from "react-router-dom"
-import useBookData from "../../hooks/useBookData";
+import PropTypes from "prop-types";
 
 const coverLabels = {
     hardcover: 'Hardcover',
@@ -7,11 +6,16 @@ const coverLabels = {
     'leather bound': 'Leather Bound',
 };
 
-const BookDescription = () => {
-    const { id } = useParams()
-    const [booksData] = useBookData()
-    const book = booksData?.find(pd => pd._id === id)
-
+// Takes the book as a prop from BookDetails.jsx rather than fetching its
+// own copy - it used to independently re-derive it from the shared
+// all-books list (useBookData), but that list no longer carries
+// description/language/publisher/isbn/dimensions/etc (see GET /books on
+// the server - trimmed down to only what listing/card views need), so this
+// component was silently showing a blank description and partial specs
+// for every book. BookDetails.jsx already fetches the one full record this
+// page needs via GET /books/:id; reusing that here instead of a second,
+// incomplete fetch is both the fix and the right shape for it regardless.
+const BookDescription = ({ book }) => {
     if (!book) return null;
 
     const specs = [
@@ -53,5 +57,21 @@ const BookDescription = () => {
         </section>
     )
 }
+
+BookDescription.propTypes = {
+    book: PropTypes.shape({
+        name: PropTypes.string,
+        author: PropTypes.string,
+        language: PropTypes.string,
+        publisher: PropTypes.string,
+        cover: PropTypes.string,
+        page: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        isbn10: PropTypes.string,
+        isbn13: PropTypes.string,
+        itemWeight: PropTypes.string,
+        dimensions: PropTypes.string,
+        description: PropTypes.string,
+    }),
+};
 
 export default BookDescription

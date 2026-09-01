@@ -1,11 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom";
-import useBookData from "../../../hooks/useBookData";
+import { useQuery } from "@tanstack/react-query";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useState } from "react";
 import { resizeImageFile, uploadToCloudinary } from "../../../utils/image";
 import { showSuccessToast, showErrorToast } from "../../../utils/toast";
+import Loading from "../../../Loading/Loading";
 
 // same cap as AddBooks.jsx - see comment there
 const FULL_IMAGE_MAX_DIMENSION = 1200;
@@ -13,9 +14,20 @@ const FULL_IMAGE_MAX_DIMENSION = 1200;
 const UpdateBook = () => {
     const [updateLoading, setupdateLoadin] = useState(false)
     const { id } = useParams()
-    const [booksData] = useBookData()
     const [axiosSecure] = useAxiosSecure()
-    const productDetails = booksData.find(pd => pd._id == id);
+    // Fetched by id directly (full document, description included) rather
+    // than filtered out of the shared all-books list - that list deliberately
+    // excludes description now (see GET /books on the server), so this page
+    // (the only admin page that edits it) fetches the single full record itself.
+    const { data: productDetails, isLoading: productLoading } = useQuery({
+        queryKey: ['book', id],
+        queryFn: async () => {
+            const res = await fetch(`https://book-ocean-bd-server.vercel.app/books/${id}`)
+            if (!res.ok) return null
+            return res.json()
+        },
+        enabled: !!id,
+    })
 
     const { register, handleSubmit } = useForm();
     const navigate = useNavigate()
@@ -60,6 +72,16 @@ const UpdateBook = () => {
             setupdateLoadin(false)
         }
     };
+
+    // must not render the form (all its inputs use uncontrolled
+    // defaultValue) until productDetails has actually arrived - an
+    // uncontrolled input only takes its defaultValue on first mount, so
+    // mounting the form early with productDetails still undefined would
+    // leave every field permanently blank even after the real data loads
+    if (productLoading || !productDetails) {
+        return <Loading />;
+    }
+
     return (
         <div className=" container mx-auto ">
             <Helmet>
