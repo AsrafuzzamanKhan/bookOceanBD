@@ -18,17 +18,36 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        // This function splits your 'node_modules' into a separate file
         manualChunks(id) {
           if (id.includes('node_modules')) {
-            // Split heavy libraries into their own chunks
-            if (id.includes('@tanstack') || id.includes('react-router-dom')) {
+            // Only group libraries here that are genuinely needed on every
+            // single page load (React itself, routing, data fetching) -
+            // that makes this one chunk worth its size, since it's shared
+            // and long-cacheable rather than re-downloaded per route.
+            if (id.includes('/react/') || id.includes('/react-dom/') || id.includes('/scheduler/') || id.includes('@tanstack') || id.includes('react-router-dom')) {
               return 'vendor-core';
+            }
+            // Firebase (auth) is also needed early - AuthProvider wraps the
+            // whole app - but it's large and changes independently of the
+            // rest of the app's code, so it gets its own cacheable chunk
+            // rather than bloating vendor-core.
+            if (id.includes('firebase')) {
+              return 'vendor-firebase';
             }
             if (id.includes('framer-motion') || id.includes('react-icons')) {
               return 'vendor-ui';
             }
-            return 'vendor'; // everything else from node_modules
+            // Deliberately no catch-all "everything else -> one vendor
+            // blob" bucket here anymore. That used to force every page
+            // load to download a single 700KB+ chunk containing libraries
+            // most routes never touch at all - swiper (only the home page
+            // carousel), sweetalert2 (only confirm dialogs on a handful of
+            // admin actions), react-hook-form (only a few forms), etc.
+            // Leaving those unassigned lets Rollup follow the real import
+            // graph and bundle each one only into the lazy route chunk(s)
+            // (see main.jsx's React.lazy calls) that actually import it -
+            // so e.g. the login page no longer pays to download the
+            // carousel library it never uses.
           }
         },
       },

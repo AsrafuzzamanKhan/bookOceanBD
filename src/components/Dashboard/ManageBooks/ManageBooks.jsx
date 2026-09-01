@@ -13,6 +13,31 @@ import Pagination from "../../Pagination/Pagination";
 
 const BOOKS_PER_PAGE = 30;
 
+// Manual in-stock/out-of-stock switch - the click target itself, plus the
+// two labels, form one accessible control (a real <button> with the state
+// spoken via aria-pressed, since a bare colored pill isn't announced as
+// interactive by a screen reader).
+const AvailabilityToggle = ({ available, busy, onClick }) => {
+    const isAvailable = available === 'true'
+    return (
+        <button
+            type="button"
+            onClick={onClick}
+            disabled={busy}
+            aria-pressed={isAvailable}
+            aria-label={isAvailable ? 'In stock - click to mark out of stock' : 'Out of stock - click to mark in stock'}
+            className="flex items-center gap-2 disabled:opacity-50 disabled:cursor-wait"
+        >
+            <span className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors duration-200 ${isAvailable ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'}`}>
+                <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform duration-200 ${isAvailable ? 'translate-x-[18px]' : 'translate-x-1'}`} />
+            </span>
+            <span className={`text-xs font-semibold whitespace-nowrap ${isAvailable ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}`}>
+                {busy ? 'Saving…' : isAvailable ? 'In stock' : 'Out of stock'}
+            </span>
+        </button>
+    )
+}
+
 const ManageBooks = () => {
     const [booksData, , refetch] = useBookData()
     const [searchTerm, setSearchTerm] = useState('')
@@ -131,6 +156,27 @@ const ManageBooks = () => {
 
 
     // console.log(booksData)
+    // manual in-stock/out-of-stock override, independent of quantity - the
+    // next Google Sheet sync still derives availability from quantity as
+    // usual and can override this, same as editing it on the book's own
+    // edit page would
+    const [togglingId, setTogglingId] = useState(null)
+    const handleToggleAvailability = book => {
+        const nextAvailable = book.available === 'true' ? 'false' : 'true'
+        setTogglingId(book._id)
+        axiosSecure.patch(`/books/availability/${book._id}`, { available: nextAvailable })
+            .then(res => {
+                if (res.data.modifiedCount > 0) {
+                    refetch()
+                    showSuccessToast(nextAvailable === 'true' ? 'Marked in stock' : 'Marked out of stock', book.name)
+                }
+            })
+            .catch(err => {
+                showErrorToast('Could not update availability', err.response?.data?.message || err.message)
+            })
+            .finally(() => setTogglingId(null))
+    }
+
     const handleDeleteBook = book => {
         console.log('selected book', book)
         Swal.fire({
@@ -321,11 +367,11 @@ const ManageBooks = () => {
                                         </td>
                                         <td>{row.book?.quantity ?? '—'}</td>
                                         <td>
-                                            <span className={`text-xs font-semibold px-2 py-1 rounded-full ${row.book?.available === 'true'
-                                                ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                                                : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'}`}>
-                                                {row.book?.available === 'true' ? 'In stock' : 'Out of stock'}
-                                            </span>
+                                            <AvailabilityToggle
+                                                available={row.book?.available}
+                                                busy={togglingId === row.book?._id}
+                                                onClick={() => handleToggleAvailability(row.book)}
+                                            />
                                         </td>
                                         <td>{row.book?.price}</td>
                                         <td>
@@ -360,11 +406,11 @@ const ManageBooks = () => {
                                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{row.book?.author}</p>
 
                                 <div className="flex flex-wrap items-center gap-2 mt-2">
-                                    <span className={`text-xs font-semibold px-2 py-1 rounded-full ${row.book?.available === 'true'
-                                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                                        : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'}`}>
-                                        {row.book?.available === 'true' ? 'In stock' : 'Out of stock'}
-                                    </span>
+                                    <AvailabilityToggle
+                                        available={row.book?.available}
+                                        busy={togglingId === row.book?._id}
+                                        onClick={() => handleToggleAvailability(row.book)}
+                                    />
                                     <span className="text-xs text-gray-500 dark:text-gray-400">Qty {row.book?.quantity ?? '—'}</span>
                                     <span className="text-sm font-bold text-gray-900 dark:text-white ml-auto">৳{row.book?.price}</span>
                                 </div>

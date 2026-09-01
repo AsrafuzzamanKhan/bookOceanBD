@@ -154,10 +154,12 @@ const AdminHome = () => {
 
                 {/* stat cards */}
                 <div className='grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8'>
-                    <div className='border dark:border-0 dark:bg-gray-800 rounded-[8px] p-5 shadow-sm hover:shadow-md duration-300'>
-                        <FaHourglassHalf size={26} className='text-yellow-500 mb-2' />
+                    <div className='bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow duration-300'>
+                        <div className='w-10 h-10 rounded-full bg-yellow-50 dark:bg-yellow-900/30 flex items-center justify-center mb-3'>
+                            <FaHourglassHalf size={18} className='text-yellow-500' />
+                        </div>
                         <p className='text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400'>Pending Orders</p>
-                        <p className='text-2xl font-bold dark:text-white'>
+                        <p className='text-2xl font-bold text-gray-900 dark:text-white'>
                             {ordersLoading
                                 ? <span className='loading loading-spinner loading-sm'></span>
                                 : pendingOrders.length.toLocaleString()}
@@ -166,10 +168,12 @@ const AdminHome = () => {
                     {statMeta.map((meta) => {
                         const Icon = meta.icon;
                         return (
-                            <div key={meta.key} className='border dark:border-0 dark:bg-gray-800 rounded-[8px] p-5 shadow-sm hover:shadow-md duration-300'>
-                                <Icon size={26} className={`${meta.color} mb-2`} />
+                            <div key={meta.key} className='bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow duration-300'>
+                                <div className={`w-10 h-10 rounded-full bg-gray-50 dark:bg-gray-700 flex items-center justify-center mb-3`}>
+                                    <Icon size={18} className={meta.color} />
+                                </div>
                                 <p className='text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400'>{meta.label}</p>
-                                <p className='text-2xl font-bold dark:text-white'>
+                                <p className='text-2xl font-bold text-gray-900 dark:text-white'>
                                     {statsLoading
                                         ? <span className='loading loading-spinner loading-sm'></span>
                                         : meta.isCurrency
@@ -183,7 +187,7 @@ const AdminHome = () => {
 
                 {/* quick actions */}
                 <div className='mb-8'>
-                    <h2 className='text-lg font-semibold mb-3 dark:text-white'>Quick Actions</h2>
+                    <h2 className='text-lg font-semibold mb-3 text-gray-900 dark:text-white'>Quick Actions</h2>
                     <div className='flex flex-wrap gap-3'>
                         {quickLinks.map((link) => {
                             const Icon = link.icon;
@@ -191,9 +195,9 @@ const AdminHome = () => {
                                 <Link
                                     key={link.to}
                                     to={link.to}
-                                    className='flex items-center gap-2 px-4 py-2 rounded bg-slate-800 text-white hover:bg-slate-700 duration-300'
+                                    className='flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold bg-blue-500 hover:bg-blue-600 text-white transition-colors duration-200'
                                 >
-                                    <Icon /> {link.label}
+                                    <Icon size={14} /> {link.label}
                                 </Link>
                             );
                         })}
@@ -203,7 +207,7 @@ const AdminHome = () => {
                 {/* pending orders - needs action */}
                 <div className='mb-8'>
                     <div className='flex justify-between items-center mb-3'>
-                        <h2 className='text-lg font-semibold dark:text-white'>
+                        <h2 className='text-lg font-semibold text-gray-900 dark:text-white'>
                             Pending Orders
                             {pendingOrders.length > 0 && (
                                 <span className='ml-2 align-middle px-2 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300'>
@@ -219,62 +223,97 @@ const AdminHome = () => {
                             <span className='loading loading-spinner loading-md'></span>
                         </div>
                     ) : pendingOrders.length === 0 ? (
-                        <p className='dark:text-white border dark:border-0 dark:bg-gray-800 rounded-[8px] p-5'>No pending orders right now - you&apos;re all caught up.</p>
+                        <p className='text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-5'>No pending orders right now - you&apos;re all caught up.</p>
                     ) : (
-                        <div className='overflow-x-auto border dark:border-0 dark:bg-gray-800 rounded-[8px]'>
-                            <table className='table w-full'>
-                                <thead>
-                                    <tr className='dark:text-white'>
-                                        <th>Customer</th>
-                                        <th>Date</th>
-                                        <th>Items</th>
-                                        <th>Amount</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {pendingOrders.map((order) => (
-                                        <tr key={order._id} className='dark:text-white dark:hover:bg-gray-700 hover:bg-gray-100 duration-300'>
-                                            <td>{order.data?.name}</td>
-                                            <td>{order.date}</td>
-                                            <td>{order.orderQuantity}</td>
-                                            <td>৳{order.totalAmount}</td>
-                                            <td>
-                                                <div className='flex gap-2'>
-                                                    <button
-                                                        onClick={() => handleApprove(order)}
-                                                        disabled={actioningId === order._id}
-                                                        className='px-3 py-1 rounded text-xs font-semibold bg-green-600 text-white hover:bg-green-700 duration-200 disabled:opacity-50'
-                                                    >
-                                                        Approve
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleCancel(order)}
-                                                        disabled={actioningId === order._id}
-                                                        className='px-3 py-1 rounded text-xs font-semibold bg-red-600 text-white hover:bg-red-700 duration-200 disabled:opacity-50'
-                                                    >
-                                                        Cancel
-                                                    </button>
-                                                </div>
-                                            </td>
+                        <>
+                            {/* desktop */}
+                            <div className='hidden lg:block overflow-x-auto bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl'>
+                                <table className='table w-full'>
+                                    <thead>
+                                        <tr className='dark:text-white'>
+                                            <th>Customer</th>
+                                            <th>Date</th>
+                                            <th>Items</th>
+                                            <th>Amount</th>
+                                            <th>Action</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+                                    <tbody>
+                                        {pendingOrders.map((order) => (
+                                            <tr key={order._id} className='dark:text-white dark:hover:bg-gray-700 hover:bg-gray-100 duration-300'>
+                                                <td>{order.data?.name}</td>
+                                                <td>{order.date}</td>
+                                                <td>{order.orderQuantity}</td>
+                                                <td>৳{order.totalAmount}</td>
+                                                <td>
+                                                    <div className='flex gap-2'>
+                                                        <button
+                                                            onClick={() => handleApprove(order)}
+                                                            disabled={actioningId === order._id}
+                                                            className='px-3 py-1 rounded-full text-xs font-semibold bg-green-600 text-white hover:bg-green-700 duration-200 disabled:opacity-50'
+                                                        >
+                                                            Approve
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleCancel(order)}
+                                                            disabled={actioningId === order._id}
+                                                            className='px-3 py-1 rounded-full text-xs font-semibold bg-red-600 text-white hover:bg-red-700 duration-200 disabled:opacity-50'
+                                                        >
+                                                            Cancel
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* mobile: stacked cards - avoids pushing the
+                                Action column off-screen with no way to reach it */}
+                            <div className='lg:hidden flex flex-col gap-3'>
+                                {pendingOrders.map((order) => (
+                                    <div key={order._id} className='bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-4'>
+                                        <div className='flex items-start justify-between gap-2'>
+                                            <div className='min-w-0'>
+                                                <p className='font-semibold text-gray-900 dark:text-white truncate'>{order.data?.name}</p>
+                                                <p className='text-xs text-gray-500 dark:text-gray-400'>{order.date} &middot; {order.orderQuantity} item{order.orderQuantity === 1 ? '' : 's'}</p>
+                                            </div>
+                                            <span className='text-sm font-bold text-gray-900 dark:text-white shrink-0'>৳{order.totalAmount}</span>
+                                        </div>
+                                        <div className='flex gap-2 mt-3'>
+                                            <button
+                                                onClick={() => handleApprove(order)}
+                                                disabled={actioningId === order._id}
+                                                className='flex-1 px-3 py-1.5 rounded-full text-xs font-semibold bg-green-600 text-white hover:bg-green-700 duration-200 disabled:opacity-50'
+                                            >
+                                                Approve
+                                            </button>
+                                            <button
+                                                onClick={() => handleCancel(order)}
+                                                disabled={actioningId === order._id}
+                                                className='flex-1 px-3 py-1.5 rounded-full text-xs font-semibold bg-red-600 text-white hover:bg-red-700 duration-200 disabled:opacity-50'
+                                            >
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </>
                     )}
                 </div>
 
                 {/* sales filter */}
                 <div className='mb-8'>
                     <div className='flex justify-between items-center mb-3'>
-                        <h2 className='text-lg font-semibold dark:text-white'>Sales Overview</h2>
+                        <h2 className='text-lg font-semibold text-gray-900 dark:text-white'>Sales Overview</h2>
                         <div className='flex gap-2'>
                             {salesPeriods.map((p) => (
                                 <button
                                     key={p.key}
                                     onClick={() => setSalesPeriod(p.key)}
-                                    className={`px-3 py-1.5 rounded text-sm font-medium duration-200 ${salesPeriod === p.key
+                                    className={`px-3 py-1.5 rounded-full text-sm font-medium duration-200 ${salesPeriod === p.key
                                         ? 'bg-blue-500 text-white'
                                         : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                                         }`}
@@ -285,17 +324,17 @@ const AdminHome = () => {
                         </div>
                     </div>
                     <div className='grid grid-cols-2 gap-4'>
-                        <div className='border dark:border-0 dark:bg-gray-800 rounded-[8px] p-5 shadow-sm'>
+                        <div className='bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-5 shadow-sm'>
                             <p className='text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400'>Orders (Delivered)</p>
-                            <p className='text-2xl font-bold dark:text-white'>
+                            <p className='text-2xl font-bold text-gray-900 dark:text-white'>
                                 {ordersLoading
                                     ? <span className='loading loading-spinner loading-sm'></span>
                                     : periodOrders.length.toLocaleString()}
                             </p>
                         </div>
-                        <div className='border dark:border-0 dark:bg-gray-800 rounded-[8px] p-5 shadow-sm'>
+                        <div className='bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-5 shadow-sm'>
                             <p className='text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400'>Revenue (Delivered)</p>
-                            <p className='text-2xl font-bold dark:text-white'>
+                            <p className='text-2xl font-bold text-gray-900 dark:text-white'>
                                 {ordersLoading
                                     ? <span className='loading loading-spinner loading-sm'></span>
                                     : `৳${periodRevenue.toLocaleString()}`}
@@ -308,13 +347,13 @@ const AdminHome = () => {
                 {/* daily sales report */}
                 <div className='mb-8'>
                     <div className='flex flex-wrap justify-between items-center gap-3 mb-3'>
-                        <h2 className='text-lg font-semibold dark:text-white'>Daily Sales Report</h2>
+                        <h2 className='text-lg font-semibold text-gray-900 dark:text-white'>Daily Sales Report</h2>
                         <div className='flex flex-wrap items-center gap-2'>
                             <input
                                 type='date'
                                 value={selectedDate}
                                 onChange={(e) => setSelectedDate(e.target.value)}
-                                className='px-3 py-1.5 rounded text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none'
+                                className='px-3 py-1.5 rounded-full text-sm bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none'
                             />
                             {selectedDate && (
                                 <button
@@ -327,7 +366,7 @@ const AdminHome = () => {
                             <button
                                 onClick={handleDownloadCsv}
                                 disabled={dailyBreakdown.length === 0}
-                                className='flex items-center gap-2 px-3 py-1.5 rounded text-sm font-medium bg-slate-800 text-white hover:bg-slate-700 duration-200 disabled:opacity-40 disabled:cursor-not-allowed'
+                                className='flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium bg-slate-800 text-white hover:bg-slate-700 duration-200 disabled:opacity-40 disabled:cursor-not-allowed'
                             >
                                 <FaDownload size={12} /> Download CSV
                             </button>
@@ -335,10 +374,10 @@ const AdminHome = () => {
                     </div>
 
                     {selectedDate && (
-                        <div className='border dark:border-0 dark:bg-gray-800 rounded-[8px] p-4 mb-3 flex items-center justify-between'>
+                        <div className='bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-4 mb-3 flex items-center justify-between'>
                             <span className='text-sm text-gray-500 dark:text-gray-400'>{selectedDate}</span>
                             {selectedDayData ? (
-                                <span className='font-semibold dark:text-white'>{selectedDayData.orders} order{selectedDayData.orders === 1 ? '' : 's'} &middot; ৳{selectedDayData.revenue.toLocaleString()}</span>
+                                <span className='font-semibold text-gray-900 dark:text-white'>{selectedDayData.orders} order{selectedDayData.orders === 1 ? '' : 's'} &middot; ৳{selectedDayData.revenue.toLocaleString()}</span>
                             ) : (
                                 <span className='text-sm text-gray-400'>No delivered orders on this date</span>
                             )}
@@ -350,9 +389,9 @@ const AdminHome = () => {
                             <span className='loading loading-spinner loading-md'></span>
                         </div>
                     ) : dailyBreakdown.length === 0 ? (
-                        <p className='dark:text-white border dark:border-0 dark:bg-gray-800 rounded-[8px] p-5'>No delivered orders yet.</p>
+                        <p className='text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-5'>No delivered orders yet.</p>
                     ) : (
-                        <div className='overflow-y-auto max-h-96 overflow-x-auto border dark:border-0 dark:bg-gray-800 rounded-[8px]'>
+                        <div className='overflow-y-auto max-h-96 overflow-x-auto bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl'>
                             <table className='table w-full'>
                                 <thead className='sticky top-0 bg-white dark:bg-gray-800'>
                                     <tr className='dark:text-white'>
@@ -382,7 +421,7 @@ const AdminHome = () => {
                 {/* recent orders */}
                 <div>
                     <div className='flex justify-between items-center mb-3'>
-                        <h2 className='text-lg font-semibold dark:text-white'>Recent Orders</h2>
+                        <h2 className='text-lg font-semibold text-gray-900 dark:text-white'>Recent Orders</h2>
                         <Link to='/dashboard/allOrders' className='text-blue-500 hover:underline text-sm'>View all</Link>
                     </div>
 
@@ -391,9 +430,10 @@ const AdminHome = () => {
                             <span className='loading loading-spinner loading-md'></span>
                         </div>
                     ) : recentOrders.length === 0 ? (
-                        <p className='dark:text-white border dark:border-0 dark:bg-gray-800 rounded-[8px] p-5'>No orders yet.</p>
+                        <p className='text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-5'>No orders yet.</p>
                     ) : (
-                        <div className='overflow-x-auto border dark:border-0 dark:bg-gray-800 rounded-[8px]'>
+                        <>
+                        <div className='hidden lg:block overflow-x-auto bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl'>
                             <table className='table w-full'>
                                 <thead>
                                     <tr className='dark:text-white'>
@@ -412,7 +452,7 @@ const AdminHome = () => {
                                             <td>{order.orderQuantity}</td>
                                             <td>৳{order.totalAmount}</td>
                                             <td>
-                                                <span className={`capitalize px-2 py-1 rounded text-xs font-semibold ${statusStyles[order.status] || 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'}`}>
+                                                <span className={`capitalize px-2 py-1 rounded-full text-xs font-semibold ${statusStyles[order.status] || 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'}`}>
                                                     {order.status}
                                                 </span>
                                             </td>
@@ -421,6 +461,25 @@ const AdminHome = () => {
                                 </tbody>
                             </table>
                         </div>
+
+                        {/* mobile: stacked cards */}
+                        <div className='lg:hidden flex flex-col gap-3'>
+                            {recentOrders.map((order) => (
+                                <div key={order._id} className='bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-4'>
+                                    <div className='flex items-start justify-between gap-2'>
+                                        <div className='min-w-0'>
+                                            <p className='font-semibold text-gray-900 dark:text-white truncate'>{order.data?.name}</p>
+                                            <p className='text-xs text-gray-500 dark:text-gray-400'>{order.date} &middot; {order.orderQuantity} item{order.orderQuantity === 1 ? '' : 's'}</p>
+                                        </div>
+                                        <span className={`capitalize shrink-0 px-2 py-1 rounded-full text-xs font-semibold ${statusStyles[order.status] || 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'}`}>
+                                            {order.status}
+                                        </span>
+                                    </div>
+                                    <p className='text-sm font-bold text-gray-900 dark:text-white mt-2'>৳{order.totalAmount}</p>
+                                </div>
+                            ))}
+                        </div>
+                        </>
                     )}
                 </div>
             </div>

@@ -9,6 +9,29 @@ import { HelmetProvider } from 'react-helmet-async';
 // a filename it has never seen can't have that problem.
 window.__BOC_BUILD__ = 'force-new-hash-2026-08-19';
 
+// Self-heal stale-tab chunk-load failures: this app's JS is split into
+// content-hashed chunks per route (BookDetails-<hash>.js etc). A browser
+// tab left open across a deploy still has the OLD index.html in memory, so
+// navigating to a route it hasn't loaded yet in this session asks for that
+// old chunk's exact filename - which the last build deleted, since each
+// build wipes and regenerates dist/assets from scratch. Vite fires this
+// event on exactly that failure; reloading re-fetches the current
+// index.html (and therefore the current hashes) and fixes it silently,
+// instead of showing the user the "Oops! ...Failed to fetch dynamically
+// imported module" error page. Guarded with a one-shot sessionStorage flag
+// so a genuinely broken deploy (or being offline) can't reload-loop
+// forever - it falls back to the normal error page instead.
+window.addEventListener('vite:preloadError', () => {
+  const guardKey = 'boc-reloaded-after-chunk-error';
+  if (sessionStorage.getItem(guardKey)) return;
+  sessionStorage.setItem(guardKey, '1');
+  window.location.reload();
+});
+// clear the guard a few seconds after a successful boot, so a LATER stale-
+// chunk error (from some future deploy) still gets its own reload attempt
+// rather than being silently blocked by a guard flag left over from today
+setTimeout(() => sessionStorage.removeItem('boc-reloaded-after-chunk-error'), 10000);
+
 import './index.css'
 import {
   createBrowserRouter,
@@ -47,7 +70,14 @@ const LazyUserHome = React.lazy(() => import('./components/Dashboard/UserHome/Us
 const LazyOrderHistory = React.lazy(() => import('./components/Dashboard/OrderHistory/OrderHistory'));
 const LazyMyProfile = React.lazy(() => import('./components/Dashboard/MyProfile/MyProfile'));
 
-import Home from './components/Home/Home/Home';
+// Home was previously imported eagerly here (not through React.lazy like
+// every other route) - since main.jsx's top-level imports are never lazy
+// regardless of which route is actually being visited, that pulled Home's
+// entire dependency tree (swiper for the hero carousel, react-countup,
+// react-scroll-trigger/react-intersection-observer for its animations)
+// into the critical path of EVERY page load, including e.g. /login, which
+// has nothing to do with any of that. Lazy like the rest fixes it.
+const LazyHome = React.lazy(() => import('./components/Home/Home/Home'));
 import AuthProvider from './providers/AuthProvider/AuthProvider';
 import ThemeProvider from './providers/ThemeProvider/ThemeProvider';
 import PrivateRoutes from './components/Routes/PrivateRoutes';
@@ -68,7 +98,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Home />
+        element: <React.Suspense fallback={<Loading />}><LazyHome /></React.Suspense>
       },
       {
         path: '/books',
