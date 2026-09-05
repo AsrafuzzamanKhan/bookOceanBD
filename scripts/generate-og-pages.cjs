@@ -59,6 +59,21 @@ function slugifyName(name) {
   return (name || "").replace(/\s/g, "_");
 }
 
+// Every non-root page this script generates - book pages, /books,
+// /books/<category>, /search, /login, /signup - is physically a directory
+// with an index.html inside (see buildShellPages/the per-book loop below),
+// because that's what lets Hostinger's hcdn edge layer serve it as a real
+// static file instead of 404ing (see SHELL_ROUTES' comment). hcdn then
+// 301-redirects the no-slash form of any such URL to the slash form.
+// Link-preview crawlers (WhatsApp, iMessage, Facebook, Twitter) generally
+// don't follow redirects when fetching a share preview, and search engines
+// treat a redirecting URL as non-canonical - so every URL this script
+// hands out (og:url, sitemap <loc>) needs the trailing slash itself,
+// or it's pointing at a redirect instead of the real page.
+function withTrailingSlash(url) {
+  return url.endsWith("/") ? url : `${url}/`;
+}
+
 // matches a whole <meta ...> tag by its property/name attribute, regardless
 // of attribute order or whitespace/newlines inside the tag (the source
 // index.html spans these across multiple lines, which literal-space regexes
@@ -79,7 +94,7 @@ function buildPageFor(book, baseHtml) {
   const title = `Buy ${book.name} by ${book.author} | Book Ocean BD`;
   const description = (book.description || "").replace(/\s+/g, " ").trim().slice(0, 300);
   const image = book.image || FALLBACK_IMAGE;
-  const url = `${SITE_URL}/book/${slugifyName(book.name)}/${book._id}`;
+  const url = withTrailingSlash(`${SITE_URL}/book/${slugifyName(book.name)}/${book._id}`);
 
   let html = baseHtml;
   // vite.config.js uses base: "/" (root-relative), so every asset reference
@@ -167,19 +182,19 @@ function buildSitemap(books) {
 
   const urlEntries = [
     ...STATIC_ROUTES.map(({ path: p, priority, changefreq }) => ({
-      loc: `${SITE_URL}${p}`,
+      loc: withTrailingSlash(`${SITE_URL}${p}`),
       priority,
       changefreq,
     })),
     ...categories.map((category) => ({
-      loc: `${SITE_URL}/books/${encodeURIComponent(category)}`,
+      loc: withTrailingSlash(`${SITE_URL}/books/${encodeURIComponent(category)}`),
       priority: "0.7",
       changefreq: "weekly",
     })),
     ...books
       .filter((b) => b._id && b.name)
       .map((book) => ({
-        loc: `${SITE_URL}/book/${slugifyName(book.name)}/${book._id}`,
+        loc: withTrailingSlash(`${SITE_URL}/book/${slugifyName(book.name)}/${book._id}`),
         priority: "0.8",
         changefreq: "weekly",
       })),

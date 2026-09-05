@@ -165,7 +165,16 @@ const BookDetails = () => {
     // share THIS book specifically - distinct from the static Facebook/
     // Instagram icons further down, which link to the store's own pages
     const handleShare = async () => {
-        const url = `https://bookoceanbd.com/book/${productDetails.name.replace(/\s/g, "_")}/${productDetails._id}`;
+        // trailing slash matters here: the static per-book HTML file that
+        // gives this page its real Open Graph tags for crawlers lives at
+        // dist/book/<name>/<id>/index.html (see generate-og-pages.cjs) - a
+        // literal directory. Hostinger 301-redirects the no-slash form to
+        // this one, but WhatsApp/iMessage/Facebook/Twitter's link-preview
+        // crawlers generally don't follow redirects when fetching a share
+        // preview, so a shared link without the slash showed no preview at
+        // all (or a stale/generic one) despite this page's own meta tags
+        // being correct.
+        const url = `https://bookoceanbd.com/book/${productDetails.name.replace(/\s/g, "_")}/${productDetails._id}/`;
         const shareData = { title: productDetails.name, text: `${productDetails.name} by ${productDetails.author} - Book Ocean BD`, url };
         if (navigator.share) {
             try { await navigator.share(shareData); } catch { /* user canceled the share sheet - not an error */ }
@@ -199,7 +208,7 @@ const BookDetails = () => {
                     <meta property="og:title" content={`${productDetails?.name} by ${productDetails?.author}`} />
                     <meta property="og:description" content={productDetails?.description} />
                     <meta property="og:image" content={productDetails?.image || 'https://i.ibb.co/yhDbPYf/logo2.jpg'} />
-                    <meta property="og:url" content={`https://bookoceanbd.com/book/${productDetails?.name?.replace(/\s/g, "_")}/${productDetails?._id}`} />
+                    <meta property="og:url" content={`https://bookoceanbd.com/book/${productDetails?.name?.replace(/\s/g, "_")}/${productDetails?._id}/`} />
 
                     <meta name="twitter:card" content="summary_large_image" />
                     <meta name="twitter:title" content={`${productDetails?.name} by ${productDetails?.author}`} />
