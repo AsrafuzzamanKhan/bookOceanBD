@@ -11,6 +11,20 @@ import Loading from "../../../Loading/Loading";
 // same cap as AddBooks.jsx - see comment there
 const FULL_IMAGE_MAX_DIMENSION = 1200;
 
+// human-readable names for the fields still marked required, for the error
+// summary below - only the fields that stayed required after the fix need
+// an entry; anything else falls back to its raw register() name
+const FIELD_LABELS = {
+    name: 'Book name',
+    author: 'Author name',
+    category: 'Category',
+    price: 'Price',
+    cover: 'Cover',
+    quantity: 'Quantity',
+    new: 'New',
+    best: 'Best Selling',
+};
+
 const UpdateBook = () => {
     const [updateLoading, setupdateLoadin] = useState(false)
     const { id } = useParams()
@@ -29,7 +43,17 @@ const UpdateBook = () => {
         enabled: !!id,
     })
 
-    const { register, handleSubmit } = useForm();
+    // formState.errors is read below so a failed validation is actually
+    // visible - previously handleSubmit(onSubmit) had no onInvalid handler,
+    // so react-hook-form would silently do nothing on submit whenever any
+    // required field was empty, with zero feedback. That was hitting most
+    // real edits: books created by the Google Sheet sync are deliberately
+    // saved with blank description/page/isbn10/etc for later manual
+    // completion (~40% of the catalog at last count), and every one of
+    // those fields was marked required here - so trying to edit even just
+    // the price on one of those books would silently fail unless every
+    // other blank field got filled in first.
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const navigate = useNavigate()
 
     const onSubmit = async data => {
@@ -182,7 +206,16 @@ const UpdateBook = () => {
                                     <span className="label-text font-semibold">New*</span>
 
                                 </label>
-                                <select defaultValue={productDetails?.new} className="select select-bordered uppercase"  {...register("new", { required: true })}>
+                                {/* DB field is "newBook" (see GET /books' projection / the sync's
+                                    newBookDoc) - this used to read productDetails?.new, which is
+                                    always undefined, so the dropdown never matched the book's real
+                                    value and instead defaulted to the disabled placeholder. Since
+                                    that placeholder still has a truthy value ("Pick one" - no value
+                                    attribute means its value falls back to its text), react-hook-form's
+                                    required check silently accepted it, and every edit that didn't
+                                    explicitly re-pick True/False overwrote newBook with the literal
+                                    string "Pick one" instead of preserving it. */}
+                                <select defaultValue={productDetails?.newBook} className="select select-bordered uppercase"  {...register("new", { required: true })}>
                                     <option disabled >Pick one</option>
                                     <option value="true">True</option>
                                     <option value="false">False</option>
@@ -214,25 +247,25 @@ const UpdateBook = () => {
 
                                 </label>
                                 <textarea defaultValue={productDetails?.description} className="textarea textarea-bordered h-24" placeholder="Description"
-                                    {...register("description", { required: true })}></textarea>
+                                    {...register("description")}></textarea>
 
                             </div>
                             {/* Publisher  */}
                             <div className="form-control w-full">
                                 <label className="label">
-                                    <span className="label-text font-semibold ">Publisher*</span>
+                                    <span className="label-text font-semibold ">Publisher</span>
                                 </label>
                                 <input defaultValue={productDetails?.publisher} type="text" placeholder="Type here" className="input input-bordered w-full"
-                                    {...register("publisher", { required: true })} />
+                                    {...register("publisher")} />
                             </div>
                             {/* Language  */}
                             <div className="form-control w-full ">
                                 <label className="label">
-                                    <span className="label-text font-semibold">Language*</span>
+                                    <span className="label-text font-semibold">Language</span>
 
                                 </label>
-                                <select defaultValue={productDetails?.language} className="select select-bordered uppercase"  {...register("language", { required: true })}>
-                                    <option disabled >Pick one</option>
+                                <select defaultValue={productDetails?.language} className="select select-bordered uppercase"  {...register("language")}>
+                                    <option value="">Pick one</option>
                                     <option>english</option>
                                     <option>bangla</option>
                                 </select>
@@ -241,42 +274,42 @@ const UpdateBook = () => {
                             {/* page  */}
                             <div className="form-control w-full">
                                 <label className="label">
-                                    <span className="label-text font-semibold ">Page*</span>
+                                    <span className="label-text font-semibold ">Page</span>
                                 </label>
                                 <input defaultValue={productDetails?.page} type="number" placeholder="Type here" className="input input-bordered w-full"
-                                    {...register("page", { required: true })} />
+                                    {...register("page")} />
                             </div>
                             {/* ISBN-10  */}
                             <div className="form-control w-full">
                                 <label className="label">
-                                    <span className="label-text font-semibold ">ISBN-10*</span>
+                                    <span className="label-text font-semibold ">ISBN-10</span>
                                 </label>
                                 <input defaultValue={productDetails?.isbn10} type="text" placeholder="Type here" className="input input-bordered w-full"
-                                    {...register("isbn10", { required: true })} />
+                                    {...register("isbn10")} />
                             </div>
                             {/* isbn-13  */}
                             <div className="form-control w-full">
                                 <label className="label">
-                                    <span className="label-text font-semibold ">ISBN-13*</span>
+                                    <span className="label-text font-semibold ">ISBN-13</span>
                                 </label>
                                 <input defaultValue={productDetails?.isbn13} type="text" placeholder="Type here" className="input input-bordered w-full"
-                                    {...register("isbn13", { required: true })} />
+                                    {...register("isbn13")} />
                             </div>
                             {/* Item Weight  */}
                             <div className="form-control w-full">
                                 <label className="label">
-                                    <span className="label-text font-semibold ">Item Weight*</span>
+                                    <span className="label-text font-semibold ">Item Weight</span>
                                 </label>
                                 <input defaultValue={productDetails?.itemWeight} type="text" placeholder="Type here" className="input input-bordered w-full"
-                                    {...register("itemWeight", { required: true })} />
+                                    {...register("itemWeight")} />
                             </div>
                             {/* Dimensions   */}
                             <div className="form-control w-full">
                                 <label className="label">
-                                    <span className="label-text font-semibold ">Dimensions*</span>
+                                    <span className="label-text font-semibold ">Dimensions</span>
                                 </label>
                                 <input defaultValue={productDetails?.dimensions} type="text" placeholder="Type here" className="input input-bordered w-full"
-                                    {...register("dimensions", { required: true })} />
+                                    {...register("dimensions")} />
                             </div>
                         </div>
 
@@ -300,6 +333,16 @@ const UpdateBook = () => {
                                 Leave empty to keep the current cover shown above.
                             </span>
                         </div>
+
+                        {/* react-hook-form silently skips onSubmit when validation fails
+                            and there's no onInvalid handler - this is the only feedback
+                            the admin gets when the required fields above (name, author,
+                            category, price, cover, quantity, new, best) are missing */}
+                        {Object.keys(errors).length > 0 && (
+                            <div className="mt-4 rounded border border-red-300 bg-red-50 dark:bg-red-950 dark:border-red-800 text-red-700 dark:text-red-300 text-sm px-4 py-3">
+                                Please fill in: {Object.keys(errors).map(field => FIELD_LABELS[field] || field).join(', ')}
+                            </div>
+                        )}
 
                         <div>
                             {
