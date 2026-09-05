@@ -18,8 +18,9 @@ const Home = () => {
 
             <Services></Services>
             <Counter />
-            <RamadanSpecial />
+
             <Trending></Trending>
+            <RamadanSpecial />
             <LatestBook></LatestBook>
 
 
