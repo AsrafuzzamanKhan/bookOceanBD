@@ -137,18 +137,122 @@ body {
   /* brand blue-400, matches the site's accent color */
 }
 
-@media (prefers-color-scheme: dark) {
-  .boc-toast.swal2-popup {
-    background: #1f2937 !important;
-    /* gray-800, matches the app's dashboard cards */
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55) !important;
-  }
+/* Was @media (prefers-color-scheme: dark), which only follows the OS -
+   dark mode here is an explicit Light/Dark/System toggle that puts a
+   .dark class on <html> (see ThemeProvider), so a media query missed both
+   "OS light, app set to Dark" and "OS dark, app set to Light". Keying to
+   the same class instead tracks whatever the user actually picked. */
+:root.dark .boc-toast.swal2-popup {
+  background: #1f2937 !important;
+  /* gray-800, matches the app's dashboard cards */
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55) !important;
+}
 
-  .boc-toast .swal2-title {
-    color: #f9fafb !important;
-  }
+:root.dark .boc-toast .swal2-title {
+  color: #f9fafb !important;
+}
 
-  .boc-toast .swal2-html-container {
-    color: #9ca3af !important;
-  }
+:root.dark .boc-toast .swal2-html-container {
+  color: #9ca3af !important;
+}
+
+/* ---------- confirm dialogs (SweetAlert2, see showConfirm in src/utils/toast.js) ----------
+   Used for delete/cancel/login-required prompts across the dashboard and
+   storefront. Same brand voice as the rest of the site's buttons (compare
+   BookDetails' "Add to Cart": rounded-lg, font-semibold, not uppercase)
+   rather than SweetAlert2's stock blue/red defaults. */
+.boc-confirm.swal2-popup {
+  border-radius: 16px !important;
+  padding: 1.75rem 1.5rem !important;
+  background: #ffffff !important;
+}
+
+.boc-confirm .swal2-icon.swal2-warning {
+  border-color: #f59e0b !important;
+  /* amber-500 */
+  color: #f59e0b !important;
+}
+
+.boc-confirm-title.swal2-title {
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  color: #111827 !important;
+  padding: 0 !important;
+  margin-top: 0.75rem !important;
+}
+
+.boc-confirm-text.swal2-html-container {
+  font-size: 0.9rem !important;
+  color: #6b7280 !important;
+  margin: 0.5rem 0 0 !important;
+}
+
+.boc-confirm-actions.swal2-actions {
+  margin-top: 1.5rem !important;
+  gap: 0.75rem;
+}
+
+.boc-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 0.65rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.boc-btn-primary {
+  background: #3b82f6 !important;
+  /* blue-500, matches "Add to Cart" */
+  color: #ffffff !important;
+}
+.boc-btn-primary:hover {
+  background: #2563eb !important;
+  /* blue-600 */
+}
+
+.boc-btn-danger {
+  background: #dc2626 !important;
+  /* red-600, matches the dashboard's own delete buttons */
+  color: #ffffff !important;
+}
+.boc-btn-danger:hover {
+  background: #b91c1c !important;
+  /* red-700 */
+}
+
+.boc-btn-cancel {
+  background: #f3f4f6 !important;
+  /* gray-100 */
+  color: #374151 !important;
+  /* gray-700 */
+}
+.boc-btn-cancel:hover {
+  background: #e5e7eb !important;
+  /* gray-200 */
+}
+
+:root.dark .boc-confirm.swal2-popup {
+  background: #1f2937 !important;
+  /* gray-800, matches the app's dashboard cards */
+}
+
+:root.dark .boc-confirm-title.swal2-title {
+  color: #f9fafb !important;
+}
+
+:root.dark .boc-confirm-text.swal2-html-container {
+  color: #9ca3af !important;
+}
+
+:root.dark .boc-btn-cancel {
+  background: #374151 !important;
+  /* gray-700 */
+  color: #e5e7eb !important;
+  /* gray-200 */
+}
+:root.dark .boc-btn-cancel:hover {
+  background: #4b5563 !important;
+  /* gray-600 */
 }

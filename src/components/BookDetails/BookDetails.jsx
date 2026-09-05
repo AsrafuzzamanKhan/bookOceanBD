@@ -1,8 +1,7 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import RelatedBooks from "../RelatedBooks/RelatedBooks";
-import Swal from "sweetalert2";
-import { showSuccessToast, showErrorToast } from "../../utils/toast";
+import { showSuccessToast, showErrorToast, showConfirm } from "../../utils/toast";
 import useAuth from "../../hooks/useAuth";
 import useCart from "../../hooks/useCart";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
@@ -151,18 +150,13 @@ const BookDetails = () => {
                 })
                 .catch(err => showErrorToast('Could not add to cart', err.response?.data?.message || err.message))
         } else {
-            Swal.fire({
+            showConfirm({
                 title: "Please Login",
                 text: "You won't be able to Add to cart!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Login now"
-            }).then((result) => {
-                if (result.isConfirmed) {
+                confirmText: "Login now",
+            }).then((confirmed) => {
+                if (confirmed) {
                     navigate('/login')
-
                 }
             });
         }

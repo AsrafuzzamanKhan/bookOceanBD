@@ -1,8 +1,7 @@
 import { AiFillDelete } from "react-icons/ai";
 import { FaSync } from "react-icons/fa";
 import useBookData from "../../../hooks/useBookData";
-import Swal from "sweetalert2";
-import { showSuccessToast, showErrorToast } from "../../../utils/toast";
+import { showSuccessToast, showErrorToast, showConfirm } from "../../../utils/toast";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
@@ -178,18 +177,13 @@ const ManageBooks = () => {
     }
 
     const handleDeleteBook = book => {
-        console.log('selected book', book)
-        Swal.fire({
+        showConfirm({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            console.log(result)
-            if (result.isConfirmed) {
+            confirmText: 'Yes, delete it!',
+            danger: true,
+        }).then((confirmed) => {
+            if (confirmed) {
                 axiosSecure.delete(`/books/${book._id}`)
                     .then(res => {
                         if (res.data.deletedCount > 0) {
@@ -197,8 +191,6 @@ const ManageBooks = () => {
                             showSuccessToast('Deleted!', 'Your item has been deleted.')
                         }
                     })
-
-
             }
         })
     }

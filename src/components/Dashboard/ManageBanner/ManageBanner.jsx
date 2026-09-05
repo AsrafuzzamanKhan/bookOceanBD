@@ -1,7 +1,6 @@
 import { AiFillDelete } from "react-icons/ai";
 
-import Swal from "sweetalert2";
-import { showSuccessToast } from "../../../utils/toast";
+import { showSuccessToast, showConfirm } from "../../../utils/toast";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { Helmet } from "react-helmet-async";
 import useBanner from "../../../hooks/useBanner";
@@ -12,18 +11,13 @@ const ManageBanner = () => {
 
 
     const handleDeleteBook = book => {
-        console.log('selected bookd', book._id)
-        Swal.fire({
+        showConfirm({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            console.log('result', result)
-            if (result.isConfirmed) {
+            confirmText: 'Yes, delete it!',
+            danger: true,
+        }).then((confirmed) => {
+            if (confirmed) {
                 axiosSecure.delete(`/banner/${book._id}`)
                     .then(res => {
                         if (res.data.deletedCount > 0) {
@@ -31,8 +25,6 @@ const ManageBanner = () => {
                             showSuccessToast('Deleted!', 'Your item has been deleted.')
                         }
                     })
-
-
             }
         })
     }

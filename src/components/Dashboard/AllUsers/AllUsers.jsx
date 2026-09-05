@@ -3,11 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
 import { Helmet } from "react-helmet-async";
-import { showSuccessToast, showErrorToast } from "../../../utils/toast";
+import { showSuccessToast, showErrorToast, showConfirm } from "../../../utils/toast";
 import { AiFillDelete } from "react-icons/ai";
 import { FaUserShield } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
-import Swal from "sweetalert2";
 import Pagination from "../../Pagination/Pagination";
 
 const USERS_PER_PAGE = 30;
@@ -49,16 +48,13 @@ const AllUsers = () => {
     // deleting a user is permanent and unrecoverable - confirm first, same
     // pattern used for order cancellation elsewhere in the dashboard
     const handleDelete = user => {
-        Swal.fire({
+        showConfirm({
             title: `Delete ${user.name || user.email}?`,
             text: "This permanently removes their account. This can't be undone.",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#dc2626",
-            cancelButtonColor: "#3085d6",
-            confirmButtonText: "Yes, delete",
-        }).then((result) => {
-            if (!result.isConfirmed) return;
+            confirmText: "Yes, delete",
+            danger: true,
+        }).then((confirmed) => {
+            if (!confirmed) return;
 
             axiosSecure.delete(`/users/${user._id}`)
                 .then(res => {

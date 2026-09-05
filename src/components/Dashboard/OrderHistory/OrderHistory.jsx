@@ -6,8 +6,7 @@ import useUserOrder from "../../../hooks/useUserOrder";
 import { FaMapMarkerAlt, FaPhone, FaUser } from "react-icons/fa";
 import { FiCalendar, FiClock } from "react-icons/fi";
 
-import Swal from "sweetalert2";
-import { showSuccessToast, showErrorToast } from "../../../utils/toast";
+import { showSuccessToast, showErrorToast, showConfirm } from "../../../utils/toast";
 import { Link } from "react-router-dom";
 import { STATUS_META, orderDateValue } from "../../../utils/orderStatus";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
@@ -40,16 +39,13 @@ const OrderHistory = () => {
     ];
 
     const handleCancelOrder = item => {
-        Swal.fire({
+        showConfirm({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, cancel it!"
-        }).then((result) => {
-            if (result.isConfirmed) {
+            confirmText: "Yes, cancel it!",
+            danger: true,
+        }).then((confirmed) => {
+            if (confirmed) {
                 // was a bare fetch() with no auth header; the server route
                 // now requires login + that the order actually belongs to you
                 axiosSecure.delete(`/orders/${item._id}`)
