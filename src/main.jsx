@@ -88,7 +88,20 @@ import ErrorPage from './error-page';
 
 
 
-const queryClient = new QueryClient()
+// Default staleTime is 0, which meant every remount of a component that
+// calls useBookData (i.e. basically every category/author page navigation,
+// since each is its own route element) re-fetched the entire ~700KB/2000+
+// book catalog in the background, even though the catalog rarely changes
+// mid-session. 5 minutes lets navigation reuse the cached list instead of
+// re-downloading it on every click; still short enough that a stock/price
+// change from the Google Sheet sync shows up within one page visit.
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+    },
+  },
+})
 
 const router = createBrowserRouter([
   {
