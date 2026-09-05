@@ -11,10 +11,37 @@ import { resizeImageFile, uploadToCloudinary } from '../../../utils/image';
 // and several MB), so uploads are faster and the book detail page stays fast
 const FULL_IMAGE_MAX_DIMENSION = 1200;
 
+// human-readable names for the error summary below
+const FIELD_LABELS = {
+    name: 'Book name',
+    author: 'Author name',
+    category: 'Category',
+    price: 'Price',
+    cover: 'Cover',
+    quantity: 'Quantity',
+    new: 'New',
+    best: 'Best Selling',
+    description: 'Description',
+    publisher: 'Publisher',
+    language: 'Language',
+    page: 'Page',
+    isbn10: 'ISBN-10',
+    isbn13: 'ISBN-13',
+    itemWeight: 'Item Weight',
+    dimensions: 'Dimensions',
+    image: 'Item image',
+};
+
 const AddBooks = () => {
     const [axiosSecure] = useAxiosSecure()
     const [addLoading, setAddLoading] = useState(false)
-    const { register, reset, handleSubmit } = useForm();
+    // formState.errors is read below so a failed validation is actually
+    // visible - handleSubmit(onSubmit) with no onInvalid handler otherwise
+    // silently does nothing on submit whenever any required field (every
+    // field here) is empty or, for the "Pick one" selects, never touched -
+    // with zero feedback, which reads exactly like "nothing happened, no
+    // success toast" even though the book was never sent to the server.
+    const { register, reset, handleSubmit, formState: { errors } } = useForm();
 
     const onSubmit = async data => {
         console.log('add book data', data);
@@ -90,8 +117,8 @@ const AddBooks = () => {
                                         <span className="label-text font-semibold">Category*</span>
 
                                     </label>
-                                    <select defaultValue='Pick one' className="select select-bordered capitalize "  {...register("category", { required: true })}>
-                                        <option disabled >Pick one</option>
+                                    <select defaultValue='' className="select select-bordered capitalize "  {...register("category", { required: true })}>
+                                        <option value="" disabled>Pick one</option>
                                         <option>barnes & noble</option>
                                         <option>biography</option>
                                         <option>children's</option>
@@ -130,8 +157,8 @@ const AddBooks = () => {
                                         <span className="label-text font-semibold">cover*</span>
 
                                     </label>
-                                    <select defaultValue='Pick one' className="select select-bordered capitalize"  {...register("cover", { required: true })}>
-                                        <option disabled >Pick one</option>
+                                    <select defaultValue='' className="select select-bordered capitalize"  {...register("cover", { required: true })}>
+                                        <option value="" disabled>Pick one</option>
                                         <option value="hardcover">Hardcover</option>
                                         <option value="paperback">Paperback</option>
                                         <option value="leather bound">Leather Bound</option>
@@ -155,8 +182,8 @@ const AddBooks = () => {
                                         <span className="label-text font-semibold">New*</span>
 
                                     </label>
-                                    <select defaultValue='Pick one' className="select select-bordered uppercase"  {...register("new", { required: true })}>
-                                        <option disabled >Pick one</option>
+                                    <select defaultValue='' className="select select-bordered uppercase"  {...register("new", { required: true })}>
+                                        <option value="" disabled>Pick one</option>
                                         <option value="true">True</option>
                                         <option value="false">False</option>
                                     </select>
@@ -168,8 +195,8 @@ const AddBooks = () => {
                                         <span className="label-text font-semibold">Best Selling*</span>
 
                                     </label>
-                                    <select defaultValue='Pick one' className="select select-bordered uppercase"  {...register("best", { required: true })}>
-                                        <option disabled >Pick one</option>
+                                    <select defaultValue='' className="select select-bordered uppercase"  {...register("best", { required: true })}>
+                                        <option value="" disabled>Pick one</option>
                                         <option value="true">True</option>
                                         <option value="false">False</option>
                                     </select>
@@ -207,8 +234,8 @@ const AddBooks = () => {
                                         <span className="label-text font-semibold">Language*</span>
 
                                     </label>
-                                    <select defaultValue='Pick one' className="select select-bordered uppercase"  {...register("language", { required: true })}>
-                                        <option disabled >Pick one</option>
+                                    <select defaultValue='' className="select select-bordered uppercase"  {...register("language", { required: true })}>
+                                        <option value="" disabled>Pick one</option>
                                         <option>english</option>
                                         <option>bangla</option>
                                     </select>
@@ -267,6 +294,16 @@ const AddBooks = () => {
                                     {...register("image", { required: true })} />
 
                             </div>
+                            {/* react-hook-form silently skips onSubmit when validation fails
+                                and there's no onInvalid handler - this is the only feedback
+                                the admin gets when a required field above is empty or a "Pick
+                                one" dropdown was never touched */}
+                            {Object.keys(errors).length > 0 && (
+                                <div className="mt-4 rounded border border-red-300 bg-red-50 dark:bg-red-950 dark:border-red-800 text-red-700 dark:text-red-300 text-sm px-4 py-3">
+                                    Please fill in: {Object.keys(errors).map(field => FIELD_LABELS[field] || field).join(', ')}
+                                </div>
+                            )}
+
                             {/* submit button  */}
                             {/* <input className=" bg-black w-full text-white mt-4 py-3 rounded hover:scale-105 duration-300 uppercase cursor-pointer hover:text-green-600" type="submit" value="Add Item" /> */}
 
