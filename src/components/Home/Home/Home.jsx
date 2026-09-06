@@ -7,7 +7,6 @@ import Services from "../Services/Services";
 import Trending from "../Trending/Trending";
 import RamadanSpecial from '../RamadanSpecial/RamdanSpecial';
 
-
 const Home = () => {
     return (
         <>
@@ -15,15 +14,11 @@ const Home = () => {
                 <span className="loading loading-bars loading-lg"></span>
             }><Hero />
             </React.Suspense>
-
             <Services></Services>
             <Counter />
-
             <Trending></Trending>
             <RamadanSpecial />
             <LatestBook></LatestBook>
-
-
         </>
     );
 };
