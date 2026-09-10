@@ -4,12 +4,13 @@ import { useState } from "react";
 
 
 const BookCard = ({ book }) => {
-    const { _id, name, author, price, image, thumbnail, available, newBook, category, cover } = book;
+    const { _id, name, author, price, image, thumbnail, available, newBook, category, cover, discount } = book;
 
     const [isLoaded, setIsLoaded] = useState(false);
-    const discount = price * 0.05;
-    const discountPrice = parseInt(price - discount)
-    const discountPercent = price ? Math.round((discount / price) * 100) : 0;
+    // per-book discount, replacing the old site-wide fixed 5% - falls back
+    // to 5 for any book that predates this field
+    const discountPercent = discount ?? 5;
+    const discountPrice = parseInt(price - (price * discountPercent) / 100);
     const isOutOfStock = available === 'false';
 
     return (

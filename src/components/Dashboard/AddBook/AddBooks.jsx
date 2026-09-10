@@ -17,6 +17,7 @@ const FIELD_LABELS = {
     author: 'Author name',
     category: 'Category',
     price: 'Price',
+    discount: 'Discount (%)',
     cover: 'Cover',
     quantity: 'Quantity',
     new: 'New',
@@ -63,11 +64,11 @@ const AddBooks = () => {
             const imaURL = fullRes.data.display_url;
             const thumbURL = thumbRes.success ? thumbRes.data.display_url : imaURL;
 
-            const { name, price, category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, author, quantity, best, cover, new: newBook } = data;
+            const { name, price, discount, category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, author, quantity, best, cover, new: newBook } = data;
             const stockCount = parseInt(quantity, 10) || 0;
             // available is derived from quantity - no stock means unavailable,
             // regardless of what was typed here
-            const newBookItem = { name, price: parseFloat(price), category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, image: imaURL, thumbnail: thumbURL, author, quantity: stockCount, available: stockCount > 0 ? 'true' : 'false', best, cover, newBook }
+            const newBookItem = { name, price: parseFloat(price), discount: parseFloat(discount), category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, image: imaURL, thumbnail: thumbURL, author, quantity: stockCount, available: stockCount > 0 ? 'true' : 'false', best, cover, newBook }
             console.log(newBookItem)
             const res = await axiosSecure.post('/books', newBookItem)
             console.log('Post in database', res);
@@ -172,6 +173,14 @@ const AddBooks = () => {
                                     </label>
                                     <input type="number" min="0" placeholder="0" className="input input-bordered w-full"
                                         {...register("quantity", { required: true, min: 0 })} />
+                                </div>
+                                {/* discount - per-book, replaces the old site-wide fixed 5% */}
+                                <div className="form-control w-full ">
+                                    <label className="label">
+                                        <span className="label-text font-semibold">Discount (%)*</span>
+                                    </label>
+                                    <input type="number" min="0" max="100" defaultValue="5" placeholder="5" className="input input-bordered w-full"
+                                        {...register("discount", { required: true, min: 0, max: 100 })} />
                                 </div>
                             </div>
                             {/* new best selling  */}

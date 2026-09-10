@@ -19,6 +19,7 @@ const FIELD_LABELS = {
     author: 'Author name',
     category: 'Category',
     price: 'Price',
+    discount: 'Discount (%)',
     cover: 'Cover',
     quantity: 'Quantity',
     new: 'New',
@@ -61,11 +62,11 @@ const UpdateBook = () => {
         setupdateLoadin(true)
 
         try {
-            const { name, price, category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, author, quantity, best, cover, new: newBook, image } = data;
+            const { name, price, discount, category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, author, quantity, best, cover, new: newBook, image } = data;
             const stockCount = parseInt(quantity, 10) || 0;
             // available is derived from quantity - no stock means unavailable,
             // regardless of what was typed here
-            const updateBookItem = { name, price: parseFloat(price), category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, author, quantity: stockCount, available: stockCount > 0 ? 'true' : 'false', best, cover, newBook }
+            const updateBookItem = { name, price: parseFloat(price), discount: parseFloat(discount), category, description, publisher, language, page, isbn10, isbn13, itemWeight, dimensions, author, quantity: stockCount, available: stockCount > 0 ? 'true' : 'false', best, cover, newBook }
 
             // image is optional here - only upload/replace it if a new file
             // was actually picked, otherwise the book keeps its current cover
@@ -196,6 +197,18 @@ const UpdateBook = () => {
                                 </label>
                                 <input type="number" min="0" defaultValue={productDetails?.quantity ?? 0} placeholder="0" className="input input-bordered w-full"
                                     {...register("quantity", { required: true, min: 0 })} />
+                            </div>
+                            {/* discount - per-book, replaces the old site-wide fixed 5%. Falls
+                                back to 5 for a book that predates this field, matching the same
+                                fallback BookCard/BookDetails use for display - so editing shows
+                                (and, once saved, makes explicit) the discount the storefront is
+                                actually showing right now, not a misleading blank/zero. */}
+                            <div className="form-control w-full ">
+                                <label className="label">
+                                    <span className="label-text font-semibold">Discount (%)*</span>
+                                </label>
+                                <input type="number" min="0" max="100" defaultValue={productDetails?.discount ?? 5} placeholder="5" className="input input-bordered w-full"
+                                    {...register("discount", { required: true, min: 0, max: 100 })} />
                             </div>
                         </div>
                         {/* new best selling  */}

@@ -76,9 +76,10 @@ const BookDetails = () => {
         },
         enabled: !!id,
     })
-    const discount = productDetails?.price * 0.05;
-    const discountPrice = parseInt(productDetails?.price - discount)
-    const discountPercent = productDetails?.price ? Math.round((discount / productDetails.price) * 100) : 0;
+    // per-book discount, replacing the old site-wide fixed 5% - falls back
+    // to 5 for any book that predates this field
+    const discountPercent = productDetails?.discount ?? 5;
+    const discountPrice = parseInt(productDetails?.price - (productDetails?.price * discountPercent) / 100);
 
     // sticky mobile add-to-cart bar - only shows once the main card (with
     // its own, already-visible Add to Cart button) has scrolled out of view,
