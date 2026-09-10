@@ -1,5 +1,6 @@
 
 import { useForm } from 'react-hook-form';
+import { useQueryClient } from '@tanstack/react-query';
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { showSuccessToast, showErrorToast } from "../../../utils/toast";
 import { Helmet } from 'react-helmet-async';
@@ -43,6 +44,7 @@ const AddBooks = () => {
     // with zero feedback, which reads exactly like "nothing happened, no
     // success toast" even though the book was never sent to the server.
     const { register, reset, handleSubmit, formState: { errors } } = useForm();
+    const queryClient = useQueryClient()
 
     const onSubmit = async data => {
         console.log('add book data', data);
@@ -73,6 +75,11 @@ const AddBooks = () => {
             const res = await axiosSecure.post('/books', newBookItem)
             console.log('Post in database', res);
             if (res.data.insertedId) {
+                // see the matching comment in UpdateBook.jsx - the shared
+                // 5-minute staleTime (main.jsx) means the catalog listing
+                // (['booksData']) wouldn't otherwise pick up a just-added
+                // book until that cache expired on its own
+                queryClient.invalidateQueries({ queryKey: ['booksData'] })
                 reset()
                 setAddLoading(false)
                 showSuccessToast('Book is added successfully!!!')

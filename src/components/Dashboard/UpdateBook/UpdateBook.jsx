@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
@@ -56,6 +56,7 @@ const UpdateBook = () => {
     // other blank field got filled in first.
     const { register, handleSubmit, formState: { errors } } = useForm();
     const navigate = useNavigate()
+    const queryClient = useQueryClient()
 
     const onSubmit = async data => {
         console.log('update book data', data);
@@ -87,6 +88,17 @@ const UpdateBook = () => {
 
             const res = await axiosSecure.put(`/books/${productDetails._id}`, updateBookItem)
             if (res.data.modifiedCount > 0) {
+                // main.jsx sets a 5-minute staleTime on every query (a
+                // deliberate fix so browsing doesn't re-fetch the whole
+                // catalog on every nav) - without invalidating explicitly
+                // here, this book's own detail page (BookDetails.jsx,
+                // same ['book', id] key this page uses) and every listing
+                // built from ['booksData'] would keep serving whatever
+                // they last fetched for up to 5 more minutes, so a saved
+                // edit - price, discount, stock, anything - silently
+                // didn't show up anywhere until a hard reload.
+                queryClient.invalidateQueries({ queryKey: ['book', productDetails._id] })
+                queryClient.invalidateQueries({ queryKey: ['booksData'] })
                 showSuccessToast('Book updated!')
                 navigate('/dashboard/manageBooks')
             }
